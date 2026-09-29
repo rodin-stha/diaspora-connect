@@ -158,6 +158,84 @@ abstract class AppLocalizations {
   /// **'Escalated'**
   String get statusEscalated;
 
+  /// No description provided for @statusNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get statusNew;
+
+  /// No description provided for @statusResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolved'**
+  String get statusResolved;
+
+  /// No description provided for @categoryWages.
+  ///
+  /// In en, this message translates to:
+  /// **'Wages'**
+  String get categoryWages;
+
+  /// No description provided for @categoryPermit.
+  ///
+  /// In en, this message translates to:
+  /// **'Permit'**
+  String get categoryPermit;
+
+  /// No description provided for @categoryHousing.
+  ///
+  /// In en, this message translates to:
+  /// **'Housing'**
+  String get categoryHousing;
+
+  /// No description provided for @categoryDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get categoryDocuments;
+
+  /// No description provided for @issuesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Issues'**
+  String get issuesTitle;
+
+  /// No description provided for @searchIssuesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search ticket or subject'**
+  String get searchIssuesHint;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All · {count}'**
+  String filterAll(int count);
+
+  /// No description provided for @filterInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get filterInProgress;
+
+  /// No description provided for @filterAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned'**
+  String get filterAssigned;
+
+  /// No description provided for @filterResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolved'**
+  String get filterResolved;
+
+  /// No description provided for @noIssuesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No issues match your search'**
+  String get noIssuesFound;
+
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:

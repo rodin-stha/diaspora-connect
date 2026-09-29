@@ -35,6 +35,9 @@ class TTextStyles {
     height: 1.25,
   );
 
+  static TextStyle get titleLarge =>
+      _manrope(fontSize: 20, fontWeight: FontWeight.w700, height: 1.25);
+
   static TextStyle get titleMedium => _manrope(
     fontSize: 16,
     fontWeight: FontWeight.w700,
@@ -65,6 +68,9 @@ class TTextStyles {
     fontWeight: FontWeight.w700,
     height: 1.3,
   );
+
+  static TextStyle get chipLabel =>
+      _manrope(fontSize: 13, fontWeight: FontWeight.w700, height: 1.3);
 
   static TextStyle get caption => _manrope(
     fontSize: 11,

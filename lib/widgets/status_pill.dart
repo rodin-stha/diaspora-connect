@@ -16,6 +16,11 @@ class StatusPill extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
     final (label, background, foreground) = switch (status) {
+      IssueStatus.submitted => (
+        l10n.statusNew,
+        colors.infoContainer,
+        colors.onInfoContainer,
+      ),
       IssueStatus.inProgress => (
         l10n.statusInProgress,
         colors.warningContainer,
@@ -25,6 +30,11 @@ class StatusPill extends StatelessWidget {
         l10n.statusEscalated,
         colors.errorContainer,
         colors.onErrorContainer,
+      ),
+      IssueStatus.resolved => (
+        l10n.statusResolved,
+        colors.successContainer,
+        colors.onSuccessContainer,
       ),
     };
 

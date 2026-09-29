@@ -1,22 +1,28 @@
 {
   "@@locale": "ne",
-
   "appName": "Diaspora Connect",
-
   "greeting": "नमस्ते, {name}",
-
   "reportIssueTitle": "समस्या रिपोर्ट गर्नुहोस्",
   "reportIssueSubtitle": "तलब, अनुमतिपत्र, आवास, सुरक्षा र अन्य",
-
   "myIssues": "मेरा समस्याहरू",
   "viewAll": "सबै हेर्नुहोस्",
-
   "dueInDays": "{days, plural, =0{आज म्याद सकिन्छ} other{{days} दिनमा म्याद सकिन्छ}}",
   "overdue": "म्याद नाघेको",
-
   "statusInProgress": "प्रगतिमा",
   "statusEscalated": "माथि पठाइएको",
-
+  "statusNew": "नयाँ",
+  "statusResolved": "समाधान भयो",
+  "categoryWages": "तलब",
+  "categoryPermit": "अनुमतिपत्र",
+  "categoryHousing": "आवास",
+  "categoryDocuments": "कागजात",
+  "issuesTitle": "समस्याहरू",
+  "searchIssuesHint": "टिकट वा विषय खोज्नुहोस्",
+  "filterAll": "सबै · {count}",
+  "filterInProgress": "प्रगतिमा",
+  "filterAssigned": "तोकिएको",
+  "filterResolved": "समाधान भएका",
+  "noIssuesFound": "तपाईंको खोजसँग मिल्ने कुनै समस्या छैन",
   "navHome": "गृहपृष्ठ",
   "navIssues": "समस्याहरू",
   "navActivity": "गतिविधि",

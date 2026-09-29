@@ -50,6 +50,47 @@ class AppLocalizationsNe extends AppLocalizations {
   String get statusEscalated => 'माथि पठाइएको';
 
   @override
+  String get statusNew => 'नयाँ';
+
+  @override
+  String get statusResolved => 'समाधान भयो';
+
+  @override
+  String get categoryWages => 'तलब';
+
+  @override
+  String get categoryPermit => 'अनुमतिपत्र';
+
+  @override
+  String get categoryHousing => 'आवास';
+
+  @override
+  String get categoryDocuments => 'कागजात';
+
+  @override
+  String get issuesTitle => 'समस्याहरू';
+
+  @override
+  String get searchIssuesHint => 'टिकट वा विषय खोज्नुहोस्';
+
+  @override
+  String filterAll(int count) {
+    return 'सबै · $count';
+  }
+
+  @override
+  String get filterInProgress => 'प्रगतिमा';
+
+  @override
+  String get filterAssigned => 'तोकिएको';
+
+  @override
+  String get filterResolved => 'समाधान भएका';
+
+  @override
+  String get noIssuesFound => 'तपाईंको खोजसँग मिल्ने कुनै समस्या छैन';
+
+  @override
   String get navHome => 'गृहपृष्ठ';
 
   @override

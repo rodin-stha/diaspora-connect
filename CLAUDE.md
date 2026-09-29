@@ -29,7 +29,7 @@ Flutter app (iOS/Android) for Nepali migrant workers to report and track workpla
 ```
 lib/
   app/        router, main shell (bottom nav), app-wide providers
-  features/   one folder per feature (home/, issues/ …) with screens, widgets/, models/
+  features/   one folder per feature (home/, issues/ …) with screens, widgets/, models/, data/ (providers)
   widgets/    widgets shared by 2+ features (StatusPill, bottom nav)
   theme/      design tokens: colors.dart, sizes.dart, text_styles.dart, app_theme.dart
   l10n/       ARB translation files (+ generated app_localizations*.dart — don't edit)
@@ -38,7 +38,9 @@ lib/
 ## Conventions
 
 - **Imports:** relative imports inside `lib/` (`../theme/colors.dart`), enforced by `prefer_relative_imports`. Tests use `package:diaspora_connect/...`. (Dart has no `@/` or `/lib/` aliases.)
-- **Where widgets go:** start a widget in its feature's `widgets/` folder; move it to `lib/widgets/` only once a second feature needs it.
+- **Where widgets go:**
+  - *Building blocks* that know nothing about a feature (SearchField, chips, buttons, inputs) → `lib/widgets/` from day one, with generic names.
+  - *Feature widgets* that know a feature's data/text (HomeHeader, ReportIssueCard) → the feature's `widgets/` folder; move to `lib/widgets/` only once a second feature needs them.
 - **No hard-coded UI text:** every user-facing string goes in both ARB files and is read via `AppLocalizations.of(context)`. Nepali translations need native-speaker review.
 - **No magic values:** use `context.colors`, `TSizes`, `TTextStyles` instead of raw colors/numbers.
 - **Theme-ready colors (dark mode later):** colors live in the `AppColors` theme extension (`lib/theme/colors.dart`) with *semantic* names (`surface`, `textSecondary`, not `white`/`grey`). Widgets read them via `context.colors.x` — never a hard-coded `Color(...)` or `Colors.white`. `TTextStyles` hold typography only (no color); apply color at the call site with `.copyWith(color: context.colors.x)`. SVG icons get tinted with `colorFilter` from theme colors. To add dark mode: create `AppColors.dark`, `TAppTheme.dark`, and set `darkTheme` + `themeMode` in `main.dart`.

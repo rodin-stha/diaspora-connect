@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:diaspora_connect/app/locale_provider.dart';
 import 'package:diaspora_connect/main.dart';
+import 'package:diaspora_connect/widgets/issue_card.dart';
+import 'package:diaspora_connect/widgets/selectable_chip.dart';
 
 Future<void> pumpApp(
   WidgetTester tester, {
@@ -47,7 +49,79 @@ void main() {
     await tester.tap(find.text('View all'));
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(Center, 'Issues'), findsOneWidget);
+    expect(find.text('Search ticket or subject'), findsOneWidget);
+    expect(find.text('All · 4'), findsOneWidget);
+  });
+
+  group('Issues screen', () {
+    Future<void> openIssuesTab(WidgetTester tester) async {
+      await pumpApp(tester);
+      await tester.tap(find.text('View all'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('shows all issues with category in the subtitle', (
+      tester,
+    ) async {
+      await openIssuesTab(tester);
+
+      expect(find.byType(IssueCard), findsNWidgets(4));
+      expect(
+        find.text('GN-2083-004512 · Wages · Due in 4 days'),
+        findsOneWidget,
+      );
+      expect(find.text('New'), findsOneWidget);
+    });
+
+    testWidgets('In progress filter includes escalated issues', (
+      tester,
+    ) async {
+      await openIssuesTab(tester);
+
+      // Tap the chip, not the "In progress" status pill on a card
+      await tester.tap(find.widgetWithText(SelectableChip, 'In progress'));
+      await tester.pumpAndSettle();
+
+      // 1 in progress + 2 escalated; the "New" one is hidden
+      expect(find.byType(IssueCard), findsNWidgets(3));
+      expect(find.text('Housing dispute, live-in contract'), findsNothing);
+    });
+
+    testWidgets('Assigned filter hides issues without a case worker', (
+      tester,
+    ) async {
+      await openIssuesTab(tester);
+
+      await tester.tap(find.text('Assigned'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(IssueCard), findsNWidgets(3));
+      expect(find.text('Housing dispute, live-in contract'), findsNothing);
+    });
+
+    testWidgets('Resolved filter shows the empty state', (tester) async {
+      await openIssuesTab(tester);
+
+      await tester.tap(find.text('Resolved'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(IssueCard), findsNothing);
+      expect(find.text('No issues match your search'), findsOneWidget);
+    });
+
+    testWidgets('search matches reference number or title', (tester) async {
+      await openIssuesTab(tester);
+
+      await tester.enterText(find.byType(TextField), '004530');
+      await tester.pumpAndSettle();
+      expect(find.byType(IssueCard), findsOneWidget);
+      expect(find.text('Housing dispute, live-in contract'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'PASSPORT');
+      await tester.pumpAndSettle();
+      expect(find.byType(IssueCard), findsOneWidget);
+      expect(find.text('Passport held by employer'), findsOneWidget);
+    });
   });
 
   testWidgets('Language toggle switches to Nepali and saves the choice', (

@@ -51,6 +51,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusEscalated => 'Escalated';
 
   @override
+  String get statusNew => 'New';
+
+  @override
+  String get statusResolved => 'Resolved';
+
+  @override
+  String get categoryWages => 'Wages';
+
+  @override
+  String get categoryPermit => 'Permit';
+
+  @override
+  String get categoryHousing => 'Housing';
+
+  @override
+  String get categoryDocuments => 'Documents';
+
+  @override
+  String get issuesTitle => 'Issues';
+
+  @override
+  String get searchIssuesHint => 'Search ticket or subject';
+
+  @override
+  String filterAll(int count) {
+    return 'All · $count';
+  }
+
+  @override
+  String get filterInProgress => 'In progress';
+
+  @override
+  String get filterAssigned => 'Assigned';
+
+  @override
+  String get filterResolved => 'Resolved';
+
+  @override
+  String get noIssuesFound => 'No issues match your search';
+
+  @override
   String get navHome => 'Home';
 
   @override

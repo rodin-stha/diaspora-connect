@@ -31,6 +31,10 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color onWarningContainer;
   final Color errorContainer;
   final Color onErrorContainer;
+  final Color infoContainer;
+  final Color onInfoContainer;
+  final Color successContainer;
+  final Color onSuccessContainer;
 
   const AppColors({
     required this.primary,
@@ -48,6 +52,10 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.onWarningContainer,
     required this.errorContainer,
     required this.onErrorContainer,
+    required this.infoContainer,
+    required this.onInfoContainer,
+    required this.successContainer,
+    required this.onSuccessContainer,
   });
 
   /// Values from the Figma design.
@@ -67,6 +75,10 @@ class AppColors extends ThemeExtension<AppColors> {
     onWarningContainer: Color(0xFF8A5A00),
     errorContainer: Color(0xFFFCE4E4),
     onErrorContainer: Color(0xFFB3261E),
+    infoContainer: Color(0xFFE5E2F5),
+    onInfoContainer: Color(0xFF4436B0),
+    successContainer: Color(0xFFDEF2E4),
+    onSuccessContainer: Color(0xFF1F7A4D),
   );
 
   // To add dark mode: define `static const dark = AppColors(...)` with the
@@ -89,6 +101,10 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? onWarningContainer,
     Color? errorContainer,
     Color? onErrorContainer,
+    Color? infoContainer,
+    Color? onInfoContainer,
+    Color? successContainer,
+    Color? onSuccessContainer,
   }) {
     return AppColors(
       primary: primary ?? this.primary,
@@ -106,6 +122,10 @@ class AppColors extends ThemeExtension<AppColors> {
       onWarningContainer: onWarningContainer ?? this.onWarningContainer,
       errorContainer: errorContainer ?? this.errorContainer,
       onErrorContainer: onErrorContainer ?? this.onErrorContainer,
+      infoContainer: infoContainer ?? this.infoContainer,
+      onInfoContainer: onInfoContainer ?? this.onInfoContainer,
+      successContainer: successContainer ?? this.successContainer,
+      onSuccessContainer: onSuccessContainer ?? this.onSuccessContainer,
     );
   }
 
@@ -139,6 +159,18 @@ class AppColors extends ThemeExtension<AppColors> {
       onErrorContainer: Color.lerp(
         onErrorContainer,
         other.onErrorContainer,
+        t,
+      )!,
+      infoContainer: Color.lerp(infoContainer, other.infoContainer, t)!,
+      onInfoContainer: Color.lerp(onInfoContainer, other.onInfoContainer, t)!,
+      successContainer: Color.lerp(
+        successContainer,
+        other.successContainer,
+        t,
+      )!,
+      onSuccessContainer: Color.lerp(
+        onSuccessContainer,
+        other.onSuccessContainer,
         t,
       )!,
     );

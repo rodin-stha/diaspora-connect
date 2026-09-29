@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -7,32 +8,23 @@ import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
 import '../../widgets/issue_card.dart';
-import '../issues/models/issue.dart';
+import '../issues/data/issues_provider.dart';
 import 'widgets/home_header.dart';
 import 'widgets/report_issue_card.dart';
 
-// Placeholder data until the issues API is connected.
-const _sampleIssues = [
-  Issue(
-    title: 'Wage shortfall, October pay',
-    reference: 'GN-2083-004512',
-    dueInDays: 4,
-    status: IssueStatus.inProgress,
-  ),
-  Issue(
-    title: 'Permit renewal delayed',
-    reference: 'GN-2083-004498',
-    dueInDays: -1,
-    status: IssueStatus.escalated,
-  ),
-];
+// Home previews a few open issues; the full list is on the Issues tab.
+const _maxPreviewIssues = 2;
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final openIssues = ref
+        .watch(issuesProvider)
+        .where((issue) => issue.isOpen)
+        .take(_maxPreviewIssues);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // White status bar icons on the blue header
@@ -62,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                       onAction: () => context.go('/issues'),
                     ),
                     const SizedBox(height: TSizes.md),
-                    for (final (index, issue) in _sampleIssues.indexed) ...[
+                    for (final (index, issue) in openIssues.indexed) ...[
                       if (index > 0) const SizedBox(height: TSizes.md),
                       IssueCard(issue: issue, onTap: () {}),
                     ],

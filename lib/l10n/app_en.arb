@@ -1,28 +1,49 @@
 {
   "@@locale": "en",
-
   "appName": "Diaspora Connect",
-
   "greeting": "Namaste, {name}",
   "@greeting": {
-    "placeholders": { "name": { "type": "String" } }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
-
   "reportIssueTitle": "Report an issue",
   "reportIssueSubtitle": "Wages, permit, housing, safety and more",
-
   "myIssues": "My issues",
   "viewAll": "View all",
-
   "dueInDays": "{days, plural, =0{Due today} =1{Due in 1 day} other{Due in {days} days}}",
   "@dueInDays": {
-    "placeholders": { "days": { "type": "int" } }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
   "overdue": "Overdue",
-
   "statusInProgress": "In progress",
   "statusEscalated": "Escalated",
-
+  "statusNew": "New",
+  "statusResolved": "Resolved",
+  "categoryWages": "Wages",
+  "categoryPermit": "Permit",
+  "categoryHousing": "Housing",
+  "categoryDocuments": "Documents",
+  "issuesTitle": "Issues",
+  "searchIssuesHint": "Search ticket or subject",
+  "filterAll": "All · {count}",
+  "@filterAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filterInProgress": "In progress",
+  "filterAssigned": "Assigned",
+  "filterResolved": "Resolved",
+  "noIssuesFound": "No issues match your search",
   "navHome": "Home",
   "navIssues": "Issues",
   "navActivity": "Activity",
