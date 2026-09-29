@@ -91,6 +91,24 @@ class AppLocalizationsNe extends AppLocalizations {
   String get noIssuesFound => 'तपाईंको खोजसँग मिल्ने कुनै समस्या छैन';
 
   @override
+  String get trackIssueTitle => 'समस्या ट्र्याक गर्नुहोस्';
+
+  @override
+  String get issueNotFound => 'यो समस्या फेला परेन';
+
+  @override
+  String get timelineSubmitted => 'पेश गरियो';
+
+  @override
+  String get timelineAssignedToEmployer => 'रोजगारदातालाई तोकियो';
+
+  @override
+  String get timelineEscalatedToEmbassy => 'दूतावासको श्रम डेस्कमा पठाइयो';
+
+  @override
+  String get timelineResolved => 'समाधान भयो · तपाईंको प्रतिक्रिया बाँकी';
+
+  @override
   String get navHome => 'गृहपृष्ठ';
 
   @override

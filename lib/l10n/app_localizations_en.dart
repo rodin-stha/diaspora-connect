@@ -92,6 +92,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noIssuesFound => 'No issues match your search';
 
   @override
+  String get trackIssueTitle => 'Track issue';
+
+  @override
+  String get issueNotFound => 'This issue could not be found';
+
+  @override
+  String get timelineSubmitted => 'Submitted';
+
+  @override
+  String get timelineAssignedToEmployer => 'Assigned to employer';
+
+  @override
+  String get timelineEscalatedToEmbassy => 'Escalated to Embassy Labour Desk';
+
+  @override
+  String get timelineResolved => 'Resolved · pending your feedback';
+
+  @override
   String get navHome => 'Home';
 
   @override

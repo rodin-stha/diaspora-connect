@@ -122,6 +122,28 @@ void main() {
       expect(find.byType(IssueCard), findsOneWidget);
       expect(find.text('Passport held by employer'), findsOneWidget);
     });
+
+    testWidgets('tapping an issue opens Track issue, back returns', (
+      tester,
+    ) async {
+      await openIssuesTab(tester);
+
+      await tester.tap(find.text('Wage shortfall, October pay'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Track issue'), findsOneWidget);
+      expect(find.text('GN-2083-004512'), findsOneWidget);
+      expect(find.text('Submitted'), findsOneWidget);
+      expect(find.text('3 Sep, 10:42 AM'), findsOneWidget);
+      expect(find.text('Resolved · pending your feedback'), findsOneWidget);
+      // Detail page covers the bottom nav
+      expect(find.text('Activity'), findsNothing);
+
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Search ticket or subject'), findsOneWidget);
+    });
   });
 
   testWidgets('Language toggle switches to Nepali and saves the choice', (

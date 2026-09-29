@@ -35,8 +35,16 @@ class TTextStyles {
     height: 1.25,
   );
 
+  /// Detail page heading, e.g. the issue title on Track issue.
+  static TextStyle get headlineSmall =>
+      _manrope(fontSize: 19, fontWeight: FontWeight.w700, height: 1.25);
+
   static TextStyle get titleLarge =>
       _manrope(fontSize: 20, fontWeight: FontWeight.w700, height: 1.25);
+
+  /// Title next to a back button.
+  static TextStyle get appBarTitle =>
+      _manrope(fontSize: 17, fontWeight: FontWeight.w700, height: 1.25);
 
   static TextStyle get titleMedium => _manrope(
     fontSize: 16,

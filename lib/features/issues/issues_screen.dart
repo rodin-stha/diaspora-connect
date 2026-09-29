@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
@@ -93,7 +94,11 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
               else
                 for (final (index, issue) in visibleIssues.indexed) ...[
                   if (index > 0) const SizedBox(height: TSizes.listGap),
-                  IssueCard(issue: issue, showCategory: true),
+                  IssueCard(
+                    issue: issue,
+                    showCategory: true,
+                    onTap: () => context.push('/issues/${issue.reference}'),
+                  ),
                 ],
             ],
           ),

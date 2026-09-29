@@ -236,6 +236,42 @@ abstract class AppLocalizations {
   /// **'No issues match your search'**
   String get noIssuesFound;
 
+  /// No description provided for @trackIssueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track issue'**
+  String get trackIssueTitle;
+
+  /// No description provided for @issueNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This issue could not be found'**
+  String get issueNotFound;
+
+  /// No description provided for @timelineSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get timelineSubmitted;
+
+  /// No description provided for @timelineAssignedToEmployer.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to employer'**
+  String get timelineAssignedToEmployer;
+
+  /// No description provided for @timelineEscalatedToEmbassy.
+  ///
+  /// In en, this message translates to:
+  /// **'Escalated to Embassy Labour Desk'**
+  String get timelineEscalatedToEmbassy;
+
+  /// No description provided for @timelineResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolved · pending your feedback'**
+  String get timelineResolved;
+
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:

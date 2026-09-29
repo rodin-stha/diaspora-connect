@@ -10,6 +10,25 @@ enum IssueStatus {
 
 enum IssueCategory { wages, permit, housing, documents }
 
+/// A step on an issue's timeline ("Submitted", "Escalated to…").
+enum IssueEventType {
+  submitted,
+  assignedToEmployer,
+  escalatedToEmbassy,
+  resolved,
+}
+
+class IssueEvent {
+  final IssueEventType type;
+
+  /// When the step happened, or null if it hasn't happened yet.
+  final DateTime? date;
+
+  const IssueEvent(this.type, [this.date]);
+
+  bool get isDone => date != null;
+}
+
 class Issue {
   final String title;
   final String reference;
@@ -22,6 +41,9 @@ class Issue {
   /// Case worker handling the issue, or null if not assigned yet.
   final String? assignedTo;
 
+  /// Steps in order: completed ones first, then upcoming ones.
+  final List<IssueEvent> timeline;
+
   const Issue({
     required this.title,
     required this.reference,
@@ -29,6 +51,7 @@ class Issue {
     required this.dueInDays,
     required this.status,
     this.assignedTo,
+    this.timeline = const [],
   });
 
   bool get isOverdue => dueInDays < 0;

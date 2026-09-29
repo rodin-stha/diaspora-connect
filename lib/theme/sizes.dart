@@ -12,6 +12,7 @@ class TSizes {
   static const double spaceBtwItems = 16.0;
   static const double spaceBtwSections = 22.0;
   static const double listGap = 14.0; // between stacked items on list screens
+  static const double timelineGap = 18.0; // between steps on a timeline
 
   // Horizontal page padding
   static const double pagePadding = 22.0;
@@ -24,6 +25,7 @@ class TSizes {
   static const double pillRadius = 999.0;
 
   // Icons
+  static const double dotSize = 10.0; // timeline step marker
   static const double iconSm = 16.0;
   static const double iconMd = 22.0;
   static const double iconLg = 26.0;

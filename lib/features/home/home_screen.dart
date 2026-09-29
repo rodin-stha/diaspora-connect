@@ -56,7 +56,10 @@ class HomeScreen extends ConsumerWidget {
                     const SizedBox(height: TSizes.md),
                     for (final (index, issue) in openIssues.indexed) ...[
                       if (index > 0) const SizedBox(height: TSizes.md),
-                      IssueCard(issue: issue, onTap: () {}),
+                      IssueCard(
+                        issue: issue,
+                        onTap: () => context.push('/issues/${issue.reference}'),
+                      ),
                     ],
                   ],
                 ),
