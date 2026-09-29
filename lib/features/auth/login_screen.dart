@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/locale_provider.dart';
@@ -66,23 +65,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               Column(
                 spacing: 10,
                 children: [
-                  Container(
-                    width: TSizes.logoSize,
+                  // Same logo as the app icon. A PNG, not a themed SVG: it's
+                  // multicoloured artwork, so it isn't tinted.
+                  Image.asset(
+                    'assets/images/logo.png',
                     height: TSizes.logoSize,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: colors.primary,
-                      borderRadius: BorderRadius.circular(TSizes.logoRadius),
-                    ),
-                    child: SvgPicture.asset(
-                      'assets/icons/logo_pin.svg',
-                      width: TSizes.iconLg,
-                      height: TSizes.iconLg,
-                      colorFilter: ColorFilter.mode(
-                        colors.onPrimary,
-                        BlendMode.srcIn,
-                      ),
-                    ),
+                    semanticLabel: l10n.appName,
                   ),
                   Text(
                     l10n.appName,

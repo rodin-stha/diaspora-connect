@@ -22,9 +22,24 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 flutter:
   generate: true
   uses-material-design: true
 
   assets:
     - assets/icons/
+    - assets/images/
+
+# App icon. Source files live in assets/app_icon/ (not bundled into the app).
+# After changing them, run: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: assets/app_icon/icon.png
+  ios: true
+  remove_alpha_ios: true # App Store rejects icons with transparency
+  android: true
+  min_sdk_android: 21
+  # Android 8+ masks icons into circles/squircles, so the logo sits smaller
+  # on a plain background layer to survive the crop.
+  adaptive_icon_background: "#F6F7F9"
+  adaptive_icon_foreground: assets/app_icon/icon_foreground.png
