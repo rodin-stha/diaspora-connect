@@ -272,6 +272,84 @@ abstract class AppLocalizations {
   /// **'Resolved · pending your feedback'**
   String get timelineResolved;
 
+  /// No description provided for @activityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activityTitle;
+
+  /// No description provided for @markAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get markAllRead;
+
+  /// No description provided for @activityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Account activity — signing in, updating your number, submitting an issue. Issue status updates live in Issues.'**
+  String get activityDescription;
+
+  /// No description provided for @noActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity yet'**
+  String get noActivity;
+
+  /// No description provided for @activityIssueSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted a new issue'**
+  String get activityIssueSubmitted;
+
+  /// No description provided for @activityMobileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number updated'**
+  String get activityMobileUpdated;
+
+  /// No description provided for @activityMobileUpdatedDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed to {number}'**
+  String activityMobileUpdatedDetail(String number);
+
+  /// No description provided for @activitySignedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in'**
+  String get activitySignedIn;
+
+  /// No description provided for @activitySignedInDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'New sign-in verified by OTP'**
+  String get activitySignedInDetail;
+
+  /// No description provided for @activityDocumentUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Document uploaded'**
+  String get activityDocumentUploaded;
+
+  /// No description provided for @activityDocumentUploadedDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{document} added to Saved documents'**
+  String activityDocumentUploadedDetail(String document);
+
+  /// No description provided for @activityProfileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get activityProfileUpdated;
+
+  /// No description provided for @activityProfileUpdatedDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Work details & permit saved'**
+  String get activityProfileUpdatedDetail;
+
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:

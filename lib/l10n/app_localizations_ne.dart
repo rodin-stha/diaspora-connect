@@ -109,6 +109,51 @@ class AppLocalizationsNe extends AppLocalizations {
   String get timelineResolved => 'समाधान भयो · तपाईंको प्रतिक्रिया बाँकी';
 
   @override
+  String get activityTitle => 'गतिविधि';
+
+  @override
+  String get markAllRead => 'सबै पढिएको बनाउनुहोस्';
+
+  @override
+  String get activityDescription =>
+      'खाता गतिविधि — साइन इन, नम्बर परिवर्तन, समस्या पेश। समस्याको स्थितिका अपडेटहरू समस्याहरूमा हेर्नुहोस्।';
+
+  @override
+  String get noActivity => 'अहिलेसम्म कुनै गतिविधि छैन';
+
+  @override
+  String get activityIssueSubmitted => 'नयाँ समस्या पेश गरियो';
+
+  @override
+  String get activityMobileUpdated => 'मोबाइल नम्बर परिवर्तन गरियो';
+
+  @override
+  String activityMobileUpdatedDetail(String number) {
+    return '$number मा परिवर्तन गरियो';
+  }
+
+  @override
+  String get activitySignedIn => 'साइन इन गरियो';
+
+  @override
+  String get activitySignedInDetail => 'नयाँ साइन इन OTP द्वारा प्रमाणित';
+
+  @override
+  String get activityDocumentUploaded => 'कागजात अपलोड गरियो';
+
+  @override
+  String activityDocumentUploadedDetail(String document) {
+    return '$document सुरक्षित कागजातहरूमा थपियो';
+  }
+
+  @override
+  String get activityProfileUpdated => 'प्रोफाइल अपडेट गरियो';
+
+  @override
+  String get activityProfileUpdatedDetail =>
+      'कामको विवरण र अनुमतिपत्र सुरक्षित गरियो';
+
+  @override
   String get navHome => 'गृहपृष्ठ';
 
   @override

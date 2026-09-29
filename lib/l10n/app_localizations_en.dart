@@ -110,6 +110,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timelineResolved => 'Resolved · pending your feedback';
 
   @override
+  String get activityTitle => 'Activity';
+
+  @override
+  String get markAllRead => 'Mark all read';
+
+  @override
+  String get activityDescription =>
+      'Account activity — signing in, updating your number, submitting an issue. Issue status updates live in Issues.';
+
+  @override
+  String get noActivity => 'No activity yet';
+
+  @override
+  String get activityIssueSubmitted => 'Submitted a new issue';
+
+  @override
+  String get activityMobileUpdated => 'Mobile number updated';
+
+  @override
+  String activityMobileUpdatedDetail(String number) {
+    return 'Changed to $number';
+  }
+
+  @override
+  String get activitySignedIn => 'Signed in';
+
+  @override
+  String get activitySignedInDetail => 'New sign-in verified by OTP';
+
+  @override
+  String get activityDocumentUploaded => 'Document uploaded';
+
+  @override
+  String activityDocumentUploadedDetail(String document) {
+    return '$document added to Saved documents';
+  }
+
+  @override
+  String get activityProfileUpdated => 'Profile updated';
+
+  @override
+  String get activityProfileUpdatedDetail => 'Work details & permit saved';
+
+  @override
   String get navHome => 'Home';
 
   @override

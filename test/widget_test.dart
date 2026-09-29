@@ -146,6 +146,46 @@ void main() {
     });
   });
 
+  group('Activity screen', () {
+    Future<void> openActivityTab(WidgetTester tester) async {
+      await pumpApp(tester);
+      await tester.tap(find.text('Activity'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('shows account activity newest first', (tester) async {
+      await openActivityTab(tester);
+
+      expect(find.text('Submitted a new issue'), findsOneWidget);
+      expect(find.text('Changed to +972 5X-XXX-XXXX'), findsOneWidget);
+      expect(
+        find.text('Passport photo page added to Saved documents'),
+        findsOneWidget,
+      );
+      expect(find.text('6 Sep, 6:40 PM'), findsOneWidget);
+
+      final first = tester.getTopLeft(find.text('Submitted a new issue'));
+      final last = tester.getTopLeft(find.text('Profile updated'));
+      expect(first.dy, lessThan(last.dy));
+    });
+
+    testWidgets('Mark all read disables itself once everything is read', (
+      tester,
+    ) async {
+      await openActivityTab(tester);
+
+      TextButton markAllRead() => tester.widget<TextButton>(
+        find.widgetWithText(TextButton, 'Mark all read'),
+      );
+      expect(markAllRead().onPressed, isNotNull);
+
+      await tester.tap(find.text('Mark all read'));
+      await tester.pumpAndSettle();
+
+      expect(markAllRead().onPressed, isNull);
+    });
+  });
+
   testWidgets('Language toggle switches to Nepali and saves the choice', (
     tester,
   ) async {

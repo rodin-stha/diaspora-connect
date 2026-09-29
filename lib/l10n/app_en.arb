@@ -50,6 +50,33 @@
   "timelineAssignedToEmployer": "Assigned to employer",
   "timelineEscalatedToEmbassy": "Escalated to Embassy Labour Desk",
   "timelineResolved": "Resolved · pending your feedback",
+  "activityTitle": "Activity",
+  "markAllRead": "Mark all read",
+  "activityDescription": "Account activity — signing in, updating your number, submitting an issue. Issue status updates live in Issues.",
+  "noActivity": "No activity yet",
+  "activityIssueSubmitted": "Submitted a new issue",
+  "activityMobileUpdated": "Mobile number updated",
+  "activityMobileUpdatedDetail": "Changed to {number}",
+  "@activityMobileUpdatedDetail": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "activitySignedIn": "Signed in",
+  "activitySignedInDetail": "New sign-in verified by OTP",
+  "activityDocumentUploaded": "Document uploaded",
+  "activityDocumentUploadedDetail": "{document} added to Saved documents",
+  "@activityDocumentUploadedDetail": {
+    "placeholders": {
+      "document": {
+        "type": "String"
+      }
+    }
+  },
+  "activityProfileUpdated": "Profile updated",
+  "activityProfileUpdatedDetail": "Work details & permit saved",
   "navHome": "Home",
   "navIssues": "Issues",
   "navActivity": "Activity",
