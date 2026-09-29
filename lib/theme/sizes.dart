@@ -13,16 +13,26 @@ class TSizes {
   static const double spaceBtwSections = 22.0;
   static const double listGap = 14.0; // between stacked items on list screens
   static const double timelineGap = 18.0; // between steps on a timeline
+  static const double groupGap =
+      18.0; // between groups on settings-style screens
+  static const double menuRowPadding = 15.0; // vertical padding of a MenuRow
+  static const double formGap = 14.0; // between blocks in a form
+  static const double fieldMinHeight =
+      80.0; // label + input + room for an error
 
   // Horizontal page padding
   static const double pagePadding = 22.0;
 
   // Border radius
   static const double inputRadius = 12.0;
+  static const double buttonRadius = 12.0;
   static const double cardRadius = 14.0;
   static const double actionCardRadius = 18.0;
   static const double headerRadius = 28.0;
   static const double pillRadius = 999.0;
+
+  // Avatars
+  static const double avatarLg = 56.0;
 
   // Icons
   static const double dotSm = 8.0; // list item marker (Activity)

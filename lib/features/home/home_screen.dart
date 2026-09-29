@@ -9,6 +9,7 @@ import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
 import '../../widgets/issue_card.dart';
 import '../issues/data/issues_provider.dart';
+import '../profile/data/user_provider.dart';
 import 'widgets/home_header.dart';
 import 'widgets/report_issue_card.dart';
 
@@ -21,6 +22,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final user = ref.watch(currentUserProvider);
     final openIssues = ref
         .watch(issuesProvider)
         .where((issue) => issue.isOpen)
@@ -35,8 +37,8 @@ class HomeScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               HomeHeader(
-                userName: 'Sita',
-                location: "Kibbutz Afikim · Emek HaMa'ayanot Regional Council",
+                userName: user.givenName,
+                location: user.location,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(

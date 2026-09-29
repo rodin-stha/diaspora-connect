@@ -13,6 +13,7 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color primary; // blue: header, links
   final Color onPrimary; // text/icons on primary
   final Color onPrimarySubtle; // translucent fills on primary (language toggle)
+  final Color onPrimaryMuted; // slightly stronger translucent fill (avatar)
   final Color accent; // crimson: main action, selected tab
   final Color onAccent; // text/icons on accent
 
@@ -40,6 +41,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.primary,
     required this.onPrimary,
     required this.onPrimarySubtle,
+    required this.onPrimaryMuted,
     required this.accent,
     required this.onAccent,
     required this.background,
@@ -63,6 +65,7 @@ class AppColors extends ThemeExtension<AppColors> {
     primary: Color(0xFF003893),
     onPrimary: Color(0xFFFFFFFF),
     onPrimarySubtle: Color(0x24FFFFFF), // 14% white
+    onPrimaryMuted: Color(0x2EFFFFFF), // 18% white
     accent: Color(0xFFC8102E),
     onAccent: Color(0xFFFFFFFF),
     background: Color(0xFFFAFAF9),
@@ -89,6 +92,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? primary,
     Color? onPrimary,
     Color? onPrimarySubtle,
+    Color? onPrimaryMuted,
     Color? accent,
     Color? onAccent,
     Color? background,
@@ -110,6 +114,7 @@ class AppColors extends ThemeExtension<AppColors> {
       primary: primary ?? this.primary,
       onPrimary: onPrimary ?? this.onPrimary,
       onPrimarySubtle: onPrimarySubtle ?? this.onPrimarySubtle,
+      onPrimaryMuted: onPrimaryMuted ?? this.onPrimaryMuted,
       accent: accent ?? this.accent,
       onAccent: onAccent ?? this.onAccent,
       background: background ?? this.background,
@@ -137,6 +142,7 @@ class AppColors extends ThemeExtension<AppColors> {
       primary: Color.lerp(primary, other.primary, t)!,
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t)!,
       onPrimarySubtle: Color.lerp(onPrimarySubtle, other.onPrimarySubtle, t)!,
+      onPrimaryMuted: Color.lerp(onPrimaryMuted, other.onPrimaryMuted, t)!,
       accent: Color.lerp(accent, other.accent, t)!,
       onAccent: Color.lerp(onAccent, other.onAccent, t)!,
       background: Color.lerp(background, other.background, t)!,

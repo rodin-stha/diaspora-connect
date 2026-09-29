@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:diaspora_connect/app/locale_provider.dart';
+import 'package:diaspora_connect/features/personal_details/models/personal_details.dart';
 import 'package:diaspora_connect/main.dart';
+import 'package:diaspora_connect/theme/sizes.dart';
 import 'package:diaspora_connect/widgets/issue_card.dart';
 import 'package:diaspora_connect/widgets/selectable_chip.dart';
 
@@ -183,6 +185,109 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(markAllRead().onPressed, isNull);
+    });
+  });
+
+  group('Profile screen', () {
+    Future<void> openProfileTab(WidgetTester tester) async {
+      await pumpApp(tester);
+      await tester.tap(find.text('Profile'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('shows the user and menu sections', (tester) async {
+      await openProfileTab(tester);
+
+      expect(find.text('Sita Kumari Shrestha'), findsOneWidget);
+      expect(find.text('PROFILE'), findsOneWidget);
+      expect(find.text('PREFERENCES'), findsOneWidget);
+      expect(find.text('Personal details'), findsOneWidget);
+      expect(find.text('Log out'), findsOneWidget);
+    });
+
+    testWidgets('Personal details: required fields block saving', (
+      tester,
+    ) async {
+      await openProfileTab(tester);
+      await tester.tap(find.text('Personal details'));
+      await tester.pumpAndSettle();
+
+      final save = find.text('Save changes');
+      await tester.ensureVisible(save);
+      await tester.tap(save);
+      await tester.pumpAndSettle();
+
+      // Sample data has no postal code or Nepal contact yet; each error
+      // says what to fill in.
+      expect(find.text('Enter your 7-digit postal code'), findsOneWidget);
+      expect(find.text("Enter how they're related to you"), findsOneWidget);
+      expect(find.text('Save changes'), findsOneWidget); // still here
+
+      // Error text is indented a little from the field's left edge, not by
+      // the full 14px inner padding like Flutter's default.
+      final errorLeft = tester
+          .getTopLeft(find.text('Enter your 7-digit postal code'))
+          .dx;
+      expect(errorLeft, TSizes.pagePadding + TSizes.xs);
+
+      // Dropdowns are the same height as text inputs.
+      final textBox = tester.getSize(find.byType(TextField).first).height;
+      final selectBox = tester
+          .getSize(
+            find
+                .ancestor(
+                  of: find.byType(DropdownButton<Gender>),
+                  matching: find.byType(InputDecorator),
+                )
+                .first,
+          )
+          .height;
+      expect(selectBox, closeTo(textBox, 0.5));
+    });
+
+    testWidgets('Personal details: saving updates the Profile header', (
+      tester,
+    ) async {
+      await openProfileTab(tester);
+      await tester.tap(find.text('Personal details'));
+      await tester.pumpAndSettle();
+
+      Future<void> fill(String currentText, String value) async {
+        final field = find.widgetWithText(TextField, currentText);
+        await tester.ensureVisible(field);
+        await tester.enterText(field, value);
+      }
+
+      await fill('Sita Kumari Shrestha', 'Gita Shrestha');
+      await fill('0000000', '1234567');
+      await fill('e.g. a parent, spouse or sibling', 'Hari Shrestha');
+      await fill('e.g. Mother', 'Father');
+      await fill('+977 98XXXXXXXX', '+977 9812345678');
+
+      // Close the keyboard, otherwise the focused field keeps scrolling
+      // itself back into view and the button moves off screen.
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pumpAndSettle();
+
+      final save = find.text('Save changes');
+      await tester.ensureVisible(save);
+      await tester.pumpAndSettle();
+      await tester.tap(save);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Your details have been saved'), findsOneWidget);
+      expect(find.text('Gita Shrestha'), findsOneWidget); // Profile header
+      expect(find.text('GS'), findsOneWidget); // avatar initials
+    });
+
+    testWidgets('language pill switches the app to Nepali', (tester) async {
+      await openProfileTab(tester);
+
+      await tester.tap(find.text('नेपाली'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('एपको भाषा'), findsOneWidget);
+      expect(find.text('लग आउट'), findsOneWidget);
     });
   });
 

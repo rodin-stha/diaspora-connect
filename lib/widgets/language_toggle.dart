@@ -6,35 +6,72 @@ import '../theme/colors.dart';
 import '../theme/sizes.dart';
 import '../theme/text_styles.dart';
 
-/// The ने / EN switch shown in the home header. Changes the whole app's language.
+enum LanguageToggleVariant {
+  /// Small "ने / EN" switch on the blue Home header.
+  compact,
+
+  /// "नेपाली / English" pill on a light background (Profile).
+  full,
+}
+
+/// Nepali/English switch. Changes the whole app's language.
+///
+/// Language names are always shown in their own language (not translated),
+/// so people can find theirs whatever language the app is in.
 class LanguageToggle extends ConsumerWidget {
-  const LanguageToggle({super.key});
+  final LanguageToggleVariant variant;
+
+  const LanguageToggle({
+    super.key,
+    this.variant = LanguageToggleVariant.compact,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final current = ref.watch(localeProvider).languageCode;
     final notifier = ref.read(localeProvider.notifier);
     final colors = context.colors;
+    final isCompact = variant == LanguageToggleVariant.compact;
+
+    final style = isCompact
+        ? _SegmentStyle(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            textStyle: TTextStyles.caption,
+            selectedBackground: colors.onPrimary,
+            selectedForeground: colors.primary,
+            unselectedForeground: colors.onPrimary,
+          )
+        : _SegmentStyle(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            textStyle: TTextStyles.label,
+            selectedBackground: colors.primary,
+            selectedForeground: colors.onPrimary,
+            unselectedForeground: colors.textSecondary,
+          );
 
     return Container(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(TSizes.xs),
       decoration: BoxDecoration(
-        color: colors.onPrimarySubtle,
+        color: isCompact ? colors.onPrimarySubtle : colors.surface,
+        border: isCompact ? null : Border.all(color: colors.border),
         borderRadius: BorderRadius.circular(TSizes.pillRadius),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           _Segment(
-            label: 'ने',
+            label: isCompact ? 'ने' : 'नेपाली',
             semanticsLabel: 'नेपाली',
             isSelected: current == 'ne',
+            style: style,
             onTap: () => notifier.setLocale(const Locale('ne')),
           ),
+          if (!isCompact) const SizedBox(width: 6),
           _Segment(
-            label: 'EN',
+            label: isCompact ? 'EN' : 'English',
             semanticsLabel: 'English',
             isSelected: current == 'en',
+            style: style,
             onTap: () => notifier.setLocale(const Locale('en')),
           ),
         ],
@@ -43,23 +80,39 @@ class LanguageToggle extends ConsumerWidget {
   }
 }
 
+class _SegmentStyle {
+  final EdgeInsets padding;
+  final TextStyle textStyle;
+  final Color selectedBackground;
+  final Color selectedForeground;
+  final Color unselectedForeground;
+
+  const _SegmentStyle({
+    required this.padding,
+    required this.textStyle,
+    required this.selectedBackground,
+    required this.selectedForeground,
+    required this.unselectedForeground,
+  });
+}
+
 class _Segment extends StatelessWidget {
   final String label;
   final String semanticsLabel;
   final bool isSelected;
+  final _SegmentStyle style;
   final VoidCallback onTap;
 
   const _Segment({
     required this.label,
     required this.semanticsLabel,
     required this.isSelected,
+    required this.style,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-
     return Semantics(
       button: true,
       selected: isSelected,
@@ -70,15 +123,17 @@ class _Segment extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: style.padding,
           decoration: BoxDecoration(
-            color: isSelected ? colors.onPrimary : Colors.transparent,
+            color: isSelected ? style.selectedBackground : Colors.transparent,
             borderRadius: BorderRadius.circular(TSizes.pillRadius),
           ),
           child: Text(
             label,
-            style: TTextStyles.caption.copyWith(
-              color: isSelected ? colors.primary : colors.onPrimary,
+            style: style.textStyle.copyWith(
+              color: isSelected
+                  ? style.selectedForeground
+                  : style.unselectedForeground,
             ),
           ),
         ),

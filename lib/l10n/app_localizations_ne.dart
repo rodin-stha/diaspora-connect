@@ -154,6 +154,203 @@ class AppLocalizationsNe extends AppLocalizations {
       'कामको विवरण र अनुमतिपत्र सुरक्षित गरियो';
 
   @override
+  String get appLanguage => 'एपको भाषा';
+
+  @override
+  String get profileSectionProfile => 'प्रोफाइल';
+
+  @override
+  String get profileSectionPreferences => 'प्राथमिकताहरू';
+
+  @override
+  String get personalDetails => 'व्यक्तिगत विवरण';
+
+  @override
+  String get legalDetails => 'कानुनी विवरण · नागरिकता / राष्ट्रिय परिचयपत्र';
+
+  @override
+  String get workDetails => 'कामको विवरण र अनुमतिपत्र';
+
+  @override
+  String get savedDocuments => 'सुरक्षित कागजातहरू';
+
+  @override
+  String get notificationSettings => 'सूचना सेटिङहरू';
+
+  @override
+  String get logOut => 'लग आउट';
+
+  @override
+  String get fullNameLabel => 'पूरा नाम';
+
+  @override
+  String get dateOfBirthLabel => 'जन्म मिति · ऐच्छिक';
+
+  @override
+  String get dateOfBirthHint => 'DD/MM/YYYY';
+
+  @override
+  String get genderLabel => 'लिङ्ग';
+
+  @override
+  String get genderFemale => 'महिला';
+
+  @override
+  String get genderMale => 'पुरुष';
+
+  @override
+  String get genderOther => 'अन्य';
+
+  @override
+  String get selectHint => 'छान्नुहोस्';
+
+  @override
+  String get mobileIsraelLabel => 'मोबाइल नम्बर (इजरायल)';
+
+  @override
+  String get mobileIsraelHint => '+972 5X-XXX-XXXX';
+
+  @override
+  String get homeInIsraelSection => 'इजरायलमा तपाईंको घर';
+
+  @override
+  String get councilCity => 'सिटी काउन्सिल';
+
+  @override
+  String get councilLocal => 'लोकल काउन्सिल';
+
+  @override
+  String get councilRegional => 'रिजनल काउन्सिल';
+
+  @override
+  String get districtLabel => 'जिल्ला';
+
+  @override
+  String get districtJerusalem => 'जेरुसलेम जिल्ला';
+
+  @override
+  String get districtNorthern => 'उत्तरी जिल्ला';
+
+  @override
+  String get districtHaifa => 'हाइफा जिल्ला';
+
+  @override
+  String get districtCentral => 'मध्य जिल्ला';
+
+  @override
+  String get districtTelAviv => 'तेल अभिभ जिल्ला';
+
+  @override
+  String get districtSouthern => 'दक्षिणी जिल्ला';
+
+  @override
+  String get localAuthorityLabel => 'स्थानीय निकाय';
+
+  @override
+  String get neighborhoodLabel => 'टोल वा बस्ती';
+
+  @override
+  String get neighborhoodHint => 'जस्तै: Kibbutz Afikim';
+
+  @override
+  String get postalCodeLabel => 'पोस्टल कोड · ७ अङ्क';
+
+  @override
+  String get homeHint =>
+      'आधिकारिक अभिलेखका लागि उप-जिल्ला आफैं रेकर्ड हुन्छ। तपाईं किबुत्ज वा मोशाभमा बस्नुहुन्छ भने रिजनल काउन्सिलको नामको सट्टा सिधै त्यसैलाई खोज्नुहोस्।';
+
+  @override
+  String get nepalContactSection => 'नेपालमा सम्पर्क · ठेगाना होइन';
+
+  @override
+  String get contactNameLabel => 'सम्पर्क व्यक्तिको नाम';
+
+  @override
+  String get contactNameHint =>
+      'जस्तै: आमाबुबा, श्रीमान्/श्रीमती वा दाजुभाइ-दिदीबहिनी';
+
+  @override
+  String get relationshipLabel => 'नाता';
+
+  @override
+  String get relationshipHint => 'जस्तै: आमा';
+
+  @override
+  String get contactPhoneLabel => 'फोन नम्बर';
+
+  @override
+  String get contactPhoneHint => '+977 98XXXXXXXX';
+
+  @override
+  String get emailLabel => 'इमेल ठेगाना · ऐच्छिक';
+
+  @override
+  String get emailHint => 'name@example.com';
+
+  @override
+  String get contactHint =>
+      'आपतकालमा परिवारलाई सम्पर्क गर्न वा आधिकारिक पत्राचारका लागि मात्र प्रयोग हुन्छ — यसलाई तपाईंको घरको ठेगाना मानिँदैन।';
+
+  @override
+  String get saveChanges => 'परिवर्तनहरू सुरक्षित गर्नुहोस्';
+
+  @override
+  String get detailsSaved => 'तपाईंको विवरण सुरक्षित भयो';
+
+  @override
+  String get errorFullName => 'आफ्नो पूरा नाम लेख्नुहोस्';
+
+  @override
+  String get errorGender => 'आफ्नो लिङ्ग छान्नुहोस्';
+
+  @override
+  String get errorMobileEmpty => 'आफ्नो इजरायली मोबाइल नम्बर लेख्नुहोस्';
+
+  @override
+  String get errorCouncilType =>
+      'तपाईं बस्ने ठाउँको काउन्सिलको प्रकार छान्नुहोस्';
+
+  @override
+  String get errorDistrict => 'तपाईं बस्ने जिल्ला छान्नुहोस्';
+
+  @override
+  String get errorLocalAuthority =>
+      'आफ्नो स्थानीय निकाय लेख्नुहोस्, जस्तै सिटी वा रिजनल काउन्सिल';
+
+  @override
+  String get errorNeighborhood => 'आफ्नो टोल, किबुत्ज वा मोशाभ लेख्नुहोस्';
+
+  @override
+  String get errorPostalCodeEmpty => 'आफ्नो ७ अङ्कको पोस्टल कोड लेख्नुहोस्';
+
+  @override
+  String get errorContactName =>
+      'नेपालमा सम्पर्क गर्न सकिने व्यक्तिको नाम लेख्नुहोस्';
+
+  @override
+  String get errorRelationship => 'उहाँ तपाईंको को हुनुहुन्छ, लेख्नुहोस्';
+
+  @override
+  String get errorContactPhoneEmpty => 'उहाँको फोन नम्बर लेख्नुहोस्';
+
+  @override
+  String get errorIsraeliMobile =>
+      'इजरायली मोबाइल नम्बर लेख्नुहोस्, जस्तै +972 52 123 4567';
+
+  @override
+  String get errorNepaliMobile =>
+      'नेपाली मोबाइल नम्बर लेख्नुहोस्, जस्तै +977 98XXXXXXXX';
+
+  @override
+  String get errorPostalCode => 'पोस्टल कोड ७ अङ्कको हुनुपर्छ';
+
+  @override
+  String get errorEmail => 'सही इमेल ठेगाना लेख्नुहोस्';
+
+  @override
+  String get requiredField => 'आवश्यक';
+
+  @override
   String get navHome => 'गृहपृष्ठ';
 
   @override

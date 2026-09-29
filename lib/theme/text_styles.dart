@@ -42,7 +42,7 @@ class TTextStyles {
   static TextStyle get titleLarge =>
       _manrope(fontSize: 20, fontWeight: FontWeight.w700, height: 1.25);
 
-  /// Title next to a back button.
+  /// Title next to a back button; also the name in the Profile header.
   static TextStyle get appBarTitle =>
       _manrope(fontSize: 17, fontWeight: FontWeight.w700, height: 1.25);
 
@@ -79,6 +79,10 @@ class TTextStyles {
 
   static TextStyle get chipLabel =>
       _manrope(fontSize: 13, fontWeight: FontWeight.w700, height: 1.3);
+
+  /// Body/Button
+  static TextStyle get button =>
+      _manrope(fontSize: 15, fontWeight: FontWeight.w700, height: 1.3);
 
   static TextStyle get caption => _manrope(
     fontSize: 11,

@@ -350,6 +350,384 @@ abstract class AppLocalizations {
   /// **'Work details & permit saved'**
   String get activityProfileUpdatedDetail;
 
+  /// No description provided for @appLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get appLanguage;
+
+  /// No description provided for @profileSectionProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileSectionProfile;
+
+  /// No description provided for @profileSectionPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get profileSectionPreferences;
+
+  /// No description provided for @personalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal details'**
+  String get personalDetails;
+
+  /// No description provided for @legalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal details · Citizenship / NID'**
+  String get legalDetails;
+
+  /// No description provided for @workDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Work details & permit'**
+  String get workDetails;
+
+  /// No description provided for @savedDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved documents'**
+  String get savedDocuments;
+
+  /// No description provided for @notificationSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification settings'**
+  String get notificationSettings;
+
+  /// No description provided for @logOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logOut;
+
+  /// No description provided for @fullNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get fullNameLabel;
+
+  /// No description provided for @dateOfBirthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth · optional'**
+  String get dateOfBirthLabel;
+
+  /// No description provided for @dateOfBirthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'DD/MM/YYYY'**
+  String get dateOfBirthHint;
+
+  /// No description provided for @genderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get genderLabel;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get genderFemale;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get genderMale;
+
+  /// No description provided for @genderOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get genderOther;
+
+  /// No description provided for @selectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get selectHint;
+
+  /// No description provided for @mobileIsraelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number (Israel)'**
+  String get mobileIsraelLabel;
+
+  /// No description provided for @mobileIsraelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'+972 5X-XXX-XXXX'**
+  String get mobileIsraelHint;
+
+  /// No description provided for @homeInIsraelSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Your home in Israel'**
+  String get homeInIsraelSection;
+
+  /// No description provided for @councilCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City Council'**
+  String get councilCity;
+
+  /// No description provided for @councilLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Council'**
+  String get councilLocal;
+
+  /// No description provided for @councilRegional.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Council'**
+  String get councilRegional;
+
+  /// No description provided for @districtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'District'**
+  String get districtLabel;
+
+  /// No description provided for @districtJerusalem.
+  ///
+  /// In en, this message translates to:
+  /// **'Jerusalem District'**
+  String get districtJerusalem;
+
+  /// No description provided for @districtNorthern.
+  ///
+  /// In en, this message translates to:
+  /// **'Northern District'**
+  String get districtNorthern;
+
+  /// No description provided for @districtHaifa.
+  ///
+  /// In en, this message translates to:
+  /// **'Haifa District'**
+  String get districtHaifa;
+
+  /// No description provided for @districtCentral.
+  ///
+  /// In en, this message translates to:
+  /// **'Central District'**
+  String get districtCentral;
+
+  /// No description provided for @districtTelAviv.
+  ///
+  /// In en, this message translates to:
+  /// **'Tel Aviv District'**
+  String get districtTelAviv;
+
+  /// No description provided for @districtSouthern.
+  ///
+  /// In en, this message translates to:
+  /// **'Southern District'**
+  String get districtSouthern;
+
+  /// No description provided for @localAuthorityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Authority'**
+  String get localAuthorityLabel;
+
+  /// No description provided for @neighborhoodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Neighborhood or Settlement'**
+  String get neighborhoodLabel;
+
+  /// No description provided for @neighborhoodHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Kibbutz Afikim'**
+  String get neighborhoodHint;
+
+  /// No description provided for @postalCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Postal code · 7 digits'**
+  String get postalCodeLabel;
+
+  /// No description provided for @homeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sub-district is recorded automatically for official records. If you live on a Kibbutz or Moshav, search for it directly rather than the Regional Council name.'**
+  String get homeHint;
+
+  /// No description provided for @nepalContactSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact in Nepal · not an address'**
+  String get nepalContactSection;
+
+  /// No description provided for @contactNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact person\'s name'**
+  String get contactNameLabel;
+
+  /// No description provided for @contactNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. a parent, spouse or sibling'**
+  String get contactNameHint;
+
+  /// No description provided for @relationshipLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Relationship'**
+  String get relationshipLabel;
+
+  /// No description provided for @relationshipHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Mother'**
+  String get relationshipHint;
+
+  /// No description provided for @contactPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get contactPhoneLabel;
+
+  /// No description provided for @contactPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'+977 98XXXXXXXX'**
+  String get contactPhoneHint;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address · optional'**
+  String get emailLabel;
+
+  /// No description provided for @emailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'name@example.com'**
+  String get emailHint;
+
+  /// No description provided for @contactHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Used only to reach your family in an emergency, or for official correspondence — this is not treated as your home address.'**
+  String get contactHint;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get saveChanges;
+
+  /// No description provided for @detailsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your details have been saved'**
+  String get detailsSaved;
+
+  /// No description provided for @errorFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your full name'**
+  String get errorFullName;
+
+  /// No description provided for @errorGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your gender'**
+  String get errorGender;
+
+  /// No description provided for @errorMobileEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your Israeli mobile number'**
+  String get errorMobileEmpty;
+
+  /// No description provided for @errorCouncilType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the type of council where you live'**
+  String get errorCouncilType;
+
+  /// No description provided for @errorDistrict.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the district where you live'**
+  String get errorDistrict;
+
+  /// No description provided for @errorLocalAuthority.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your local authority, e.g. a city or regional council'**
+  String get errorLocalAuthority;
+
+  /// No description provided for @errorNeighborhood.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your neighborhood, kibbutz or moshav'**
+  String get errorNeighborhood;
+
+  /// No description provided for @errorPostalCodeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your 7-digit postal code'**
+  String get errorPostalCodeEmpty;
+
+  /// No description provided for @errorContactName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the name of someone we can contact in Nepal'**
+  String get errorContactName;
+
+  /// No description provided for @errorRelationship.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter how they\'re related to you'**
+  String get errorRelationship;
+
+  /// No description provided for @errorContactPhoneEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter their phone number'**
+  String get errorContactPhoneEmpty;
+
+  /// No description provided for @errorIsraeliMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an Israeli mobile number, e.g. +972 52 123 4567'**
+  String get errorIsraeliMobile;
+
+  /// No description provided for @errorNepaliMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a Nepali mobile, e.g. +977 98XXXXXXXX'**
+  String get errorNepaliMobile;
+
+  /// No description provided for @errorPostalCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Postal code must be 7 digits'**
+  String get errorPostalCode;
+
+  /// No description provided for @errorEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get errorEmail;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'required'**
+  String get requiredField;
+
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:
