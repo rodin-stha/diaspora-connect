@@ -124,6 +124,10 @@ class ProfileScreen extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
+            // Red, like the Log out row: it's the destructive choice.
+            style: TextButton.styleFrom(
+              foregroundColor: context.colors.accent,
+            ),
             child: Text(l10n.logOut),
           ),
         ],

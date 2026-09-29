@@ -1199,7 +1199,7 @@ abstract class AppLocalizations {
   /// No description provided for @logOutConfirmBody.
   ///
   /// In en, this message translates to:
-  /// **'You\'ll need your mobile number and a new code to sign in again.'**
+  /// **'Are you sure you want to log out? You\'ll need your mobile number and a new code to sign in again.'**
   String get logOutConfirmBody;
 
   /// No description provided for @navHome.

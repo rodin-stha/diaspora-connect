@@ -92,6 +92,19 @@ void main() {
       await tester.tap(find.text('Log out'));
       await tester.pumpAndSettle();
       expect(find.text('Log out?'), findsOneWidget);
+      expect(
+        find.textContaining('Are you sure you want to log out?'),
+        findsOneWidget,
+      );
+
+      // Cancel keeps you signed in
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+      expect(find.text('Log out?'), findsNothing);
+      expect(find.text('PROFILE'), findsOneWidget);
+
+      await tester.tap(find.text('Log out'));
+      await tester.pumpAndSettle();
 
       await tester.tap(find.text('Log out').last); // the dialog's button
       await tester.pumpAndSettle();

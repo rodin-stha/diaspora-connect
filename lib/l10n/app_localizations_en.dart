@@ -592,7 +592,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logOutConfirmBody =>
-      'You\'ll need your mobile number and a new code to sign in again.';
+      'Are you sure you want to log out? You\'ll need your mobile number and a new code to sign in again.';
 
   @override
   String get navHome => 'Home';

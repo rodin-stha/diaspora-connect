@@ -220,7 +220,7 @@
   "errorOtpIncomplete": "Enter all 6 digits",
   "errorOtpWrong": "That code isn't right. Check the SMS and try again.",
   "logOutConfirmTitle": "Log out?",
-  "logOutConfirmBody": "You'll need your mobile number and a new code to sign in again.",
+  "logOutConfirmBody": "Are you sure you want to log out? You'll need your mobile number and a new code to sign in again.",
   "navHome": "Home",
   "navIssues": "Issues",
   "navActivity": "Activity",

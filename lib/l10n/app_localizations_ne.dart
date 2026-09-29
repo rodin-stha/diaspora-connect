@@ -594,7 +594,7 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get logOutConfirmBody =>
-      'फेरि साइन इन गर्न तपाईंको मोबाइल नम्बर र नयाँ कोड चाहिन्छ।';
+      'के तपाईं पक्का लग आउट गर्न चाहनुहुन्छ? फेरि साइन इन गर्न तपाईंको मोबाइल नम्बर र नयाँ कोड चाहिन्छ।';
 
   @override
   String get navHome => 'गृहपृष्ठ';
