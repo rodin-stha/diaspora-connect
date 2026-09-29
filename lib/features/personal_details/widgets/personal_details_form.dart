@@ -5,8 +5,9 @@ import '../../../l10n/app_localizations.dart';
 import '../../../theme/colors.dart';
 import '../../../theme/sizes.dart';
 import '../../../theme/text_styles.dart';
-import '../../../utils/formatters.dart';
 import '../../../utils/validators.dart';
+import '../../../widgets/date_field.dart';
+import '../../../widgets/form_section_header.dart';
 import '../../../widgets/labeled_field.dart';
 import '../../../widgets/labeled_text_field.dart';
 import '../../../widgets/select_field.dart';
@@ -45,11 +46,6 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
 
   // Text fields: a controller each (like a ref to an uncontrolled input).
   late final _fullName = TextEditingController(text: _initial.fullName);
-  late final _dateOfBirth = TextEditingController(
-    text: _initial.dateOfBirth == null
-        ? ''
-        : TFormatters.shortDate(_initial.dateOfBirth!),
-  );
   late final _mobile = TextEditingController(text: _initial.mobileNumber);
   late final _localAuthority = TextEditingController(
     text: _initial.localAuthority,
@@ -79,7 +75,6 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
   void dispose() {
     for (final controller in [
       _fullName,
-      _dateOfBirth,
       _mobile,
       _localAuthority,
       _neighborhood,
@@ -92,22 +87,6 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
       controller.dispose();
     }
     super.dispose();
-  }
-
-  Future<void> _pickDateOfBirth() async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _dob ?? DateTime(now.year - 30),
-      firstDate: DateTime(1940),
-      lastDate: now,
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-    );
-    if (picked == null) return;
-    setState(() {
-      _dob = picked;
-      _dateOfBirth.text = TFormatters.shortDate(picked);
-    });
   }
 
   void _submit() {
@@ -182,12 +161,14 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
               spacing: 10,
               children: [
                 Expanded(
-                  child: LabeledTextField(
+                  child: DateField(
                     label: l10n.dateOfBirthLabel,
-                    controller: _dateOfBirth,
-                    hintText: l10n.dateOfBirthHint,
-                    readOnly: true,
-                    onTap: _pickDateOfBirth,
+                    value: _dob,
+                    hintText: l10n.dateHint,
+                    firstDate: DateTime(1940),
+                    lastDate: DateTime.now(),
+                    initialPickerDate: DateTime(DateTime.now().year - 30),
+                    onChanged: (date) => setState(() => _dob = date),
                   ),
                 ),
                 Expanded(
@@ -218,7 +199,7 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
               autofillHints: const [AutofillHints.telephoneNumber],
             ),
 
-            _SectionHeader(title: l10n.homeInIsraelSection),
+            FormSectionHeader(title: l10n.homeInIsraelSection),
             FormField<CouncilType>(
               initialValue: _councilType,
               validator: requiredChoice(l10n.errorCouncilType),
@@ -286,7 +267,7 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
             ),
             if (widget.showHints) Text(l10n.homeHint, style: hintStyle),
 
-            _SectionHeader(title: l10n.nepalContactSection),
+            FormSectionHeader(title: l10n.nepalContactSection),
             LabeledTextField(
               label: l10n.contactNameLabel,
               isRequired: true,
@@ -372,28 +353,4 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
         IsraelDistrict.telAviv => l10n.districtTelAviv,
         IsraelDistrict.southern => l10n.districtSouthern,
       };
-}
-
-/// A divider followed by a small uppercase heading.
-class _SectionHeader extends StatelessWidget {
-  final String title;
-
-  const _SectionHeader({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: TSizes.formGap,
-      children: [
-        Divider(height: 1, thickness: 1, color: colors.border),
-        Text(
-          title.toUpperCase(),
-          style: TTextStyles.caption.copyWith(color: colors.textSecondary),
-        ),
-      ],
-    );
-  }
 }

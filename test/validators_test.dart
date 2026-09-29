@@ -27,4 +27,11 @@ void main() {
     expect(TValidators.isEmail('sita@example'), isFalse);
     expect(TValidators.isEmail('sita example.com'), isFalse);
   });
+
+  test('passport number is 6-9 letters or digits', () {
+    expect(TValidators.isPassportNumber('09123456'), isTrue);
+    expect(TValidators.isPassportNumber('pa 1234567'), isTrue);
+    expect(TValidators.isPassportNumber('12345'), isFalse);
+    expect(TValidators.isPassportNumber('09-123456'), isFalse);
+  });
 }

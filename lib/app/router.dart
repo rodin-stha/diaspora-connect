@@ -6,8 +6,12 @@ import '../features/activity/activity_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/issues/issue_detail_screen.dart';
 import '../features/issues/issues_screen.dart';
+import '../features/legal_details/legal_details_screen.dart';
+import '../features/notification_settings/notification_settings_screen.dart';
 import '../features/personal_details/personal_details_screen.dart';
 import '../features/profile/profile_screen.dart';
+import '../features/saved_documents/saved_documents_screen.dart';
+import '../features/work_details/work_details_screen.dart';
 import 'main_shell.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -67,6 +71,27 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'personal-details', // → /profile/personal-details
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) => const PersonalDetailsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'legal-details', // → /profile/legal-details
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const LegalDetailsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'work-details', // → /profile/work-details
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const WorkDetailsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'notification-settings',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) =>
+                        const NotificationSettingsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'saved-documents', // → /profile/saved-documents
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const SavedDocumentsScreen(),
                   ),
                 ],
               ),

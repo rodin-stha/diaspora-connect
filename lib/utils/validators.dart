@@ -23,4 +23,10 @@ class TValidators {
   /// of an email address is sending to it.
   static bool isEmail(String value) =>
       RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value.trim());
+
+  /// Passport number: 6–9 letters or digits (spaces ignored). Loose on
+  /// purpose: Nepali passport formats have changed over the years.
+  static bool isPassportNumber(String value) => RegExp(
+    r'^[A-Z0-9]{6,9}$',
+  ).hasMatch(value.replaceAll(' ', '').toUpperCase());
 }

@@ -8,6 +8,7 @@ import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
 import '../../widgets/language_toggle.dart';
+import '../../widgets/list_section.dart';
 import '../../widgets/menu_row.dart';
 import 'data/user_provider.dart';
 import 'widgets/profile_header.dart';
@@ -21,7 +22,7 @@ class ProfileScreen extends ConsumerWidget {
     final colors = context.colors;
     final user = ref.watch(currentUserProvider);
 
-    // TODO: onTap for the remaining rows once their screens exist.
+    // TODO: Log out once sign-in exists.
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // White status bar icons on the blue header
       value: SystemUiOverlayStyle.light,
@@ -57,24 +58,37 @@ class ProfileScreen extends ConsumerWidget {
                       ],
                     ),
                     const SizedBox(height: TSizes.groupGap),
-                    _MenuSection(
+                    ListSection(
                       title: l10n.profileSectionProfile,
-                      rows: [
+                      children: [
                         MenuRow(
                           title: l10n.personalDetails,
                           onTap: () =>
                               context.push('/profile/personal-details'),
                         ),
-                        MenuRow(title: l10n.legalDetails),
-                        MenuRow(title: l10n.workDetails),
-                        MenuRow(title: l10n.savedDocuments),
+                        MenuRow(
+                          title: l10n.legalDetails,
+                          onTap: () => context.push('/profile/legal-details'),
+                        ),
+                        MenuRow(
+                          title: l10n.workDetails,
+                          onTap: () => context.push('/profile/work-details'),
+                        ),
+                        MenuRow(
+                          title: l10n.savedDocuments,
+                          onTap: () => context.push('/profile/saved-documents'),
+                        ),
                       ],
                     ),
                     const SizedBox(height: TSizes.groupGap),
-                    _MenuSection(
+                    ListSection(
                       title: l10n.profileSectionPreferences,
-                      rows: [
-                        MenuRow(title: l10n.notificationSettings),
+                      children: [
+                        MenuRow(
+                          title: l10n.notificationSettings,
+                          onTap: () =>
+                              context.push('/profile/notification-settings'),
+                        ),
                         MenuRow(
                           title: l10n.logOut,
                           isDestructive: true,
@@ -90,33 +104,6 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-/// A small uppercase heading followed by its rows.
-class _MenuSection extends StatelessWidget {
-  final String title;
-  final List<Widget> rows;
-
-  const _MenuSection({required this.title, required this.rows});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          // Uppercase is styling (like CSS text-transform), so the ARB file
-          // keeps normal case. Devanagari has no case and is unaffected.
-          title.toUpperCase(),
-          style: TTextStyles.label.copyWith(
-            color: context.colors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: 2),
-        ...rows,
-      ],
     );
   }
 }

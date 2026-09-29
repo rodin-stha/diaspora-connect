@@ -416,11 +416,11 @@ abstract class AppLocalizations {
   /// **'Date of birth · optional'**
   String get dateOfBirthLabel;
 
-  /// No description provided for @dateOfBirthHint.
+  /// No description provided for @dateHint.
   ///
   /// In en, this message translates to:
   /// **'DD/MM/YYYY'**
-  String get dateOfBirthHint;
+  String get dateHint;
 
   /// No description provided for @genderLabel.
   ///
@@ -727,6 +727,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'required'**
   String get requiredField;
+
+  /// No description provided for @legalDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal details'**
+  String get legalDetailsTitle;
+
+  /// No description provided for @passportNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Passport number'**
+  String get passportNumberLabel;
+
+  /// No description provided for @passportNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 09XXXXXX'**
+  String get passportNumberHint;
+
+  /// No description provided for @passportExpiryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Passport expiry'**
+  String get passportExpiryLabel;
+
+  /// No description provided for @nationalIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'NID no. · optional'**
+  String get nationalIdLabel;
+
+  /// No description provided for @nationalIdHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter NID number'**
+  String get nationalIdHint;
+
+  /// No description provided for @citizenshipNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Citizenship certificate no.'**
+  String get citizenshipNumberLabel;
+
+  /// No description provided for @citizenshipNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 27-01-73-01234'**
+  String get citizenshipNumberHint;
+
+  /// No description provided for @uploadedDocumentsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded documents'**
+  String get uploadedDocumentsSection;
+
+  /// No description provided for @documentPassportPhotoPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Passport · photo page'**
+  String get documentPassportPhotoPage;
+
+  /// No description provided for @documentIsraelVisaPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Israel visa page'**
+  String get documentIsraelVisaPage;
+
+  /// No description provided for @replaceAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get replaceAction;
+
+  /// No description provided for @uploadAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get uploadAction;
+
+  /// No description provided for @uploadComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading documents isn\'t available yet'**
+  String get uploadComingSoon;
+
+  /// No description provided for @errorPassportNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your passport number'**
+  String get errorPassportNumber;
+
+  /// No description provided for @errorPassportNumberFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter it as printed: 6–9 letters or numbers'**
+  String get errorPassportNumberFormat;
+
+  /// No description provided for @errorPassportExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the expiry date'**
+  String get errorPassportExpiry;
+
+  /// No description provided for @errorCitizenshipNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your citizenship certificate number'**
+  String get errorCitizenshipNumber;
+
+  /// No description provided for @documentWorkPermitLetter.
+  ///
+  /// In en, this message translates to:
+  /// **'Work permit approval letter'**
+  String get documentWorkPermitLetter;
+
+  /// No description provided for @viewAction.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get viewAction;
+
+  /// No description provided for @viewComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Viewing documents isn\'t available yet'**
+  String get viewComingSoon;
+
+  /// No description provided for @uploadNewDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload new document'**
+  String get uploadNewDocument;
+
+  /// No description provided for @businessTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type of business'**
+  String get businessTypeLabel;
+
+  /// No description provided for @businessCaregiving.
+  ///
+  /// In en, this message translates to:
+  /// **'Caregiving'**
+  String get businessCaregiving;
+
+  /// No description provided for @businessAgriculture.
+  ///
+  /// In en, this message translates to:
+  /// **'Agriculture'**
+  String get businessAgriculture;
+
+  /// No description provided for @businessEntrepreneur.
+  ///
+  /// In en, this message translates to:
+  /// **'Entrepreneur'**
+  String get businessEntrepreneur;
+
+  /// No description provided for @businessEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee'**
+  String get businessEmployee;
+
+  /// No description provided for @workPermitSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Work permit'**
+  String get workPermitSection;
+
+  /// No description provided for @caregivingDetailsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Caregiving details'**
+  String get caregivingDetailsSection;
+
+  /// No description provided for @careArrangementLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Live-in or live-out'**
+  String get careArrangementLabel;
+
+  /// No description provided for @liveIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Live-in'**
+  String get liveIn;
+
+  /// No description provided for @liveOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Live-out'**
+  String get liveOut;
+
+  /// No description provided for @hostFamilyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Host family / care institution · optional'**
+  String get hostFamilyLabel;
+
+  /// No description provided for @hostFamilyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Name of household or facility'**
+  String get hostFamilyHint;
+
+  /// No description provided for @errorBusinessType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the type of business you work in'**
+  String get errorBusinessType;
+
+  /// No description provided for @errorCareArrangement.
+  ///
+  /// In en, this message translates to:
+  /// **'Select whether you live in or out'**
+  String get errorCareArrangement;
+
+  /// No description provided for @howNotifiedSection.
+  ///
+  /// In en, this message translates to:
+  /// **'How you\'re notified'**
+  String get howNotifiedSection;
+
+  /// No description provided for @whatNotifiedSection.
+  ///
+  /// In en, this message translates to:
+  /// **'What you\'re notified about'**
+  String get whatNotifiedSection;
+
+  /// No description provided for @notifySms.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS alerts'**
+  String get notifySms;
+
+  /// No description provided for @notifyInApp.
+  ///
+  /// In en, this message translates to:
+  /// **'In-app alerts'**
+  String get notifyInApp;
+
+  /// No description provided for @notifyIssueStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Issue status changes'**
+  String get notifyIssueStatus;
+
+  /// No description provided for @notifyDocumentExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Document expiry reminders'**
+  String get notifyDocumentExpiry;
+
+  /// No description provided for @notifyAnnouncements.
+  ///
+  /// In en, this message translates to:
+  /// **'Embassy & DoFE announcements'**
+  String get notifyAnnouncements;
 
   /// No description provided for @navHome.
   ///

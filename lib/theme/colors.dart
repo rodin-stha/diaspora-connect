@@ -26,6 +26,7 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color textPrimary;
   final Color textSecondary;
   final Color iconInactive;
+  final Color iconDefault; // neutral icons next to text (e.g. "+")
 
   // Status
   final Color warningContainer;
@@ -50,6 +51,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.textPrimary,
     required this.textSecondary,
     required this.iconInactive,
+    required this.iconDefault,
     required this.warningContainer,
     required this.onWarningContainer,
     required this.errorContainer,
@@ -74,6 +76,7 @@ class AppColors extends ThemeExtension<AppColors> {
     textPrimary: Color(0xFF1C1B1A),
     textSecondary: Color(0xFF6B675F),
     iconInactive: Color(0xFF8A8676),
+    iconDefault: Color(0xFF4A473F),
     warningContainer: Color(0xFFFDF0D5),
     onWarningContainer: Color(0xFF8A5A00),
     errorContainer: Color(0xFFFCE4E4),
@@ -101,6 +104,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? textPrimary,
     Color? textSecondary,
     Color? iconInactive,
+    Color? iconDefault,
     Color? warningContainer,
     Color? onWarningContainer,
     Color? errorContainer,
@@ -123,6 +127,7 @@ class AppColors extends ThemeExtension<AppColors> {
       textPrimary: textPrimary ?? this.textPrimary,
       textSecondary: textSecondary ?? this.textSecondary,
       iconInactive: iconInactive ?? this.iconInactive,
+      iconDefault: iconDefault ?? this.iconDefault,
       warningContainer: warningContainer ?? this.warningContainer,
       onWarningContainer: onWarningContainer ?? this.onWarningContainer,
       errorContainer: errorContainer ?? this.errorContainer,
@@ -151,6 +156,7 @@ class AppColors extends ThemeExtension<AppColors> {
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       iconInactive: Color.lerp(iconInactive, other.iconInactive, t)!,
+      iconDefault: Color.lerp(iconDefault, other.iconDefault, t)!,
       warningContainer: Color.lerp(
         warningContainer,
         other.warningContainer,

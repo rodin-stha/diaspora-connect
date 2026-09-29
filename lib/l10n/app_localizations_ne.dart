@@ -187,7 +187,7 @@ class AppLocalizationsNe extends AppLocalizations {
   String get dateOfBirthLabel => 'जन्म मिति · ऐच्छिक';
 
   @override
-  String get dateOfBirthHint => 'DD/MM/YYYY';
+  String get dateHint => 'DD/MM/YYYY';
 
   @override
   String get genderLabel => 'लिङ्ग';
@@ -349,6 +349,137 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get requiredField => 'आवश्यक';
+
+  @override
+  String get legalDetailsTitle => 'कानुनी विवरण';
+
+  @override
+  String get passportNumberLabel => 'राहदानी नम्बर';
+
+  @override
+  String get passportNumberHint => 'जस्तै: 09XXXXXX';
+
+  @override
+  String get passportExpiryLabel => 'राहदानीको म्याद';
+
+  @override
+  String get nationalIdLabel => 'राष्ट्रिय परिचयपत्र नं. · ऐच्छिक';
+
+  @override
+  String get nationalIdHint => 'राष्ट्रिय परिचयपत्र नम्बर लेख्नुहोस्';
+
+  @override
+  String get citizenshipNumberLabel => 'नागरिकता प्रमाणपत्र नं.';
+
+  @override
+  String get citizenshipNumberHint => 'जस्तै: 27-01-73-01234';
+
+  @override
+  String get uploadedDocumentsSection => 'अपलोड गरिएका कागजात';
+
+  @override
+  String get documentPassportPhotoPage => 'राहदानी · फोटो पृष्ठ';
+
+  @override
+  String get documentIsraelVisaPage => 'इजरायली भिसा पृष्ठ';
+
+  @override
+  String get replaceAction => 'बदल्नुहोस्';
+
+  @override
+  String get uploadAction => 'अपलोड गर्नुहोस्';
+
+  @override
+  String get uploadComingSoon => 'कागजात अपलोड गर्ने सुविधा अहिले उपलब्ध छैन';
+
+  @override
+  String get errorPassportNumber => 'आफ्नो राहदानी नम्बर लेख्नुहोस्';
+
+  @override
+  String get errorPassportNumberFormat =>
+      'राहदानीमा छापिएजस्तै लेख्नुहोस्: ६–९ अक्षर वा अङ्क';
+
+  @override
+  String get errorPassportExpiry => 'म्याद सकिने मिति छान्नुहोस्';
+
+  @override
+  String get errorCitizenshipNumber =>
+      'आफ्नो नागरिकता प्रमाणपत्र नम्बर लेख्नुहोस्';
+
+  @override
+  String get documentWorkPermitLetter => 'कार्य अनुमति स्वीकृति पत्र';
+
+  @override
+  String get viewAction => 'हेर्नुहोस्';
+
+  @override
+  String get viewComingSoon => 'कागजात हेर्ने सुविधा अहिले उपलब्ध छैन';
+
+  @override
+  String get uploadNewDocument => 'नयाँ कागजात अपलोड गर्नुहोस्';
+
+  @override
+  String get businessTypeLabel => 'व्यवसायको प्रकार';
+
+  @override
+  String get businessCaregiving => 'हेरचाह (केयरगिभिङ)';
+
+  @override
+  String get businessAgriculture => 'कृषि';
+
+  @override
+  String get businessEntrepreneur => 'उद्यमी';
+
+  @override
+  String get businessEmployee => 'कर्मचारी';
+
+  @override
+  String get workPermitSection => 'कार्य अनुमति';
+
+  @override
+  String get caregivingDetailsSection => 'हेरचाह कामको विवरण';
+
+  @override
+  String get careArrangementLabel => 'घरमै बस्ने वा बाहिर बस्ने';
+
+  @override
+  String get liveIn => 'घरमै बस्ने';
+
+  @override
+  String get liveOut => 'बाहिर बस्ने';
+
+  @override
+  String get hostFamilyLabel => 'होस्ट परिवार / हेरचाह संस्था · ऐच्छिक';
+
+  @override
+  String get hostFamilyHint => 'परिवार वा संस्थाको नाम';
+
+  @override
+  String get errorBusinessType => 'तपाईं काम गर्ने व्यवसायको प्रकार छान्नुहोस्';
+
+  @override
+  String get errorCareArrangement => 'घरमै बस्ने वा बाहिर बस्ने छान्नुहोस्';
+
+  @override
+  String get howNotifiedSection => 'तपाईंलाई कसरी सूचना दिइन्छ';
+
+  @override
+  String get whatNotifiedSection => 'केको बारेमा सूचना दिइन्छ';
+
+  @override
+  String get notifySms => 'SMS सूचना';
+
+  @override
+  String get notifyInApp => 'एपभित्रको सूचना';
+
+  @override
+  String get notifyIssueStatus => 'समस्याको स्थिति परिवर्तन';
+
+  @override
+  String get notifyDocumentExpiry => 'कागजातको म्याद सकिने सम्झना';
+
+  @override
+  String get notifyAnnouncements => 'दूतावास र वैदेशिक रोजगार विभागका सूचना';
 
   @override
   String get navHome => 'गृहपृष्ठ';

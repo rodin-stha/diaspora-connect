@@ -10,6 +10,8 @@ import 'package:diaspora_connect/main.dart';
 import 'package:diaspora_connect/theme/sizes.dart';
 import 'package:diaspora_connect/widgets/issue_card.dart';
 import 'package:diaspora_connect/widgets/selectable_chip.dart';
+import 'package:diaspora_connect/widgets/toggle_row.dart';
+import 'package:diaspora_connect/widgets/toggle_switch.dart';
 
 Future<void> pumpApp(
   WidgetTester tester, {
@@ -278,6 +280,124 @@ void main() {
       expect(find.text('Your details have been saved'), findsOneWidget);
       expect(find.text('Gita Shrestha'), findsOneWidget); // Profile header
       expect(find.text('GS'), findsOneWidget); // avatar initials
+    });
+
+    testWidgets('Legal details: validates, then saves', (tester) async {
+      await openProfileTab(tester);
+      await tester.tap(find.text('Legal details · Citizenship / NID'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Passport · photo page'), findsOneWidget);
+      expect(find.text('Replace'), findsNWidgets(2));
+      expect(find.text('Upload new document'), findsOneWidget);
+
+      final save = find.text('Save changes');
+      await tester.ensureVisible(save);
+      await tester.tap(save);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Enter your passport number'), findsOneWidget);
+      expect(find.text('Select the expiry date'), findsOneWidget);
+      expect(
+        find.text('Enter your citizenship certificate number'),
+        findsOneWidget,
+      );
+
+      // Fill in, including the expiry date through the date picker
+      await tester.enterText(
+        find.widgetWithText(TextField, 'e.g. 09XXXXXX'),
+        '09123456',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextField, 'e.g. 27-01-73-01234'),
+        '27-01-73-01234',
+      );
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('DD/MM/YYYY'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(save);
+      await tester.pumpAndSettle();
+      await tester.tap(save);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Your details have been saved'), findsOneWidget);
+      expect(find.text('PROFILE'), findsOneWidget); // back on Profile
+    });
+
+    testWidgets('Saved documents lists legal scans and other documents', (
+      tester,
+    ) async {
+      await openProfileTab(tester);
+      await tester.tap(find.text('Saved documents'));
+      await tester.pumpAndSettle();
+
+      // Passport + visa come from Legal details, the letter from its own list
+      expect(find.text('Passport · photo page'), findsOneWidget);
+      expect(find.text('Israel visa page'), findsOneWidget);
+      expect(find.text('Work permit approval letter'), findsOneWidget);
+      expect(find.text('View'), findsNWidgets(3));
+
+      await tester.tap(find.text('Upload new document'));
+      await tester.pump();
+      expect(
+        find.text("Uploading documents isn't available yet"),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Work details: caregiving section follows business type', (
+      tester,
+    ) async {
+      await openProfileTab(tester);
+      await tester.tap(find.text('Work details & permit'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Work permit approval letter'), findsOneWidget);
+      expect(find.text('CAREGIVING DETAILS'), findsOneWidget);
+      expect(find.text('Live-in'), findsOneWidget);
+
+      // Switch to Agriculture: caregiving questions no longer apply
+      await tester.tap(find.text('Caregiving'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Agriculture').last);
+      await tester.pumpAndSettle();
+      expect(find.text('CAREGIVING DETAILS'), findsNothing);
+
+      await tester.tap(find.text('Save changes'));
+      await tester.pumpAndSettle();
+      expect(find.text('Your details have been saved'), findsOneWidget);
+    });
+
+    testWidgets('Notification settings: toggles save on the device', (
+      tester,
+    ) async {
+      await openProfileTab(tester);
+      await tester.tap(find.text('Notification settings'));
+      await tester.pumpAndSettle();
+
+      bool isOn(String title) => tester
+          .widget<ToggleSwitch>(
+            find.descendant(
+              of: find.widgetWithText(ToggleRow, title),
+              matching: find.byType(ToggleSwitch),
+            ),
+          )
+          .value;
+
+      expect(isOn('SMS alerts'), isTrue);
+      expect(isOn('Embassy & DoFE announcements'), isFalse);
+
+      // Tapping the row label (not just the switch) flips it
+      await tester.tap(find.text('Embassy & DoFE announcements'));
+      await tester.pumpAndSettle();
+      expect(isOn('Embassy & DoFE announcements'), isTrue);
+
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getBool('notify_embassyAnnouncements'), isTrue);
     });
 
     testWidgets('language pill switches the app to Nepali', (tester) async {

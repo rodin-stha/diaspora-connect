@@ -64,6 +64,9 @@ class TTextStyles {
     height: 1.4,
   );
 
+  /// 13px body text, e.g. document names in a list.
+  static TextStyle get bodyCompact => _manrope(fontSize: 13, height: 1.4);
+
   /// Body/Small
   static TextStyle get bodySmall => _manrope(
     fontSize: 12,

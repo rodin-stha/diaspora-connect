@@ -187,7 +187,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dateOfBirthLabel => 'Date of birth · optional';
 
   @override
-  String get dateOfBirthHint => 'DD/MM/YYYY';
+  String get dateHint => 'DD/MM/YYYY';
 
   @override
   String get genderLabel => 'Gender';
@@ -346,6 +346,137 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requiredField => 'required';
+
+  @override
+  String get legalDetailsTitle => 'Legal details';
+
+  @override
+  String get passportNumberLabel => 'Passport number';
+
+  @override
+  String get passportNumberHint => 'e.g. 09XXXXXX';
+
+  @override
+  String get passportExpiryLabel => 'Passport expiry';
+
+  @override
+  String get nationalIdLabel => 'NID no. · optional';
+
+  @override
+  String get nationalIdHint => 'Enter NID number';
+
+  @override
+  String get citizenshipNumberLabel => 'Citizenship certificate no.';
+
+  @override
+  String get citizenshipNumberHint => 'e.g. 27-01-73-01234';
+
+  @override
+  String get uploadedDocumentsSection => 'Uploaded documents';
+
+  @override
+  String get documentPassportPhotoPage => 'Passport · photo page';
+
+  @override
+  String get documentIsraelVisaPage => 'Israel visa page';
+
+  @override
+  String get replaceAction => 'Replace';
+
+  @override
+  String get uploadAction => 'Upload';
+
+  @override
+  String get uploadComingSoon => 'Uploading documents isn\'t available yet';
+
+  @override
+  String get errorPassportNumber => 'Enter your passport number';
+
+  @override
+  String get errorPassportNumberFormat =>
+      'Enter it as printed: 6–9 letters or numbers';
+
+  @override
+  String get errorPassportExpiry => 'Select the expiry date';
+
+  @override
+  String get errorCitizenshipNumber =>
+      'Enter your citizenship certificate number';
+
+  @override
+  String get documentWorkPermitLetter => 'Work permit approval letter';
+
+  @override
+  String get viewAction => 'View';
+
+  @override
+  String get viewComingSoon => 'Viewing documents isn\'t available yet';
+
+  @override
+  String get uploadNewDocument => 'Upload new document';
+
+  @override
+  String get businessTypeLabel => 'Type of business';
+
+  @override
+  String get businessCaregiving => 'Caregiving';
+
+  @override
+  String get businessAgriculture => 'Agriculture';
+
+  @override
+  String get businessEntrepreneur => 'Entrepreneur';
+
+  @override
+  String get businessEmployee => 'Employee';
+
+  @override
+  String get workPermitSection => 'Work permit';
+
+  @override
+  String get caregivingDetailsSection => 'Caregiving details';
+
+  @override
+  String get careArrangementLabel => 'Live-in or live-out';
+
+  @override
+  String get liveIn => 'Live-in';
+
+  @override
+  String get liveOut => 'Live-out';
+
+  @override
+  String get hostFamilyLabel => 'Host family / care institution · optional';
+
+  @override
+  String get hostFamilyHint => 'Name of household or facility';
+
+  @override
+  String get errorBusinessType => 'Select the type of business you work in';
+
+  @override
+  String get errorCareArrangement => 'Select whether you live in or out';
+
+  @override
+  String get howNotifiedSection => 'How you\'re notified';
+
+  @override
+  String get whatNotifiedSection => 'What you\'re notified about';
+
+  @override
+  String get notifySms => 'SMS alerts';
+
+  @override
+  String get notifyInApp => 'In-app alerts';
+
+  @override
+  String get notifyIssueStatus => 'Issue status changes';
+
+  @override
+  String get notifyDocumentExpiry => 'Document expiry reminders';
+
+  @override
+  String get notifyAnnouncements => 'Embassy & DoFE announcements';
 
   @override
   String get navHome => 'Home';

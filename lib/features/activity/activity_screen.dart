@@ -10,6 +10,7 @@ import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
 import '../../utils/formatters.dart';
 import '../../widgets/dot_list_item.dart';
+import '../../widgets/link_button.dart';
 import 'data/activity_provider.dart';
 import 'models/activity.dart';
 
@@ -49,22 +50,14 @@ class ActivityScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  TextButton(
+                  LinkButton(
+                    label: l10n.markAllRead,
                     // `read`, not `watch`: we only call a method here, we
                     // don't need to rebuild when the provider changes.
                     onPressed: hasUnread
                         ? () =>
                               ref.read(activityProvider.notifier).markAllRead()
                         : null,
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      foregroundColor: colors.primary,
-                      disabledForegroundColor: colors.textSecondary,
-                      textStyle: TTextStyles.label,
-                    ),
-                    child: Text(l10n.markAllRead),
                   ),
                 ],
               ),
