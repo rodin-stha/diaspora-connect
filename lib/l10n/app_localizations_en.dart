@@ -537,6 +537,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifyAnnouncements => 'Embassy & DoFE announcements';
 
   @override
+  String get mobileNumberLabel => 'Mobile number';
+
+  @override
+  String get mobileNumberHint => '5X-XXX-XXXX';
+
+  @override
+  String get sendOtp => 'Send OTP';
+
+  @override
+  String get loginConsent =>
+      'By continuing you agree this number will be used to verify your identity.';
+
+  @override
+  String get errorLoginMobile => 'Enter your mobile number';
+
+  @override
+  String get verifyTitle => 'Verify your number';
+
+  @override
+  String verifySubtitle(String phone) {
+    return 'Enter the 6-digit code sent by SMS to $phone';
+  }
+
+  @override
+  String get otpFieldLabel => '6-digit code';
+
+  @override
+  String get resendPrompt => 'Didn\'t get a code?';
+
+  @override
+  String resendIn(String time) {
+    return 'Resend in $time';
+  }
+
+  @override
+  String get resendAction => 'Resend';
+
+  @override
+  String get codeResent => 'A new code has been sent';
+
+  @override
+  String get verifyAction => 'Verify';
+
+  @override
+  String get errorOtpIncomplete => 'Enter all 6 digits';
+
+  @override
+  String get errorOtpWrong =>
+      'That code isn\'t right. Check the SMS and try again.';
+
+  @override
+  String get logOutConfirmTitle => 'Log out?';
+
+  @override
+  String get logOutConfirmBody =>
+      'You\'ll need your mobile number and a new code to sign in again.';
+
+  @override
   String get navHome => 'Home';
 
   @override

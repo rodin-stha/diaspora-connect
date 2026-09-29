@@ -12,8 +12,9 @@ import '../theme/text_styles.dart';
 const double _chevronLeftInset = 7.33;
 
 /// A back chevron followed by a page title, for pages pushed on top of a tab.
+/// Without a [title], just the chevron.
 class BackTitleBar extends StatelessWidget {
-  final String title;
+  final String? title;
 
   /// Where to go when there's nothing to pop, e.g. the page was opened
   /// directly from a deep link.
@@ -21,7 +22,7 @@ class BackTitleBar extends StatelessWidget {
 
   const BackTitleBar({
     super.key,
-    required this.title,
+    this.title,
     required this.fallbackLocation,
   });
 
@@ -55,13 +56,17 @@ class BackTitleBar extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Text(
-            title,
-            style: TTextStyles.appBarTitle.copyWith(color: colors.textPrimary),
+        if (title != null) ...[
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              title!,
+              style: TTextStyles.appBarTitle.copyWith(
+                color: colors.textPrimary,
+              ),
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

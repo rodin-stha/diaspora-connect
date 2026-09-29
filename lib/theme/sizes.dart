@@ -30,9 +30,11 @@ class TSizes {
   static const double actionCardRadius = 18.0;
   static const double headerRadius = 28.0;
   static const double pillRadius = 999.0;
+  static const double logoRadius = 16.0;
 
   // Avatars
   static const double avatarLg = 56.0;
+  static const double logoSize = 64.0;
 
   // Icons
   static const double dotSm = 8.0; // list item marker (Activity)

@@ -35,6 +35,14 @@ class TTextStyles {
     height: 1.25,
   );
 
+  /// The app name on the login screen.
+  static TextStyle get brandTitle =>
+      _manrope(fontSize: 24, fontWeight: FontWeight.w700, height: 1.25);
+
+  /// Big heading on a screen without a title bar ("Verify your number").
+  static TextStyle get pageHeading =>
+      _manrope(fontSize: 22, fontWeight: FontWeight.w700, height: 1.25);
+
   /// Detail page heading, e.g. the issue title on Track issue.
   static TextStyle get headlineSmall =>
       _manrope(fontSize: 19, fontWeight: FontWeight.w700, height: 1.25);

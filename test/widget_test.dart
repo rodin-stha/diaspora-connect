@@ -16,8 +16,12 @@ import 'package:diaspora_connect/widgets/toggle_switch.dart';
 Future<void> pumpApp(
   WidgetTester tester, {
   Map<String, Object> savedPrefs = const {},
+  bool signedIn = true,
 }) async {
-  SharedPreferences.setMockInitialValues(savedPrefs);
+  SharedPreferences.setMockInitialValues({
+    'signed_in': signedIn,
+    ...savedPrefs,
+  });
   final prefs = await SharedPreferences.getInstance();
 
   await tester.pumpWidget(
@@ -32,6 +36,68 @@ Future<void> pumpApp(
 void main() {
   // Tests have no network access, so don't try to download fonts.
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
+
+  group('Login', () {
+    testWidgets('signed-out users start on login, 111111 signs in', (
+      tester,
+    ) async {
+      await pumpApp(tester, signedIn: false);
+
+      expect(find.text('Send OTP'), findsOneWidget);
+      expect(find.text('Namaste, Sita'), findsNothing);
+
+      // Any number is accepted for now, but not an empty one
+      await tester.tap(find.text('Send OTP'));
+      await tester.pumpAndSettle();
+      expect(find.text('Enter your mobile number'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), '52 123 4567');
+      await tester.tap(find.text('Send OTP'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Verify your number'), findsOneWidget);
+      expect(
+        find.text('Enter the 6-digit code sent by SMS to +972 52 123 4567'),
+        findsOneWidget,
+      );
+      expect(find.text('Resend in 01:00'), findsOneWidget);
+
+      // Wrong code shows an error and stays here
+      await tester.enterText(find.byType(TextField), '123456');
+      await tester.tap(find.text('Verify'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text("That code isn't right. Check the SMS and try again."),
+        findsOneWidget,
+      );
+
+      // The dev code signs in; the route guard moves us to Home
+      await tester.enterText(find.byType(TextField), '111111');
+      await tester.tap(find.text('Verify'));
+      await tester.pumpAndSettle();
+      expect(find.text('Namaste, Sita'), findsOneWidget);
+
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getBool('signed_in'), isTrue);
+    });
+
+    testWidgets('Log out asks first, then returns to login', (tester) async {
+      await pumpApp(tester);
+      await tester.tap(find.text('Profile'));
+      await tester.pumpAndSettle();
+
+      // Last row on Profile; scroll to it first
+      await tester.ensureVisible(find.text('Log out'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Log out'));
+      await tester.pumpAndSettle();
+      expect(find.text('Log out?'), findsOneWidget);
+
+      await tester.tap(find.text('Log out').last); // the dialog's button
+      await tester.pumpAndSettle();
+      expect(find.text('Send OTP'), findsOneWidget);
+    });
+  });
 
   testWidgets('Home screen shows greeting, report card and issues', (
     tester,

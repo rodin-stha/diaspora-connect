@@ -540,6 +540,63 @@ class AppLocalizationsNe extends AppLocalizations {
   String get notifyAnnouncements => 'दूतावास र वैदेशिक रोजगार विभागका सूचना';
 
   @override
+  String get mobileNumberLabel => 'मोबाइल नम्बर';
+
+  @override
+  String get mobileNumberHint => '5X-XXX-XXXX';
+
+  @override
+  String get sendOtp => 'OTP पठाउनुहोस्';
+
+  @override
+  String get loginConsent =>
+      'अगाडि बढेर, तपाईंको पहिचान प्रमाणित गर्न यो नम्बर प्रयोग गरिनेमा सहमत हुनुहुन्छ।';
+
+  @override
+  String get errorLoginMobile => 'आफ्नो मोबाइल नम्बर लेख्नुहोस्';
+
+  @override
+  String get verifyTitle => 'आफ्नो नम्बर प्रमाणित गर्नुहोस्';
+
+  @override
+  String verifySubtitle(String phone) {
+    return '$phone मा SMS बाट पठाइएको ६ अङ्कको कोड लेख्नुहोस्';
+  }
+
+  @override
+  String get otpFieldLabel => '६ अङ्कको कोड';
+
+  @override
+  String get resendPrompt => 'कोड आएन?';
+
+  @override
+  String resendIn(String time) {
+    return '$time मा फेरि पठाउन सकिन्छ';
+  }
+
+  @override
+  String get resendAction => 'फेरि पठाउनुहोस्';
+
+  @override
+  String get codeResent => 'नयाँ कोड पठाइयो';
+
+  @override
+  String get verifyAction => 'प्रमाणित गर्नुहोस्';
+
+  @override
+  String get errorOtpIncomplete => 'सबै ६ अङ्क लेख्नुहोस्';
+
+  @override
+  String get errorOtpWrong => 'कोड मिलेन। SMS हेरेर फेरि प्रयास गर्नुहोस्।';
+
+  @override
+  String get logOutConfirmTitle => 'लग आउट गर्ने?';
+
+  @override
+  String get logOutConfirmBody =>
+      'फेरि साइन इन गर्न तपाईंको मोबाइल नम्बर र नयाँ कोड चाहिन्छ।';
+
+  @override
   String get navHome => 'गृहपृष्ठ';
 
   @override

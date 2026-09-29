@@ -10,6 +10,7 @@ import '../../theme/text_styles.dart';
 import '../../widgets/language_toggle.dart';
 import '../../widgets/list_section.dart';
 import '../../widgets/menu_row.dart';
+import '../auth/data/auth_provider.dart';
 import 'data/user_provider.dart';
 import 'widgets/profile_header.dart';
 
@@ -22,7 +23,6 @@ class ProfileScreen extends ConsumerWidget {
     final colors = context.colors;
     final user = ref.watch(currentUserProvider);
 
-    // TODO: Log out once sign-in exists.
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // White status bar icons on the blue header
       value: SystemUiOverlayStyle.light,
@@ -94,6 +94,7 @@ class ProfileScreen extends ConsumerWidget {
                           isDestructive: true,
                           showChevron: false,
                           showDivider: false,
+                          onTap: () => _confirmLogOut(context, ref),
                         ),
                       ],
                     ),
@@ -105,5 +106,29 @@ class ProfileScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  /// Asks first, so an accidental tap doesn't sign the user out. After
+  /// signing out, the router's redirect shows the login screen.
+  Future<void> _confirmLogOut(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.logOutConfirmTitle),
+        content: Text(l10n.logOutConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.logOut),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) await ref.read(authProvider.notifier).signOut();
   }
 }

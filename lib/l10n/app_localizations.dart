@@ -1100,6 +1100,108 @@ abstract class AppLocalizations {
   /// **'Embassy & DoFE announcements'**
   String get notifyAnnouncements;
 
+  /// No description provided for @mobileNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get mobileNumberLabel;
+
+  /// No description provided for @mobileNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'5X-XXX-XXXX'**
+  String get mobileNumberHint;
+
+  /// No description provided for @sendOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Send OTP'**
+  String get sendOtp;
+
+  /// No description provided for @loginConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing you agree this number will be used to verify your identity.'**
+  String get loginConsent;
+
+  /// No description provided for @errorLoginMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your mobile number'**
+  String get errorLoginMobile;
+
+  /// No description provided for @verifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your number'**
+  String get verifyTitle;
+
+  /// No description provided for @verifySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code sent by SMS to {phone}'**
+  String verifySubtitle(String phone);
+
+  /// No description provided for @otpFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'6-digit code'**
+  String get otpFieldLabel;
+
+  /// No description provided for @resendPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t get a code?'**
+  String get resendPrompt;
+
+  /// No description provided for @resendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {time}'**
+  String resendIn(String time);
+
+  /// No description provided for @resendAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend'**
+  String get resendAction;
+
+  /// No description provided for @codeResent.
+  ///
+  /// In en, this message translates to:
+  /// **'A new code has been sent'**
+  String get codeResent;
+
+  /// No description provided for @verifyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get verifyAction;
+
+  /// No description provided for @errorOtpIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter all 6 digits'**
+  String get errorOtpIncomplete;
+
+  /// No description provided for @errorOtpWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That code isn\'t right. Check the SMS and try again.'**
+  String get errorOtpWrong;
+
+  /// No description provided for @logOutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out?'**
+  String get logOutConfirmTitle;
+
+  /// No description provided for @logOutConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need your mobile number and a new code to sign in again.'**
+  String get logOutConfirmBody;
+
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:

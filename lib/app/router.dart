@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/activity/activity_screen.dart';
+import '../features/auth/data/auth_provider.dart';
+import '../features/auth/login_screen.dart';
+import '../features/auth/verify_code_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/issues/issue_detail_screen.dart';
 import '../features/issues/issues_screen.dart';
@@ -20,10 +23,42 @@ final routerProvider = Provider<GoRouter>((ref) {
   // cover the bottom nav.
   final rootNavigatorKey = GlobalKey<NavigatorState>();
 
+  // go_router re-runs `redirect` whenever this notifies, so signing in or
+  // out moves the user to the right place automatically.
+  final authChanges = ValueNotifier(ref.read(authProvider));
+  ref.listen(authProvider, (_, next) => authChanges.value = next);
+
   final router = GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: '/home',
+    refreshListenable: authChanges,
+    // Route guard (like Next.js middleware): runs before every navigation.
+    // Returns where to go instead, or null to allow it.
+    redirect: (context, state) {
+      final auth = ref.read(authProvider);
+      final location = state.matchedLocation;
+      final onLogin = location.startsWith('/login');
+
+      if (!auth.isSignedIn) {
+        // Verify only makes sense right after a code was sent.
+        if (location == '/login/verify' && auth.pendingPhone == null) {
+          return '/login';
+        }
+        return onLogin ? null : '/login';
+      }
+      return onLogin ? '/home' : null;
+    },
     routes: [
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+        routes: [
+          GoRoute(
+            path: 'verify', // → /login/verify
+            builder: (context, state) => const VerifyCodeScreen(),
+          ),
+        ],
+      ),
       // Full-screen pages outside the tabs (no bottom nav).
       GoRoute(
         path: '/report-issue',
@@ -107,6 +142,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ],
   );
-  ref.onDispose(router.dispose);
+  ref.onDispose(() {
+    router.dispose();
+    authChanges.dispose();
+  });
   return router;
 });
