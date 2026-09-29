@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/sizes.dart';
+import '../../../widgets/dashed_tile.dart';
 import '../../../widgets/document_row.dart';
 import '../../../widgets/form_section_header.dart';
 import '../../../widgets/labeled_text_field.dart';
@@ -21,12 +22,17 @@ class WorkDetailsForm extends StatefulWidget {
   /// Called when the user taps Upload/Replace on the work permit.
   final VoidCallback? onUploadWorkPermit;
 
+  /// Shows the work permit as an empty upload tile instead of a row with
+  /// Upload/Replace. Used in onboarding, where nothing is uploaded yet.
+  final bool useUploadTiles;
+
   const WorkDetailsForm({
     super.key,
     required this.initialValue,
     required this.submitLabel,
     required this.onSubmit,
     this.onUploadWorkPermit,
+    this.useUploadTiles = false,
   });
 
   @override
@@ -93,13 +99,20 @@ class _WorkDetailsFormState extends State<WorkDetailsForm> {
           ),
 
           FormSectionHeader(title: l10n.workPermitSection, showDivider: false),
-          DocumentRow(
-            name: l10n.documentWorkPermitLetter,
-            actionLabel: permit == null
-                ? l10n.uploadAction
-                : l10n.replaceAction,
-            onAction: widget.onUploadWorkPermit,
-          ),
+          if (widget.useUploadTiles)
+            DashedTile.large(
+              label: l10n.uploadWorkPermit,
+              iconAsset: 'assets/icons/plus_bold.svg',
+              onTap: widget.onUploadWorkPermit,
+            )
+          else
+            DocumentRow(
+              name: l10n.documentWorkPermitLetter,
+              actionLabel: permit == null
+                  ? l10n.uploadAction
+                  : l10n.replaceAction,
+              onAction: widget.onUploadWorkPermit,
+            ),
 
           // Details for the chosen business type. Each type gets its own
           // section here once it's designed.

@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/sizes.dart';
 import '../../../utils/validators.dart';
+import '../../../widgets/checkbox_row.dart';
 import '../../../widgets/dashed_button.dart';
+import '../../../widgets/dashed_tile.dart';
 import '../../../widgets/date_field.dart';
 import '../../../widgets/document_row.dart';
 import '../../../widgets/form_section_header.dart';
+import '../../../widgets/labeled_field.dart';
 import '../../../widgets/labeled_text_field.dart';
 import '../models/legal_details.dart';
 
@@ -28,6 +31,14 @@ class LegalDetailsForm extends StatefulWidget {
   /// Saved documents (not the passport/visa slots). Hidden when null.
   final VoidCallback? onUploadNewDocument;
 
+  /// Shows the passport and visa as two empty upload tiles instead of rows
+  /// with Upload/Replace. Used in onboarding, where nothing is uploaded yet.
+  final bool useUploadTiles;
+
+  /// Adds a required "I consent to identity verification" checkbox above
+  /// the button. Used in onboarding.
+  final bool requireConsent;
+
   const LegalDetailsForm({
     super.key,
     required this.initialValue,
@@ -35,6 +46,8 @@ class LegalDetailsForm extends StatefulWidget {
     required this.onSubmit,
     this.onUploadDocument,
     this.onUploadNewDocument,
+    this.useUploadTiles = false,
+    this.requireConsent = false,
   });
 
   @override
@@ -152,21 +165,59 @@ class _LegalDetailsFormState extends State<LegalDetailsForm> {
           ),
 
           FormSectionHeader(title: l10n.uploadedDocumentsSection),
-          for (final (name, file) in [
-            (l10n.documentPassportPhotoPage, _initial.passportPhotoPage),
-            (l10n.documentIsraelVisaPage, _initial.israelVisaPage),
-          ])
-            DocumentRow(
-              name: name,
-              actionLabel: file == null
-                  ? l10n.uploadAction
-                  : l10n.replaceAction,
-              onAction: widget.onUploadDocument,
-            ),
+          if (widget.useUploadTiles)
+            Row(
+              spacing: 10,
+              children: [
+                for (final label in [
+                  l10n.uploadPhotoPage,
+                  l10n.documentIsraelVisaPage,
+                ])
+                  Expanded(
+                    child: DashedTile.large(
+                      label: label,
+                      iconAsset: 'assets/icons/plus_bold.svg',
+                      onTap: widget.onUploadDocument,
+                    ),
+                  ),
+              ],
+            )
+          else
+            for (final (name, file) in [
+              (l10n.documentPassportPhotoPage, _initial.passportPhotoPage),
+              (l10n.documentIsraelVisaPage, _initial.israelVisaPage),
+            ])
+              DocumentRow(
+                name: name,
+                actionLabel: file == null
+                    ? l10n.uploadAction
+                    : l10n.replaceAction,
+                onAction: widget.onUploadDocument,
+              ),
           if (widget.onUploadNewDocument != null)
             DashedButton(
               label: l10n.uploadNewDocument,
               onPressed: widget.onUploadNewDocument,
+            ),
+          if (widget.requireConsent)
+            // A FormField so the box is checked by the same validate() call
+            // as the text fields, and shows its error the same way.
+            FormField<bool>(
+              initialValue: false,
+              validator: (value) =>
+                  value == true ? null : l10n.errorIdentityConsent,
+              builder: (field) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CheckboxRow(
+                    label: l10n.identityConsent,
+                    value: field.value ?? false,
+                    hasError: field.hasError,
+                    onChanged: field.didChange,
+                  ),
+                  if (field.hasError) FieldErrorText(field.errorText!),
+                ],
+              ),
             ),
 
           FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),

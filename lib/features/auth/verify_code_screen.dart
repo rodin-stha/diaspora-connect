@@ -18,7 +18,8 @@ import 'widgets/otp_input.dart';
 /// 02 · Verify code: enter the 6-digit code sent by SMS.
 ///
 /// On success there's no navigation here: signing in changes [authProvider],
-/// and the router's redirect takes the user to Home.
+/// and the router's redirect takes the user to Home (or to onboarding, the
+/// first time).
 class VerifyCodeScreen extends ConsumerStatefulWidget {
   const VerifyCodeScreen({super.key});
 

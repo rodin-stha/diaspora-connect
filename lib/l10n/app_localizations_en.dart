@@ -605,4 +605,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navProfile => 'Profile';
+
+  @override
+  String onboardingStep(int step, int total) {
+    return 'Step $step of $total';
+  }
+
+  @override
+  String get onboardingWorkTitle => 'Work details';
+
+  @override
+  String get continueAction => 'Continue';
+
+  @override
+  String get verifyAndContinue => 'Verify and continue';
+
+  @override
+  String get saveProfile => 'Save profile';
+
+  @override
+  String get uploadPhotoPage => 'Photo page';
+
+  @override
+  String get uploadWorkPermit => 'Upload work permit (Rishayon Avoda)';
+
+  @override
+  String get identityConsent => 'I consent to identity verification';
+
+  @override
+  String get errorIdentityConsent => 'Tick the box to continue';
 }

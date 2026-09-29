@@ -187,5 +187,14 @@
   "navHome": "गृहपृष्ठ",
   "navIssues": "समस्याहरू",
   "navActivity": "गतिविधि",
-  "navProfile": "प्रोफाइल"
+  "navProfile": "प्रोफाइल",
+  "onboardingStep": "चरण {step} / {total}",
+  "onboardingWorkTitle": "कामको विवरण",
+  "continueAction": "जारी राख्नुहोस्",
+  "verifyAndContinue": "प्रमाणित गरी जारी राख्नुहोस्",
+  "saveProfile": "प्रोफाइल सुरक्षित गर्नुहोस्",
+  "uploadPhotoPage": "फोटो पृष्ठ",
+  "uploadWorkPermit": "कार्य अनुमतिपत्र अपलोड गर्नुहोस् (Rishayon Avoda)",
+  "identityConsent": "म पहिचान प्रमाणीकरणमा सहमत छु",
+  "errorIdentityConsent": "जारी राख्न बाकसमा टिक लगाउनुहोस्"
 }

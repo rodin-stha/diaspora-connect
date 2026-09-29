@@ -224,5 +224,15 @@
   "navHome": "Home",
   "navIssues": "Issues",
   "navActivity": "Activity",
-  "navProfile": "Profile"
+  "navProfile": "Profile",
+  "onboardingStep": "Step {step} of {total}",
+  "@onboardingStep": {"placeholders": {"step": {"type": "int"}, "total": {"type": "int"}}},
+  "onboardingWorkTitle": "Work details",
+  "continueAction": "Continue",
+  "verifyAndContinue": "Verify and continue",
+  "saveProfile": "Save profile",
+  "uploadPhotoPage": "Photo page",
+  "uploadWorkPermit": "Upload work permit (Rishayon Avoda)",
+  "identityConsent": "I consent to identity verification",
+  "errorIdentityConsent": "Tick the box to continue"
 }

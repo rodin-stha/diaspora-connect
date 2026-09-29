@@ -9,6 +9,7 @@ import 'package:diaspora_connect/features/personal_details/models/personal_detai
 import 'package:diaspora_connect/main.dart';
 import 'package:diaspora_connect/theme/sizes.dart';
 import 'package:diaspora_connect/widgets/issue_card.dart';
+import 'package:diaspora_connect/widgets/labeled_field.dart';
 import 'package:diaspora_connect/widgets/selectable_chip.dart';
 import 'package:diaspora_connect/widgets/toggle_row.dart';
 import 'package:diaspora_connect/widgets/toggle_switch.dart';
@@ -17,9 +18,12 @@ Future<void> pumpApp(
   WidgetTester tester, {
   Map<String, Object> savedPrefs = const {},
   bool signedIn = true,
+  // null = never saved (a session from before onboarding existed).
+  bool? onboarded = true,
 }) async {
   SharedPreferences.setMockInitialValues({
     'signed_in': signedIn,
+    'onboarded': ?onboarded,
     ...savedPrefs,
   });
   final prefs = await SharedPreferences.getInstance();
@@ -109,6 +113,119 @@ void main() {
       await tester.tap(find.text('Log out').last); // the dialog's button
       await tester.pumpAndSettle();
       expect(find.text('Send OTP'), findsOneWidget);
+    });
+  });
+
+  group('Onboarding', () {
+    testWidgets('starts only after logging in', (tester) async {
+      await pumpApp(tester, signedIn: false, onboarded: null);
+      expect(find.text('Send OTP'), findsOneWidget);
+      expect(find.text('STEP 1 OF 3'), findsNothing);
+
+      await tester.enterText(find.byType(TextField), '52 123 4567');
+      await tester.tap(find.text('Send OTP'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), '111111');
+      await tester.tap(find.text('Verify'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('STEP 1 OF 3'), findsOneWidget);
+    });
+
+    testWidgets('an existing session skips it', (tester) async {
+      await pumpApp(tester, onboarded: null);
+
+      expect(find.text('Namaste, Sita'), findsOneWidget);
+      expect(find.text('STEP 1 OF 3'), findsNothing);
+    });
+
+    // Signed in but not onboarded = the app was closed mid-onboarding.
+    testWidgets('new users go through 3 steps, then Home', (tester) async {
+      await pumpApp(tester, onboarded: false);
+
+      expect(find.text('STEP 1 OF 3'), findsOneWidget);
+      expect(find.text('Personal details'), findsOneWidget);
+      expect(find.text('Namaste, Sita'), findsNothing);
+
+      /// The text box under a required field's label ("Full name *").
+      Finder field(String requiredLabel) => find.descendant(
+        of: find.ancestor(
+          of: find.text('$requiredLabel *'),
+          matching: find.byType(LabeledField),
+        ),
+        matching: find.byType(TextField),
+      );
+      Future<void> fill(Finder finder, String value) async {
+        await tester.ensureVisible(finder);
+        await tester.enterText(finder, value);
+      }
+
+      Future<void> choose(String hint, String option) async {
+        FocusManager.instance.primaryFocus?.unfocus();
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(find.text(hint).first);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(hint).first);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(option).last);
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> tapButton(String label) async {
+        FocusManager.instance.primaryFocus?.unfocus();
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(find.text(label));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(label));
+        await tester.pumpAndSettle();
+      }
+
+      // Step 1 starts empty (sample data isn't shown to a new user)
+      await fill(field('Full name'), 'Gita Shrestha');
+      await choose('Select', 'Female');
+      await fill(field('Mobile number (Israel)'), '052 123 4567');
+      await tester.ensureVisible(find.text('Regional Council'));
+      await tester.tap(find.text('Regional Council'));
+      await choose('Select', 'Central District');
+      await fill(field('Local Authority'), 'Emek HaMaayanot');
+      await fill(field('Neighborhood or Settlement'), 'Kibbutz Afikim');
+      await fill(field('Postal code · 7 digits'), '1234567');
+      await fill(field("Contact person's name"), 'Hari Shrestha');
+      await fill(field('Relationship'), 'Father');
+      await fill(field('Phone number'), '+977 9812345678');
+      await tapButton('Continue');
+
+      // Step 2: upload tiles instead of rows, and consent is required
+      expect(find.text('STEP 2 OF 3'), findsOneWidget);
+      expect(find.text('Photo page'), findsOneWidget);
+      expect(find.text('Replace'), findsNothing);
+      await fill(field('Passport number'), '09123456');
+      await fill(field('Citizenship certificate no.'), '27-01-73-01234');
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('DD/MM/YYYY'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+
+      await tapButton('Verify and continue');
+      expect(find.text('Tick the box to continue'), findsOneWidget);
+      expect(find.text('STEP 2 OF 3'), findsOneWidget); // still here
+
+      await tester.tap(find.text('I consent to identity verification'));
+      await tapButton('Verify and continue');
+
+      // Step 3
+      expect(find.text('STEP 3 OF 3'), findsOneWidget);
+      expect(find.text('Upload work permit (Rishayon Avoda)'), findsOneWidget);
+      await choose('Select', 'Caregiving');
+      await choose('Select', 'Live-in');
+      await tapButton('Save profile');
+
+      // Done: Home, greeting the name from step 1
+      expect(find.text('Namaste, Gita'), findsOneWidget);
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getBool('onboarded'), isTrue);
     });
   });
 

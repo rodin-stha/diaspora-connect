@@ -1225,6 +1225,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get navProfile;
+
+  /// No description provided for @onboardingStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {step} of {total}'**
+  String onboardingStep(int step, int total);
+
+  /// No description provided for @onboardingWorkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Work details'**
+  String get onboardingWorkTitle;
+
+  /// No description provided for @continueAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueAction;
+
+  /// No description provided for @verifyAndContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify and continue'**
+  String get verifyAndContinue;
+
+  /// No description provided for @saveProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Save profile'**
+  String get saveProfile;
+
+  /// No description provided for @uploadPhotoPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo page'**
+  String get uploadPhotoPage;
+
+  /// No description provided for @uploadWorkPermit.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload work permit (Rishayon Avoda)'**
+  String get uploadWorkPermit;
+
+  /// No description provided for @identityConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'I consent to identity verification'**
+  String get identityConsent;
+
+  /// No description provided for @errorIdentityConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'Tick the box to continue'**
+  String get errorIdentityConsent;
 }
 
 class _AppLocalizationsDelegate

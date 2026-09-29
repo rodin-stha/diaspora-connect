@@ -11,6 +11,9 @@ import '../features/issues/issue_detail_screen.dart';
 import '../features/issues/issues_screen.dart';
 import '../features/legal_details/legal_details_screen.dart';
 import '../features/notification_settings/notification_settings_screen.dart';
+import '../features/onboarding/onboarding_legal_screen.dart';
+import '../features/onboarding/onboarding_personal_screen.dart';
+import '../features/onboarding/onboarding_work_screen.dart';
 import '../features/personal_details/personal_details_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/report_issue/report_issue_screen.dart';
@@ -46,7 +49,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         }
         return onLogin ? null : '/login';
       }
-      return onLogin ? '/home' : null;
+
+      // New users fill in their profile before using the app, and can't
+      // come back to onboarding once it's done.
+      final onOnboarding = location.startsWith('/onboarding');
+      if (!auth.isOnboarded) {
+        return onOnboarding ? null : '/onboarding/personal';
+      }
+      return onLogin || onOnboarding ? '/home' : null;
     },
     routes: [
       GoRoute(
@@ -58,6 +68,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const VerifyCodeScreen(),
           ),
         ],
+      ),
+      // Onboarding: one route per step. Each step `push`es the next, so
+      // back (swipe or Android back button) returns to the previous step
+      // with what was typed still there.
+      GoRoute(
+        path: '/onboarding/personal',
+        builder: (context, state) => const OnboardingPersonalScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/legal',
+        builder: (context, state) => const OnboardingLegalScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/work',
+        builder: (context, state) => const OnboardingWorkScreen(),
       ),
       // Full-screen pages outside the tabs (no bottom nav).
       GoRoute(

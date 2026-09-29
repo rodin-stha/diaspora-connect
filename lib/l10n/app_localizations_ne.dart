@@ -607,4 +607,34 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get navProfile => 'प्रोफाइल';
+
+  @override
+  String onboardingStep(int step, int total) {
+    return 'चरण $step / $total';
+  }
+
+  @override
+  String get onboardingWorkTitle => 'कामको विवरण';
+
+  @override
+  String get continueAction => 'जारी राख्नुहोस्';
+
+  @override
+  String get verifyAndContinue => 'प्रमाणित गरी जारी राख्नुहोस्';
+
+  @override
+  String get saveProfile => 'प्रोफाइल सुरक्षित गर्नुहोस्';
+
+  @override
+  String get uploadPhotoPage => 'फोटो पृष्ठ';
+
+  @override
+  String get uploadWorkPermit =>
+      'कार्य अनुमतिपत्र अपलोड गर्नुहोस् (Rishayon Avoda)';
+
+  @override
+  String get identityConsent => 'म पहिचान प्रमाणीकरणमा सहमत छु';
+
+  @override
+  String get errorIdentityConsent => 'जारी राख्न बाकसमा टिक लगाउनुहोस्';
 }
