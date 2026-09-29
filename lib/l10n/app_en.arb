@@ -1,0 +1,30 @@
+{
+  "@@locale": "en",
+
+  "appName": "Diaspora Connect",
+
+  "greeting": "Namaste, {name}",
+  "@greeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+
+  "reportIssueTitle": "Report an issue",
+  "reportIssueSubtitle": "Wages, permit, housing, safety and more",
+
+  "myIssues": "My issues",
+  "viewAll": "View all",
+
+  "dueInDays": "{days, plural, =0{Due today} =1{Due in 1 day} other{Due in {days} days}}",
+  "@dueInDays": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "overdue": "Overdue",
+
+  "statusInProgress": "In progress",
+  "statusEscalated": "Escalated",
+
+  "navHome": "Home",
+  "navIssues": "Issues",
+  "navActivity": "Activity",
+  "navProfile": "Profile"
+}
