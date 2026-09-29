@@ -43,10 +43,19 @@ class SearchField extends StatelessWidget {
               textInputAction: TextInputAction.search,
               style: textStyle.copyWith(color: colors.textPrimary),
               cursorColor: colors.primary,
-              decoration: InputDecoration.collapsed(
-                hintText: hintText,
-                hintStyle: textStyle.copyWith(color: colors.textSecondary),
-              ),
+              // The Container above draws the box, so the field itself must
+              // be bare. `.collapsed` only clears `border`; the app theme's
+              // enabled/focused borders and fill would still apply, so turn
+              // them off explicitly.
+              decoration:
+                  InputDecoration.collapsed(
+                    hintText: hintText,
+                    hintStyle: textStyle.copyWith(color: colors.textSecondary),
+                  ).copyWith(
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    filled: false,
+                  ),
             ),
           ),
         ],

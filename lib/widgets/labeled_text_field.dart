@@ -32,6 +32,11 @@ class LabeledTextField extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
 
+  /// For longer text: the field starts at [minLines] and grows up to
+  /// [maxLines] as the user types.
+  final int minLines;
+  final int maxLines;
+
   const LabeledTextField({
     super.key,
     required this.label,
@@ -47,6 +52,8 @@ class LabeledTextField extends StatelessWidget {
     this.maxLength,
     this.readOnly = false,
     this.onTap,
+    this.minLines = 1,
+    this.maxLines = 1,
   });
 
   @override
@@ -73,6 +80,8 @@ class LabeledTextField extends StatelessWidget {
           maxLength: maxLength,
           readOnly: readOnly,
           onTap: onTap,
+          minLines: minLines,
+          maxLines: maxLines,
           style: TTextStyles.body.copyWith(color: colors.textPrimary),
           cursorColor: colors.primary,
           decoration: InputDecoration(

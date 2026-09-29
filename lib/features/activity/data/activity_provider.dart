@@ -14,6 +14,15 @@ class ActivityNotifier extends Notifier<List<Activity>> {
   List<Activity> build() =>
       [..._sampleActivity]..sort((a, b) => b.date.compareTo(a.date));
 
+  /// Adds something that just happened to the top of the feed.
+  void record(ActivityEvent event) {
+    final now = DateTime.now();
+    state = [
+      Activity(id: 'a${now.microsecondsSinceEpoch}', date: now, event: event),
+      ...state,
+    ];
+  }
+
   void markAllRead() {
     // Replace the list, never mutate it: Riverpod only notifies listeners
     // when `state` is a new object.

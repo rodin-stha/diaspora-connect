@@ -48,7 +48,9 @@ class HomeScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    ReportIssueCard(onTap: () {}),
+                    ReportIssueCard(
+                      onTap: () => context.push('/report-issue'),
+                    ),
                     const SizedBox(height: TSizes.spaceBtwSections),
                     _SectionHeader(
                       title: l10n.myIssues,

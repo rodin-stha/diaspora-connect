@@ -10,6 +10,7 @@ import '../features/legal_details/legal_details_screen.dart';
 import '../features/notification_settings/notification_settings_screen.dart';
 import '../features/personal_details/personal_details_screen.dart';
 import '../features/profile/profile_screen.dart';
+import '../features/report_issue/report_issue_screen.dart';
 import '../features/saved_documents/saved_documents_screen.dart';
 import '../features/work_details/work_details_screen.dart';
 import 'main_shell.dart';
@@ -23,6 +24,11 @@ final routerProvider = Provider<GoRouter>((ref) {
     navigatorKey: rootNavigatorKey,
     initialLocation: '/home',
     routes: [
+      // Full-screen pages outside the tabs (no bottom nav).
+      GoRoute(
+        path: '/report-issue',
+        builder: (context, state) => const ReportIssueScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             MainShell(navigationShell: navigationShell),

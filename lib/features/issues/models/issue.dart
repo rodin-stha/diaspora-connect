@@ -8,7 +8,7 @@ enum IssueStatus {
   resolved,
 }
 
-enum IssueCategory { wages, permit, housing, documents }
+enum IssueCategory { wages, permit, housing, documents, safety, other }
 
 /// A step on an issue's timeline ("Submitted", "Escalated to…").
 enum IssueEventType {
@@ -41,6 +41,12 @@ class Issue {
   /// Case worker handling the issue, or null if not assigned yet.
   final String? assignedTo;
 
+  /// What the user wrote when reporting; may be empty.
+  final String description;
+
+  /// Employer or embassy the issue is about; may be empty.
+  final String concerned;
+
   /// Steps in order: completed ones first, then upcoming ones.
   final List<IssueEvent> timeline;
 
@@ -51,6 +57,8 @@ class Issue {
     required this.dueInDays,
     required this.status,
     this.assignedTo,
+    this.description = '',
+    this.concerned = '',
     this.timeline = const [],
   });
 

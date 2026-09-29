@@ -104,6 +104,120 @@ abstract class AppLocalizations {
   /// **'Diaspora Connect'**
   String get appName;
 
+  /// No description provided for @categorySafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety'**
+  String get categorySafety;
+
+  /// No description provided for @categoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get categoryOther;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// No description provided for @concernedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Employer / Embassy concerned · optional'**
+  String get concernedLabel;
+
+  /// No description provided for @concernedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Employer or embassy name'**
+  String get concernedHint;
+
+  /// No description provided for @subjectLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get subjectLabel;
+
+  /// No description provided for @subjectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Wage shortfall, October pay'**
+  String get subjectHint;
+
+  /// No description provided for @descriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the issue · optional'**
+  String get descriptionLabel;
+
+  /// No description provided for @descriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened, where and since when?'**
+  String get descriptionHint;
+
+  /// No description provided for @evidenceSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Add evidence · optional'**
+  String get evidenceSection;
+
+  /// No description provided for @evidencePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get evidencePhoto;
+
+  /// No description provided for @evidenceLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin on map'**
+  String get evidenceLocation;
+
+  /// No description provided for @evidenceVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Record note'**
+  String get evidenceVoice;
+
+  /// No description provided for @voiceNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Not comfortable typing? Record a short voice note describing what happened instead.'**
+  String get voiceNoteHint;
+
+  /// No description provided for @submitIssue.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit issue'**
+  String get submitIssue;
+
+  /// No description provided for @issueSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your issue has been submitted'**
+  String get issueSubmitted;
+
+  /// No description provided for @evidenceComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Adding evidence isn\'t available yet'**
+  String get evidenceComingSoon;
+
+  /// No description provided for @errorCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select what the issue is about'**
+  String get errorCategory;
+
+  /// No description provided for @errorSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Give your issue a short title'**
+  String get errorSubject;
+
   /// No description provided for @greeting.
   ///
   /// In en, this message translates to:

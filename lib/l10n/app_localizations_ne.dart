@@ -13,6 +13,64 @@ class AppLocalizationsNe extends AppLocalizations {
   String get appName => 'Diaspora Connect';
 
   @override
+  String get categorySafety => 'सुरक्षा';
+
+  @override
+  String get categoryOther => 'अन्य';
+
+  @override
+  String get categoryLabel => 'वर्ग';
+
+  @override
+  String get concernedLabel => 'सम्बन्धित रोजगारदाता / दूतावास · ऐच्छिक';
+
+  @override
+  String get concernedHint => 'रोजगारदाता वा दूतावासको नाम';
+
+  @override
+  String get subjectLabel => 'विषय';
+
+  @override
+  String get subjectHint => 'जस्तै: अक्टोबरको तलब कम';
+
+  @override
+  String get descriptionLabel => 'समस्याको विवरण · ऐच्छिक';
+
+  @override
+  String get descriptionHint => 'के भयो, कहाँ र कहिलेदेखि?';
+
+  @override
+  String get evidenceSection => 'प्रमाण थप्नुहोस् · ऐच्छिक';
+
+  @override
+  String get evidencePhoto => 'फोटो';
+
+  @override
+  String get evidenceLocation => 'नक्सामा स्थान';
+
+  @override
+  String get evidenceVoice => 'आवाज रेकर्ड';
+
+  @override
+  String get voiceNoteHint =>
+      'लेख्न सहज लाग्दैन? के भयो भनेर छोटो आवाज सन्देश रेकर्ड गर्नुहोस्।';
+
+  @override
+  String get submitIssue => 'समस्या पेश गर्नुहोस्';
+
+  @override
+  String get issueSubmitted => 'तपाईंको समस्या पेश भयो';
+
+  @override
+  String get evidenceComingSoon => 'प्रमाण थप्ने सुविधा अहिले उपलब्ध छैन';
+
+  @override
+  String get errorCategory => 'समस्या केको बारेमा हो, छान्नुहोस्';
+
+  @override
+  String get errorSubject => 'समस्याको छोटो शीर्षक लेख्नुहोस्';
+
+  @override
   String greeting(String name) {
     return 'नमस्ते, $name';
   }

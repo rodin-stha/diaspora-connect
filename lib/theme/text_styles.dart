@@ -80,6 +80,9 @@ class TTextStyles {
     height: 1.3,
   );
 
+  /// 10.5px, for labels inside small tiles.
+  static TextStyle get tiny => _manrope(fontSize: 10.5, height: 1.4);
+
   static TextStyle get chipLabel =>
       _manrope(fontSize: 13, fontWeight: FontWeight.w700, height: 1.3);
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../features/issues/models/issue.dart';
+import '../features/issues/models/issue_labels.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import '../theme/sizes.dart';
@@ -29,7 +30,7 @@ class IssueCard extends StatelessWidget {
     final borderRadius = BorderRadius.circular(TSizes.cardRadius);
     final subtitle = [
       issue.reference,
-      if (showCategory) _categoryLabel(l10n, issue.category),
+      if (showCategory) issue.category.label(l10n),
       issue.isOverdue ? l10n.overdue : l10n.dueInDays(issue.dueInDays),
     ].join(' · ');
 
@@ -74,12 +75,4 @@ class IssueCard extends StatelessWidget {
       ),
     );
   }
-
-  static String _categoryLabel(AppLocalizations l10n, IssueCategory category) =>
-      switch (category) {
-        IssueCategory.wages => l10n.categoryWages,
-        IssueCategory.permit => l10n.categoryPermit,
-        IssueCategory.housing => l10n.categoryHousing,
-        IssueCategory.documents => l10n.categoryDocuments,
-      };
 }

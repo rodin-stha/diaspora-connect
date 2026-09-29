@@ -13,6 +13,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'Diaspora Connect';
 
   @override
+  String get categorySafety => 'Safety';
+
+  @override
+  String get categoryOther => 'Other';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get concernedLabel => 'Employer / Embassy concerned · optional';
+
+  @override
+  String get concernedHint => 'Employer or embassy name';
+
+  @override
+  String get subjectLabel => 'Subject';
+
+  @override
+  String get subjectHint => 'e.g. Wage shortfall, October pay';
+
+  @override
+  String get descriptionLabel => 'Describe the issue · optional';
+
+  @override
+  String get descriptionHint => 'What happened, where and since when?';
+
+  @override
+  String get evidenceSection => 'Add evidence · optional';
+
+  @override
+  String get evidencePhoto => 'Photo';
+
+  @override
+  String get evidenceLocation => 'Pin on map';
+
+  @override
+  String get evidenceVoice => 'Record note';
+
+  @override
+  String get voiceNoteHint =>
+      'Not comfortable typing? Record a short voice note describing what happened instead.';
+
+  @override
+  String get submitIssue => 'Submit issue';
+
+  @override
+  String get issueSubmitted => 'Your issue has been submitted';
+
+  @override
+  String get evidenceComingSoon => 'Adding evidence isn\'t available yet';
+
+  @override
+  String get errorCategory => 'Select what the issue is about';
+
+  @override
+  String get errorSubject => 'Give your issue a short title';
+
+  @override
   String greeting(String name) {
     return 'Namaste, $name';
   }

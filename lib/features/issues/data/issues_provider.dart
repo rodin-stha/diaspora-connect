@@ -2,12 +2,57 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/issue.dart';
 
-/// All of the current user's issues. The single source of truth for both
-/// Home and the Issues screen.
+/// All of the current user's issues, newest first. The single source of
+/// truth for Home, the Issues screen and Track issue.
 ///
 /// Returns sample data until the backend API exists; only this provider will
 /// need to change then.
-final issuesProvider = Provider<List<Issue>>((ref) => _sampleIssues);
+final issuesProvider = NotifierProvider<IssuesNotifier, List<Issue>>(
+  IssuesNotifier.new,
+);
+
+class IssuesNotifier extends Notifier<List<Issue>> {
+  /// Days a new issue has before its first deadline.
+  static const _defaultDueInDays = 7;
+
+  @override
+  List<Issue> build() => _sampleIssues;
+
+  /// Adds a newly reported issue at the top and returns it (with its new
+  /// reference number).
+  Issue report({
+    required IssueCategory category,
+    required String subject,
+    String description = '',
+    String concerned = '',
+  }) {
+    final issue = Issue(
+      title: subject,
+      reference: _nextReference(),
+      category: category,
+      dueInDays: _defaultDueInDays,
+      status: IssueStatus.submitted,
+      description: description,
+      concerned: concerned,
+      timeline: [
+        IssueEvent(IssueEventType.submitted, DateTime.now()),
+        const IssueEvent(IssueEventType.assignedToEmployer),
+        const IssueEvent(IssueEventType.resolved),
+      ],
+    );
+    state = [issue, ...state];
+    return issue;
+  }
+
+  /// "GN-2083-004534": one more than the highest number so far. The backend
+  /// will assign real reference numbers.
+  String _nextReference() {
+    final highest = state
+        .map((issue) => int.parse(issue.reference.split('-').last))
+        .fold(0, (a, b) => a > b ? a : b);
+    return 'GN-2083-${(highest + 1).toString().padLeft(6, '0')}';
+  }
+}
 
 /// One issue by its reference number, or null if there's none.
 final issueByReferenceProvider = Provider.family<Issue?, String>(

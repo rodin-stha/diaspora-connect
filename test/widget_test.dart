@@ -57,6 +57,72 @@ void main() {
     expect(find.text('All · 4'), findsOneWidget);
   });
 
+  group('Report an issue', () {
+    Future<void> openReportIssue(WidgetTester tester) async {
+      await pumpApp(tester);
+      await tester.tap(find.text('Report an issue'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('needs a category and subject', (tester) async {
+      await openReportIssue(tester);
+
+      // Employer is pre-filled from Work details
+      expect(find.text('Levi family, Rishon LeZion'), findsOneWidget);
+
+      final submit = find.text('Submit issue');
+      await tester.ensureVisible(submit);
+      await tester.tap(submit);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Select what the issue is about'), findsOneWidget);
+      expect(find.text('Give your issue a short title'), findsOneWidget);
+    });
+
+    testWidgets('submitting opens Track issue and adds it everywhere', (
+      tester,
+    ) async {
+      await openReportIssue(tester);
+
+      await tester.tap(find.text('Select'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Safety').last);
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.widgetWithText(TextField, 'e.g. Wage shortfall, October pay'),
+        'No safety equipment on site',
+      );
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pumpAndSettle();
+
+      final submit = find.text('Submit issue');
+      await tester.ensureVisible(submit);
+      await tester.pumpAndSettle();
+      await tester.tap(submit);
+      await tester.pumpAndSettle();
+
+      // Track issue for the new one, with the next reference number
+      expect(find.text('Track issue'), findsOneWidget);
+      expect(find.text('GN-2083-004534'), findsOneWidget);
+      expect(find.text('No safety equipment on site'), findsOneWidget);
+      expect(find.text('New'), findsOneWidget); // status pill
+
+      // Back goes Home (the form was replaced), which now lists it first
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+      expect(find.text('Report an issue'), findsOneWidget);
+      expect(find.text('No safety equipment on site'), findsOneWidget);
+
+      // …and the Activity feed recorded it
+      await tester.tap(find.text('Activity'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('GN-2083-004534 · No safety equipment on site'),
+        findsOneWidget,
+      );
+    });
+  });
+
   group('Issues screen', () {
     Future<void> openIssuesTab(WidgetTester tester) async {
       await pumpApp(tester);
