@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../features/issues/models/issue.dart';
-import '../features/issues/models/issue_labels.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import '../theme/sizes.dart';
@@ -30,8 +29,9 @@ class IssueCard extends StatelessWidget {
     final borderRadius = BorderRadius.circular(TSizes.cardRadius);
     final subtitle = [
       issue.reference,
-      if (showCategory) issue.category.label(l10n),
-      issue.isOverdue ? l10n.overdue : l10n.dueInDays(issue.dueInDays),
+      if (showCategory) issue.category.name,
+      if (issue.dueInDays case final days?)
+        days < 0 ? l10n.overdue : l10n.dueInDays(days),
     ].join(' · ');
 
     return Material(

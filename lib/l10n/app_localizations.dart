@@ -104,18 +104,6 @@ abstract class AppLocalizations {
   /// **'Diaspora Connect'**
   String get appName;
 
-  /// No description provided for @categorySafety.
-  ///
-  /// In en, this message translates to:
-  /// **'Safety'**
-  String get categorySafety;
-
-  /// No description provided for @categoryOther.
-  ///
-  /// In en, this message translates to:
-  /// **'Other'**
-  String get categoryOther;
-
   /// No description provided for @categoryLabel.
   ///
   /// In en, this message translates to:
@@ -284,30 +272,6 @@ abstract class AppLocalizations {
   /// **'Resolved'**
   String get statusResolved;
 
-  /// No description provided for @categoryWages.
-  ///
-  /// In en, this message translates to:
-  /// **'Wages'**
-  String get categoryWages;
-
-  /// No description provided for @categoryPermit.
-  ///
-  /// In en, this message translates to:
-  /// **'Permit'**
-  String get categoryPermit;
-
-  /// No description provided for @categoryHousing.
-  ///
-  /// In en, this message translates to:
-  /// **'Housing'**
-  String get categoryHousing;
-
-  /// No description provided for @categoryDocuments.
-  ///
-  /// In en, this message translates to:
-  /// **'Documents'**
-  String get categoryDocuments;
-
   /// No description provided for @issuesTitle.
   ///
   /// In en, this message translates to:
@@ -349,6 +313,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No issues match your search'**
   String get noIssuesFound;
+
+  /// No description provided for @noIssuesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t reported any issues yet'**
+  String get noIssuesYet;
+
+  /// No description provided for @issuesLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your issues. Check your connection and try again.'**
+  String get issuesLoadError;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get tryAgain;
 
   /// No description provided for @trackIssueTitle.
   ///

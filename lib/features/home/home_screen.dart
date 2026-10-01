@@ -23,8 +23,9 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final user = ref.watch(currentUserProvider);
-    final openIssues = ref
-        .watch(issuesProvider)
+    // Home just shows nothing until issues arrive; the Issues tab has the
+    // loading and error states.
+    final openIssues = (ref.watch(issuesProvider).value ?? const [])
         .where((issue) => issue.isOpen)
         .take(_maxPreviewIssues);
 
@@ -62,7 +63,7 @@ class HomeScreen extends ConsumerWidget {
                       if (index > 0) const SizedBox(height: TSizes.md),
                       IssueCard(
                         issue: issue,
-                        onTap: () => context.push('/issues/${issue.reference}'),
+                        onTap: () => context.push('/issues/${issue.id}'),
                       ),
                     ],
                   ],
