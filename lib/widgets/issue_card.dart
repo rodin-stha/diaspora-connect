@@ -55,6 +55,7 @@ class IssueCard extends StatelessWidget {
                       issue.title,
                       style: TTextStyles.body.copyWith(
                         color: colors.textPrimary,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: TSizes.xs),

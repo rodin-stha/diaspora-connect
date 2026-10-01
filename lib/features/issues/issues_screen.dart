@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
+import '../../widgets/app_background.dart';
 import '../../widgets/issue_card.dart';
 import '../../widgets/search_field.dart';
 import '../../widgets/selectable_chip.dart';
@@ -43,64 +44,66 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // Dark status bar icons on the light background
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          padding: EdgeInsets.fromLTRB(
-            TSizes.pagePadding,
-            topPadding,
-            TSizes.pagePadding,
-            TSizes.xl,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                l10n.issuesTitle,
-                style: TTextStyles.titleLarge.copyWith(
-                  color: colors.textPrimary,
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: EdgeInsets.fromLTRB(
+              TSizes.pagePadding,
+              topPadding,
+              TSizes.pagePadding,
+              TSizes.xl,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  l10n.issuesTitle,
+                  style: TTextStyles.titleLarge.copyWith(
+                    color: colors.textPrimary,
+                  ),
                 ),
-              ),
-              const SizedBox(height: TSizes.listGap),
-              SearchField(
-                hintText: l10n.searchIssuesHint,
-                onChanged: (value) => setState(() => _query = value),
-              ),
-              const SizedBox(height: TSizes.listGap),
-              Wrap(
-                spacing: TSizes.sm,
-                runSpacing: TSizes.sm,
-                children: [
-                  for (final filter in IssueFilter.values)
-                    SelectableChip(
-                      label: _filterLabel(l10n, filter, allIssues.length),
-                      isSelected: filter == _filter,
-                      onTap: () => setState(() => _filter = filter),
+                const SizedBox(height: TSizes.listGap),
+                SearchField(
+                  hintText: l10n.searchIssuesHint,
+                  onChanged: (value) => setState(() => _query = value),
+                ),
+                const SizedBox(height: TSizes.listGap),
+                Wrap(
+                  spacing: 3,
+                  runSpacing: TSizes.sm,
+                  children: [
+                    for (final filter in IssueFilter.values)
+                      SelectableChip(
+                        label: _filterLabel(l10n, filter, allIssues.length),
+                        isSelected: filter == _filter,
+                        onTap: () => setState(() => _filter = filter),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: TSizes.listGap),
+                if (visibleIssues.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32),
+                    child: Text(
+                      l10n.noIssuesFound,
+                      textAlign: TextAlign.center,
+                      style: TTextStyles.body.copyWith(
+                        color: colors.textSecondary,
+                      ),
                     ),
-                ],
-              ),
-              const SizedBox(height: TSizes.listGap),
-              if (visibleIssues.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32),
-                  child: Text(
-                    l10n.noIssuesFound,
-                    textAlign: TextAlign.center,
-                    style: TTextStyles.body.copyWith(
-                      color: colors.textSecondary,
+                  )
+                else
+                  for (final (index, issue) in visibleIssues.indexed) ...[
+                    if (index > 0) const SizedBox(height: TSizes.listGap),
+                    IssueCard(
+                      issue: issue,
+                      showCategory: true,
+                      onTap: () => context.push('/issues/${issue.reference}'),
                     ),
-                  ),
-                )
-              else
-                for (final (index, issue) in visibleIssues.indexed) ...[
-                  if (index > 0) const SizedBox(height: TSizes.listGap),
-                  IssueCard(
-                    issue: issue,
-                    showCategory: true,
-                    onTap: () => context.push('/issues/${issue.reference}'),
-                  ),
-                ],
-            ],
+                  ],
+              ],
+            ),
           ),
         ),
       ),

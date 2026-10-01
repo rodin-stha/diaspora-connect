@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../theme/sizes.dart';
+import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import '../../widgets/list_section.dart';
 import '../../widgets/toggle_row.dart';
@@ -41,25 +42,27 @@ class NotificationSettingsScreen extends ConsumerWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            TSizes.pagePadding,
-            topPadding,
-            TSizes.pagePadding,
-            30,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: TSizes.groupGap,
-            children: [
-              BackTitleBar(
-                title: l10n.notificationSettings,
-                fallbackLocation: '/profile',
-              ),
-              section(l10n.howNotifiedSection, NotificationGroup.channel),
-              section(l10n.whatNotifiedSection, NotificationGroup.topic),
-            ],
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              TSizes.pagePadding,
+              topPadding,
+              TSizes.pagePadding,
+              30,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: TSizes.groupGap,
+              children: [
+                BackTitleBar(
+                  title: l10n.notificationSettings,
+                  fallbackLocation: '/profile',
+                ),
+                section(l10n.howNotifiedSection, NotificationGroup.channel),
+                section(l10n.whatNotifiedSection, NotificationGroup.topic),
+              ],
+            ),
           ),
         ),
       ),

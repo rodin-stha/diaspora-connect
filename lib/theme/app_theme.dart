@@ -64,6 +64,17 @@ class TAppTheme {
           textStyle: TTextStyles.button,
         ),
       ),
+      // Secondary button (e.g. "Log out"). Same shape as the filled one; the
+      // color is set where it's used, since outlined buttons vary by purpose.
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(TSizes.buttonRadius),
+          ),
+          textStyle: TTextStyles.button,
+        ),
+      ),
       fontFamily: GoogleFonts.manrope().fontFamily,
       fontFamilyFallback: TTextStyles.devanagariFallback,
       extensions: [colors],

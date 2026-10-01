@@ -29,6 +29,8 @@ class ListSection extends StatelessWidget {
           // keeps normal case. Devanagari has no case and is unaffected.
           title.toUpperCase(),
           style: TTextStyles.label.copyWith(
+            // Heavier than other labels so section headings stand out.
+            fontWeight: FontWeight.w800,
             color: context.colors.textSecondary,
           ),
         ),

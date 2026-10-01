@@ -553,6 +553,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorLoginMobile => 'Enter your mobile number';
 
   @override
+  String developedBy(String company) {
+    return 'Developed by $company';
+  }
+
+  @override
   String get verifyTitle => 'Verify your number';
 
   @override

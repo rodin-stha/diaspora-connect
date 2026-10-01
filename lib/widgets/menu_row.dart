@@ -10,9 +10,6 @@ import '../theme/text_styles.dart';
 class MenuRow extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;
-
-  /// Red text for actions like "Log out".
-  final bool isDestructive;
   final bool showChevron;
 
   /// Line under the row, separating it from the next one.
@@ -22,7 +19,6 @@ class MenuRow extends StatelessWidget {
     super.key,
     required this.title,
     this.onTap,
-    this.isDestructive = false,
     this.showChevron = true,
     this.showDivider = true,
   });
@@ -46,7 +42,7 @@ class MenuRow extends StatelessWidget {
               child: Text(
                 title,
                 style: TTextStyles.body.copyWith(
-                  color: isDestructive ? colors.accent : colors.textPrimary,
+                  color: colors.textPrimary,
                 ),
               ),
             ),

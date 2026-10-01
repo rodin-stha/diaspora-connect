@@ -556,6 +556,11 @@ class AppLocalizationsNe extends AppLocalizations {
   String get errorLoginMobile => 'आफ्नो मोबाइल नम्बर लेख्नुहोस्';
 
   @override
+  String developedBy(String company) {
+    return '$company द्वारा विकसित';
+  }
+
+  @override
   String get verifyTitle => 'आफ्नो नम्बर प्रमाणित गर्नुहोस्';
 
   @override

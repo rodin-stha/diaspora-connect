@@ -8,6 +8,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
+import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import '../../widgets/status_pill.dart';
 import 'data/issues_provider.dart';
@@ -31,33 +32,37 @@ class IssueDetailScreen extends ConsumerWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            TSizes.pagePadding,
-            topPadding,
-            TSizes.pagePadding,
-            30,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              BackTitleBar(
-                title: l10n.trackIssueTitle,
-                fallbackLocation: '/issues',
-              ),
-              const SizedBox(height: TSizes.timelineGap),
-              if (issue == null)
-                Text(
-                  l10n.issueNotFound,
-                  style: TTextStyles.body.copyWith(color: colors.textSecondary),
-                )
-              else ...[
-                _IssueSummary(issue: issue),
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              TSizes.pagePadding,
+              topPadding,
+              TSizes.pagePadding,
+              30,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                BackTitleBar(
+                  title: l10n.trackIssueTitle,
+                  fallbackLocation: '/issues',
+                ),
                 const SizedBox(height: TSizes.timelineGap),
-                IssueTimeline(issue: issue),
+                if (issue == null)
+                  Text(
+                    l10n.issueNotFound,
+                    style: TTextStyles.body.copyWith(
+                      color: colors.textSecondary,
+                    ),
+                  )
+                else ...[
+                  _IssueSummary(issue: issue),
+                  const SizedBox(height: TSizes.timelineGap),
+                  IssueTimeline(issue: issue),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

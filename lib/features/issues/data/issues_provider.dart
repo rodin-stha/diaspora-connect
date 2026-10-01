@@ -66,7 +66,7 @@ final issueByReferenceProvider = Provider.family<Issue?, String>(
 final _sampleIssues = [
   Issue(
     title: 'Wage shortfall, October pay',
-    reference: 'GN-2083-004512',
+    reference: 'DC-2083-004512',
     category: IssueCategory.wages,
     dueInDays: 4,
     status: IssueStatus.inProgress,
@@ -86,7 +86,7 @@ final _sampleIssues = [
   ),
   Issue(
     title: 'Permit renewal delayed',
-    reference: 'GN-2083-004498',
+    reference: 'DC-2083-004498',
     category: IssueCategory.permit,
     dueInDays: -1,
     status: IssueStatus.escalated,
@@ -106,7 +106,7 @@ final _sampleIssues = [
   ),
   Issue(
     title: 'Housing dispute, live-in contract',
-    reference: 'GN-2083-004530',
+    reference: 'DC-2083-004530',
     category: IssueCategory.housing,
     dueInDays: 6,
     status: IssueStatus.submitted,
@@ -118,7 +118,7 @@ final _sampleIssues = [
   ),
   Issue(
     title: 'Passport held by employer',
-    reference: 'GN-2083-004533',
+    reference: 'DC-2083-004533',
     category: IssueCategory.documents,
     dueInDays: 2,
     status: IssueStatus.escalated,

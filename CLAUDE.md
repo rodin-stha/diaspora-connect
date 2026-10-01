@@ -21,7 +21,7 @@ Flutter app (iOS/Android) for Nepali migrant workers to report and track workpla
 - **State:** flutter_riverpod
 - **Routing:** go_router (`StatefulShellRoute` for bottom-nav tabs) — router is created in `routerProvider` (`lib/app/router.dart`)
 - **i18n:** flutter_localizations + ARB files in `lib/l10n/` (`app_en.arb`, `app_ne.arb`); current language in `localeProvider`, persisted with shared_preferences
-- **Fonts:** google_fonts (Manrope, Newsreader for logo, Noto Sans Devanagari fallback for Nepali)
+- **Fonts:** google_fonts (Manrope, Noto Sans Devanagari fallback for Nepali)
 - **Icons:** SVGs in `assets/icons/` via flutter_svg
 
 ## Project structure

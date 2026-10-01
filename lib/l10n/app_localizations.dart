@@ -1130,6 +1130,12 @@ abstract class AppLocalizations {
   /// **'Enter your mobile number'**
   String get errorLoginMobile;
 
+  /// Credit at the bottom of the login screen. {company} is the company name, never translated.
+  ///
+  /// In en, this message translates to:
+  /// **'Developed by {company}'**
+  String developedBy(String company);
+
   /// No description provided for @verifyTitle.
   ///
   /// In en, this message translates to:

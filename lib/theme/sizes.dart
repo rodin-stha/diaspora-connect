@@ -36,8 +36,9 @@ class TSizes {
   static const double logoSize = 64.0;
 
   // Icons
-  static const double dotSm = 8.0; // list item marker (Activity)
-  static const double dotMd = 10.0; // timeline step marker (Track issue)
+  static const double dotMd =
+      10.0; // list/timeline marker (Activity, Track issue)
+  static const double connectorWidth = 2.0; // line linking timeline steps
   static const double iconXs = 15.0;
   static const double iconSm = 16.0;
   static const double iconMd = 22.0;

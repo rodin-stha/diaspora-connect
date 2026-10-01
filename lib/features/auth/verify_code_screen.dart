@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
+import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import '../../widgets/labeled_field.dart';
 import '../../widgets/link_button.dart';
@@ -100,56 +101,58 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            TSizes.pagePadding,
-            topPadding,
-            TSizes.pagePadding,
-            40,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: TSizes.lg,
-            children: [
-              const BackTitleBar(fallbackLocation: '/login'),
-              Text(
-                l10n.verifyTitle,
-                style: TTextStyles.pageHeading.copyWith(
-                  color: colors.textPrimary,
-                ),
-              ),
-              Text(l10n.verifySubtitle(phone), style: smallText),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  OtpInput(
-                    controller: _code,
-                    length: _codeLength,
-                    semanticsLabel: l10n.otpFieldLabel,
-                    hasError: _error != null,
-                    // Clear the error as soon as the user edits the code.
-                    onChanged: (_) {
-                      if (_error != null) setState(() => _error = null);
-                    },
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              TSizes.pagePadding,
+              topPadding,
+              TSizes.pagePadding,
+              40,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: TSizes.lg,
+              children: [
+                const BackTitleBar(fallbackLocation: '/login'),
+                Text(
+                  l10n.verifyTitle,
+                  style: TTextStyles.pageHeading.copyWith(
+                    color: colors.textPrimary,
                   ),
-                  if (_error != null) FieldErrorText(_error!),
-                ],
-              ),
-              Row(
-                children: [
-                  Text('${l10n.resendPrompt} ', style: smallText),
-                  if (_resendIn > Duration.zero)
-                    Text(l10n.resendIn(_format(_resendIn)), style: smallText)
-                  else
-                    LinkButton(label: l10n.resendAction, onPressed: _resend),
-                ],
-              ),
-              FilledButton(
-                onPressed: _verifying ? null : _verify,
-                child: Text(l10n.verifyAction),
-              ),
-            ],
+                ),
+                Text(l10n.verifySubtitle(phone), style: smallText),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    OtpInput(
+                      controller: _code,
+                      length: _codeLength,
+                      semanticsLabel: l10n.otpFieldLabel,
+                      hasError: _error != null,
+                      // Clear the error as soon as the user edits the code.
+                      onChanged: (_) {
+                        if (_error != null) setState(() => _error = null);
+                      },
+                    ),
+                    if (_error != null) FieldErrorText(_error!),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('${l10n.resendPrompt} ', style: smallText),
+                    if (_resendIn > Duration.zero)
+                      Text(l10n.resendIn(_format(_resendIn)), style: smallText)
+                    else
+                      LinkButton(label: l10n.resendAction, onPressed: _resend),
+                  ],
+                ),
+                FilledButton(
+                  onPressed: _verifying ? null : _verify,
+                  child: Text(l10n.verifyAction),
+                ),
+              ],
+            ),
           ),
         ),
       ),

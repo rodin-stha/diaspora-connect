@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Typography from the Figma design (Manrope, plus Newsreader for the logo).
+/// Typography from the Figma design (Manrope throughout).
 ///
 /// Styles hold size/weight/line-height only, never color: color depends on
 /// the theme, so apply it at the call site with `context.colors`.
@@ -24,10 +24,7 @@ class TTextStyles {
     height: height,
   ).copyWith(fontFamilyFallback: devanagariFallback);
 
-  static TextStyle get logo => GoogleFonts.newsreader(
-    fontSize: 15,
-    height: 1.2,
-  ).copyWith(fontFamilyFallback: devanagariFallback);
+  static TextStyle get logo => _manrope(fontSize: 15, height: 1.2);
 
   static TextStyle get headline => _manrope(
     fontSize: 26,

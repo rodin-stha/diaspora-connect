@@ -44,9 +44,15 @@ class HomeHeader extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                l10n.appName,
-                style: TTextStyles.logo.copyWith(color: colors.onPrimary),
+              // Expanded takes the leftover width, pushing the toggle to the
+              // right edge. The ellipsis guards against a long translated name.
+              Expanded(
+                child: Text(
+                  l10n.appName,
+                  style: TTextStyles.logo.copyWith(color: colors.onPrimary),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               const SizedBox(width: TSizes.sm),
               const LanguageToggle(),
