@@ -20,7 +20,21 @@ import 'package:diaspora_connect/widgets/toggle_switch.dart';
 class FakeIssuesApi implements IssuesApi {
   final bool fails;
 
-  const FakeIssuesApi({this.fails = false});
+  /// Issues per page; the real API uses 15.
+  final int pageSize;
+
+  /// Pages from this one on fail (to test "load more" errors).
+  final int? failFromPage;
+
+  /// All issues on the "server"; the sample issues unless given.
+  final List<Issue>? issues;
+
+  const FakeIssuesApi({
+    this.fails = false,
+    this.pageSize = 15,
+    this.failFromPage,
+    this.issues,
+  });
 
   static const categories = [
     IssueCategory(id: 2, name: 'Financial'),
@@ -30,9 +44,18 @@ class FakeIssuesApi implements IssuesApi {
   ];
 
   @override
-  Future<List<Issue>> fetchIssues({int page = 1}) async {
-    if (fails) throw Exception('No connection');
-    return _sampleIssues;
+  Future<IssuesPage> fetchIssues({int page = 1}) async {
+    if (fails || (failFromPage != null && page >= failFromPage!)) {
+      throw Exception('No connection');
+    }
+    final all = issues ?? _sampleIssues;
+    final start = (page - 1) * pageSize;
+    return IssuesPage(
+      issues: all.skip(start).take(pageSize).toList(),
+      page: page,
+      lastPage: (all.length / pageSize).ceil(),
+      total: all.length,
+    );
   }
 
   @override
@@ -476,6 +499,78 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Try again'), findsOneWidget);
+    });
+
+    group('infinite scroll', () {
+      Future<void> openWithPages(
+        WidgetTester tester, {
+        int? failFromPage,
+      }) async {
+        await pumpApp(
+          tester,
+          issuesApi: FakeIssuesApi(pageSize: 2, failFromPage: failFromPage),
+        );
+        await tester.tap(find.text('View all'));
+        await tester.pumpAndSettle();
+      }
+
+      testWidgets('loads the next page at the end of the list', (
+        tester,
+      ) async {
+        await openWithPages(tester);
+
+        // Page 2 loads by itself: the 2 cards of page 1 don't fill the
+        // screen, so the footer is already in view.
+        expect(find.text('Passport held by employer'), findsOneWidget);
+        expect(find.byType(IssueCard), findsNWidgets(4));
+        // The count is all issues on the server, not just loaded ones
+        expect(find.text('All · 4'), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsNothing);
+      });
+
+      testWidgets('scrolling down loads more pages until the last', (
+        tester,
+      ) async {
+        final manyIssues = [
+          for (var id = 30; id >= 1; id--)
+            Issue(
+              id: id,
+              title: 'Issue number $id',
+              category: FakeIssuesApi.categories[0],
+              status: IssueStatus.submitted,
+              createdAt: DateTime(2026, 9, id),
+            ),
+        ];
+        await pumpApp(
+          tester,
+          issuesApi: FakeIssuesApi(pageSize: 10, issues: manyIssues),
+        );
+        await tester.tap(find.text('View all'));
+        await tester.pumpAndSettle();
+
+        // Only page 1 so far: the list is longer than the screen
+        expect(find.text('All · 30'), findsOneWidget);
+        expect(find.text('Issue number 11', skipOffstage: false), findsNothing);
+
+        // Scrolling to the end of each page loads the next one
+        await tester.scrollUntilVisible(
+          find.text('Issue number 1'),
+          300,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(find.text('Issue number 1'), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsNothing);
+      });
+
+      testWidgets('a failed page keeps loaded issues and offers Try again', (
+        tester,
+      ) async {
+        await openWithPages(tester, failFromPage: 2);
+
+        expect(find.byType(IssueCard), findsNWidgets(2));
+        expect(find.text("Couldn't load more issues."), findsOneWidget);
+        expect(find.text('Try again'), findsOneWidget);
+      });
     });
 
     testWidgets('tapping an issue opens Track issue, back returns', (

@@ -139,6 +139,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t load your issues. Check your connection and try again.';
 
   @override
+  String get loadMoreError => 'Couldn\'t load more issues.';
+
+  @override
   String get tryAgain => 'Try again';
 
   @override

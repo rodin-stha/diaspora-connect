@@ -26,7 +26,7 @@ class HomeScreen extends ConsumerWidget {
     final user = ref.watch(currentUserProvider);
     // Home just shows nothing until issues arrive; the Issues tab has the
     // loading and error states.
-    final openIssues = (ref.watch(issuesProvider).value ?? const [])
+    final openIssues = (ref.watch(issuesProvider).value?.issues ?? const [])
         .where((issue) => issue.isOpen)
         .take(_maxPreviewIssues);
 

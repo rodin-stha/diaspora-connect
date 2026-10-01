@@ -326,6 +326,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t load your issues. Check your connection and try again.'**
   String get issuesLoadError;
 
+  /// No description provided for @loadMoreError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load more issues.'**
+  String get loadMoreError;
+
   /// No description provided for @tryAgain.
   ///
   /// In en, this message translates to:

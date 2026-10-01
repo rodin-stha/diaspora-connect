@@ -139,6 +139,9 @@ class AppLocalizationsNe extends AppLocalizations {
       'तपाईंका समस्याहरू लोड गर्न सकिएन। इन्टरनेट जाँच गरेर फेरि प्रयास गर्नुहोस्।';
 
   @override
+  String get loadMoreError => 'थप समस्याहरू लोड गर्न सकिएन।';
+
+  @override
   String get tryAgain => 'फेरि प्रयास गर्नुहोस्';
 
   @override
