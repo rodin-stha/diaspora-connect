@@ -11,6 +11,9 @@ import '../theme/text_styles.dart';
 /// with the page content below.
 const double _chevronLeftInset = 7.33;
 
+/// Gap between the icon box and the title in the design.
+const double _titleGap = 14;
+
 /// A back chevron followed by a page title, for pages pushed on top of a tab.
 /// Without a [title], just the chevron.
 class BackTitleBar extends StatelessWidget {
@@ -57,7 +60,10 @@ class BackTitleBar extends StatelessWidget {
           ),
         ),
         if (title != null) ...[
-          const SizedBox(width: 14),
+          // The chevron is drawn shifted left but its box isn't, which adds
+          // the same amount of empty space on its right. Take it back here so
+          // the visible gap matches the design.
+          const SizedBox(width: _titleGap - _chevronLeftInset),
           Expanded(
             child: Text(
               title!,

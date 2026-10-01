@@ -7,6 +7,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../theme/colors.dart';
 import '../../../theme/sizes.dart';
 import '../../../theme/text_styles.dart';
+import '../../../widgets/app_background.dart';
 import '../../../widgets/segmented_progress_bar.dart';
 
 /// The page around each onboarding step: progress bar, "STEP 1 OF 3",
@@ -36,34 +37,36 @@ class OnboardingScaffold extends StatelessWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          padding: EdgeInsets.fromLTRB(
-            TSizes.pagePadding,
-            topPadding,
-            TSizes.pagePadding,
-            30,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: TSizes.lg,
-            children: [
-              SegmentedProgressBar(completed: step, total: totalSteps),
-              Text(
-                l10n.onboardingStep(step, totalSteps).toUpperCase(),
-                style: TTextStyles.caption.copyWith(
-                  color: colors.textSecondary,
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: EdgeInsets.fromLTRB(
+              TSizes.pagePadding,
+              topPadding,
+              TSizes.pagePadding,
+              30,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: TSizes.lg,
+              children: [
+                SegmentedProgressBar(completed: step, total: totalSteps),
+                Text(
+                  l10n.onboardingStep(step, totalSteps).toUpperCase(),
+                  style: TTextStyles.caption.copyWith(
+                    color: colors.textSecondary,
+                  ),
                 ),
-              ),
-              Text(
-                title,
-                style: TTextStyles.titleLarge.copyWith(
-                  color: colors.textPrimary,
+                Text(
+                  title,
+                  style: TTextStyles.titleLarge.copyWith(
+                    color: colors.textPrimary,
+                  ),
                 ),
-              ),
-              child,
-            ],
+                child,
+              ],
+            ),
           ),
         ),
       ),

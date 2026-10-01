@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../theme/sizes.dart';
+import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import '../../widgets/dashed_button.dart';
 import '../../widgets/document_row.dart';
@@ -30,37 +31,39 @@ class SavedDocumentsScreen extends ConsumerWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            TSizes.pagePadding,
-            topPadding,
-            TSizes.pagePadding,
-            30,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: TSizes.md,
-            children: [
-              BackTitleBar(
-                title: l10n.savedDocuments,
-                fallbackLocation: '/profile',
-              ),
-              for (final document in documents)
-                DocumentRow(
-                  name: _documentName(l10n, document),
-                  actionLabel: l10n.viewAction,
-                  // TODO: open the file once documents are stored on the
-                  // backend.
-                  onAction: () => showMessage(l10n.viewComingSoon),
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              TSizes.pagePadding,
+              topPadding,
+              TSizes.pagePadding,
+              30,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: TSizes.md,
+              children: [
+                BackTitleBar(
+                  title: l10n.savedDocuments,
+                  fallbackLocation: '/profile',
                 ),
-              DashedButton(
-                label: l10n.uploadNewDocument,
-                // TODO: pick a file, ask for its name, then
-                // otherDocumentsProvider.notifier.add(...).
-                onPressed: () => showMessage(l10n.uploadComingSoon),
-              ),
-            ],
+                for (final document in documents)
+                  DocumentRow(
+                    name: _documentName(l10n, document),
+                    actionLabel: l10n.viewAction,
+                    // TODO: open the file once documents are stored on the
+                    // backend.
+                    onAction: () => showMessage(l10n.viewComingSoon),
+                  ),
+                DashedButton(
+                  label: l10n.uploadNewDocument,
+                  // TODO: pick a file, ask for its name, then
+                  // otherDocumentsProvider.notifier.add(...).
+                  onPressed: () => showMessage(l10n.uploadComingSoon),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -23,12 +23,12 @@ class IssueTimeline extends StatelessWidget {
     final currentIndex = issue.isOpen
         ? issue.timeline.lastIndexWhere((event) => event.isDone)
         : -1;
+    bool isLast(int index) => index == issue.timeline.length - 1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (final (index, event) in issue.timeline.indexed) ...[
-          if (index > 0) const SizedBox(height: TSizes.timelineGap),
+        for (final (index, event) in issue.timeline.indexed)
           DotListItem(
             title: _label(l10n, event.type),
             details: [
@@ -40,8 +40,15 @@ class IssueTimeline extends StatelessWidget {
                 : event.isDone
                 ? colors.onSuccessContainer
                 : colors.border,
+            // Line down to the next step: green once that step is reached,
+            // grey while it's still ahead. The last step has no line.
+            connectorColor: isLast(index)
+                ? null
+                : issue.timeline[index + 1].isDone
+                ? colors.onSuccessContainer
+                : colors.border,
+            bottomSpacing: isLast(index) ? 0 : TSizes.timelineGap,
           ),
-        ],
       ],
     );
   }

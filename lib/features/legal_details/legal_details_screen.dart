@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../theme/sizes.dart';
+import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import 'data/legal_details_provider.dart';
 import 'models/legal_details.dart';
@@ -36,34 +37,36 @@ class LegalDetailsScreen extends ConsumerWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          padding: EdgeInsets.fromLTRB(
-            TSizes.pagePadding,
-            topPadding,
-            TSizes.pagePadding,
-            30,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: TSizes.formGap,
-            children: [
-              BackTitleBar(
-                title: l10n.legalDetailsTitle,
-                fallbackLocation: '/profile',
-              ),
-              LegalDetailsForm(
-                initialValue: details,
-                submitLabel: l10n.saveChanges,
-                onSubmit: save,
-                // TODO: pick a photo/file and upload it once the backend
-                // and file permissions are set up.
-                onUploadDocument: () => showMessage(l10n.uploadComingSoon),
-                // Same as Saved documents' button: adds to that list.
-                onUploadNewDocument: () => showMessage(l10n.uploadComingSoon),
-              ),
-            ],
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: EdgeInsets.fromLTRB(
+              TSizes.pagePadding,
+              topPadding,
+              TSizes.pagePadding,
+              30,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: TSizes.formGap,
+              children: [
+                BackTitleBar(
+                  title: l10n.legalDetailsTitle,
+                  fallbackLocation: '/profile',
+                ),
+                LegalDetailsForm(
+                  initialValue: details,
+                  submitLabel: l10n.saveChanges,
+                  onSubmit: save,
+                  // TODO: pick a photo/file and upload it once the backend
+                  // and file permissions are set up.
+                  onUploadDocument: () => showMessage(l10n.uploadComingSoon),
+                  // Same as Saved documents' button: adds to that list.
+                  onUploadNewDocument: () => showMessage(l10n.uploadComingSoon),
+                ),
+              ],
+            ),
           ),
         ),
       ),

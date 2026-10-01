@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
+import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import '../../widgets/dashed_tile.dart';
 import '../../widgets/form_section_header.dart';
@@ -93,95 +94,101 @@ class _ReportIssueScreenState extends ConsumerState<ReportIssueScreen> {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          padding: EdgeInsets.fromLTRB(
-            TSizes.pagePadding,
-            topPadding,
-            TSizes.pagePadding,
-            30,
-          ),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: _submitted
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: TSizes.lg,
-              children: [
-                BackTitleBar(
-                  title: l10n.reportIssueTitle,
-                  fallbackLocation: '/home',
-                ),
-                SelectField<IssueCategory>(
-                  label: l10n.categoryLabel,
-                  isRequired: true,
-                  value: _category,
-                  options: categories,
-                  optionLabel: (category) => category.name,
-                  hintText: l10n.selectHint,
-                  validator: (value) =>
-                      value == null ? l10n.errorCategory : null,
-                  onChanged: (value) => setState(() => _category = value),
-                ),
-                LabeledTextField(
-                  label: l10n.concernedLabel,
-                  controller: _concerned,
-                  hintText: l10n.concernedHint,
-                  textCapitalization: TextCapitalization.words,
-                ),
-                LabeledTextField(
-                  label: l10n.subjectLabel,
-                  isRequired: true,
-                  controller: _subject,
-                  hintText: l10n.subjectHint,
-                  validator: (value) => (value == null || value.trim().isEmpty)
-                      ? l10n.errorSubject
-                      : null,
-                  textCapitalization: TextCapitalization.sentences,
-                ),
-                LabeledTextField(
-                  label: l10n.descriptionLabel,
-                  controller: _description,
-                  hintText: l10n.descriptionHint,
-                  keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
-                  textCapitalization: TextCapitalization.sentences,
-                  maxLines: 6,
-                ),
-
-                FormSectionHeader(
-                  title: l10n.evidenceSection,
-                  showDivider: false,
-                ),
-                Row(
-                  spacing: TSizes.sm,
-                  children: [
-                    for (final (label, icon) in [
-                      (l10n.evidencePhoto, 'assets/icons/camera.svg'),
-                      (l10n.evidenceLocation, 'assets/icons/map_pin.svg'),
-                      (l10n.evidenceVoice, 'assets/icons/mic.svg'),
-                    ])
-                      Expanded(
-                        child: DashedTile(
-                          label: label,
-                          iconAsset: icon,
-                          onTap: evidenceComingSoon,
-                        ),
-                      ),
-                  ],
-                ),
-                Text(
-                  l10n.voiceNoteHint,
-                  style: TTextStyles.bodySmall.copyWith(
-                    color: colors.textSecondary,
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: EdgeInsets.fromLTRB(
+              TSizes.pagePadding,
+              topPadding,
+              TSizes.pagePadding,
+              30,
+            ),
+            child: Form(
+              key: _formKey,
+              autovalidateMode: _submitted
+                  ? AutovalidateMode.onUserInteraction
+                  : AutovalidateMode.disabled,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: TSizes.lg,
+                children: [
+                  BackTitleBar(
+                    title: l10n.reportIssueTitle,
+                    fallbackLocation: '/home',
                   ),
-                ),
+                  SelectField<IssueCategory>(
+                    label: l10n.categoryLabel,
+                    isRequired: true,
+                    value: _category,
+                    options: categories,
+                    optionLabel: (category) => category.name,
+                    hintText: l10n.selectHint,
+                    validator: (value) =>
+                        value == null ? l10n.errorCategory : null,
+                    onChanged: (value) => setState(() => _category = value),
+                  ),
+                  LabeledTextField(
+                    label: l10n.concernedLabel,
+                    controller: _concerned,
+                    hintText: l10n.concernedHint,
+                    textCapitalization: TextCapitalization.words,
+                  ),
+                  LabeledTextField(
+                    label: l10n.subjectLabel,
+                    isRequired: true,
+                    controller: _subject,
+                    hintText: l10n.subjectHint,
+                    validator: (value) =>
+                        (value == null || value.trim().isEmpty)
+                        ? l10n.errorSubject
+                        : null,
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                  LabeledTextField(
+                    label: l10n.descriptionLabel,
+                    controller: _description,
+                    hintText: l10n.descriptionHint,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    textCapitalization: TextCapitalization.sentences,
+                    maxLines: 6,
+                  ),
 
-                FilledButton(onPressed: _submit, child: Text(l10n.submitIssue)),
-              ],
+                  FormSectionHeader(
+                    title: l10n.evidenceSection,
+                    showDivider: false,
+                  ),
+                  Row(
+                    spacing: TSizes.sm,
+                    children: [
+                      for (final (label, icon) in [
+                        (l10n.evidencePhoto, 'assets/icons/camera.svg'),
+                        (l10n.evidenceLocation, 'assets/icons/map_pin.svg'),
+                        (l10n.evidenceVoice, 'assets/icons/mic.svg'),
+                      ])
+                        Expanded(
+                          child: DashedTile(
+                            label: label,
+                            iconAsset: icon,
+                            onTap: evidenceComingSoon,
+                          ),
+                        ),
+                    ],
+                  ),
+                  Text(
+                    l10n.voiceNoteHint,
+                    style: TTextStyles.bodySmall.copyWith(
+                      color: colors.textSecondary,
+                    ),
+                  ),
+
+                  FilledButton(
+                    onPressed: _submit,
+                    child: Text(l10n.submitIssue),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

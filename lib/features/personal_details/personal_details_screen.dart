@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../theme/sizes.dart';
+import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import 'data/personal_details_provider.dart';
 import 'models/personal_details.dart';
@@ -36,31 +37,33 @@ class PersonalDetailsScreen extends ConsumerWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          padding: EdgeInsets.fromLTRB(
-            TSizes.pagePadding,
-            topPadding,
-            TSizes.pagePadding,
-            30,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: TSizes.formGap,
-            children: [
-              BackTitleBar(
-                title: l10n.personalDetails,
-                fallbackLocation: '/profile',
-              ),
-              PersonalDetailsForm(
-                // `initialValue` is only read once, when the form is created,
-                // so later provider changes don't wipe what's being typed.
-                initialValue: details,
-                submitLabel: l10n.saveChanges,
-                onSubmit: save,
-              ),
-            ],
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: EdgeInsets.fromLTRB(
+              TSizes.pagePadding,
+              topPadding,
+              TSizes.pagePadding,
+              30,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: TSizes.formGap,
+              children: [
+                BackTitleBar(
+                  title: l10n.personalDetails,
+                  fallbackLocation: '/profile',
+                ),
+                PersonalDetailsForm(
+                  // `initialValue` is only read once, when the form is created,
+                  // so later provider changes don't wipe what's being typed.
+                  initialValue: details,
+                  submitLabel: l10n.saveChanges,
+                  onSubmit: save,
+                ),
+              ],
+            ),
           ),
         ),
       ),

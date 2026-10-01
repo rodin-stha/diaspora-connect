@@ -204,6 +204,8 @@
   "sendOtp": "Send OTP",
   "loginConsent": "By continuing you agree this number will be used to verify your identity.",
   "errorLoginMobile": "Enter your mobile number",
+  "developedBy": "Developed by {company}",
+  "@developedBy": {"description": "Credit at the bottom of the login screen. {company} is the company name, never translated.", "placeholders": {"company": {"type": "String"}}},
   "verifyTitle": "Verify your number",
   "verifySubtitle": "Enter the 6-digit code sent by SMS to {phone}",
   "@verifySubtitle": {"placeholders": {"phone": {"type": "String"}}},

@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
+import '../../widgets/app_background.dart';
 import '../../widgets/issue_card.dart';
 import '../issues/data/issues_provider.dart';
 import '../profile/data/user_provider.dart';
@@ -32,44 +33,46 @@ class HomeScreen extends ConsumerWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // White status bar icons on the blue header
       value: SystemUiOverlayStyle.light,
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              HomeHeader(
-                userName: user.givenName,
-                location: user.location,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: TSizes.pagePadding,
-                  vertical: TSizes.xl,
+      child: AppBackground(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                HomeHeader(
+                  userName: user.givenName,
+                  location: user.location,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ReportIssueCard(
-                      onTap: () => context.push('/report-issue'),
-                    ),
-                    const SizedBox(height: TSizes.spaceBtwSections),
-                    _SectionHeader(
-                      title: l10n.myIssues,
-                      actionLabel: l10n.viewAll,
-                      onAction: () => context.go('/issues'),
-                    ),
-                    const SizedBox(height: TSizes.md),
-                    for (final (index, issue) in openIssues.indexed) ...[
-                      if (index > 0) const SizedBox(height: TSizes.md),
-                      IssueCard(
-                        issue: issue,
-                        onTap: () => context.push('/issues/${issue.id}'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: TSizes.pagePadding,
+                    vertical: TSizes.xl,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ReportIssueCard(
+                        onTap: () => context.push('/report-issue'),
                       ),
+                      const SizedBox(height: TSizes.spaceBtwSections),
+                      _SectionHeader(
+                        title: l10n.myIssues,
+                        actionLabel: l10n.viewAll,
+                        onAction: () => context.go('/issues'),
+                      ),
+                      const SizedBox(height: TSizes.md),
+                      for (final (index, issue) in openIssues.indexed) ...[
+                        if (index > 0) const SizedBox(height: TSizes.md),
+                        IssueCard(
+                          issue: issue,
+                          onTap: () => context.push('/issues/${issue.id}'),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
