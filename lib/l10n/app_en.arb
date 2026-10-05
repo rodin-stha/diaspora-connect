@@ -236,5 +236,8 @@
   "uploadPhotoPage": "Photo page",
   "uploadWorkPermit": "Upload work permit (Rishayon Avoda)",
   "identityConsent": "I consent to identity verification",
-  "errorIdentityConsent": "Tick the box to continue"
+  "errorIdentityConsent": "Tick the box to continue",
+  "errorNoConnection": "No internet connection. Check your connection and try again.",
+  "errorTimeout": "The server is taking too long. Try again in a moment.",
+  "errorGeneric": "Something went wrong. Try again."
 }

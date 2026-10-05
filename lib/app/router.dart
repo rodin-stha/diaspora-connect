@@ -65,7 +65,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: 'verify', // → /login/verify
-            builder: (context, state) => const VerifyCodeScreen(),
+            builder: (context, state) =>
+                VerifyCodeScreen(phone: state.extra as String),
           ),
         ],
       ),

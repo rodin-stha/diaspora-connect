@@ -1,10 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:diaspora_connect/app/api/api_exception.dart';
 import 'package:diaspora_connect/app/locale_provider.dart';
+import 'package:diaspora_connect/features/auth/data/auth_repository.dart';
 import 'package:diaspora_connect/features/personal_details/models/personal_details.dart';
 import 'package:diaspora_connect/main.dart';
 import 'package:diaspora_connect/theme/sizes.dart';
@@ -13,6 +9,11 @@ import 'package:diaspora_connect/widgets/labeled_field.dart';
 import 'package:diaspora_connect/widgets/selectable_chip.dart';
 import 'package:diaspora_connect/widgets/toggle_row.dart';
 import 'package:diaspora_connect/widgets/toggle_switch.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> pumpApp(
   WidgetTester tester, {
@@ -20,6 +21,7 @@ Future<void> pumpApp(
   bool signedIn = true,
   // null = never saved (a session from before onboarding existed).
   bool? onboarded = true,
+  AuthRepository? authRepository,
 }) async {
   SharedPreferences.setMockInitialValues({
     'signed_in': signedIn,
@@ -30,11 +32,29 @@ Future<void> pumpApp(
 
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        // Never hit the real API from tests.
+        authRepositoryProvider.overrideWithValue(
+          authRepository ?? _FakeAuthRepository(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
   await tester.pumpAndSettle();
+}
+
+/// Stands in for the real API. Succeeds, or throws [error] if given.
+class _FakeAuthRepository implements AuthRepository {
+  final ApiException? error;
+
+  _FakeAuthRepository({this.error});
+
+  @override
+  Future<void> register(String phone) async {
+    if (error != null) throw error!;
+  }
 }
 
 void main() {
@@ -42,6 +62,33 @@ void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
 
   group('Login', () {
+    testWidgets('a failed send shows an error and stays on login', (
+      tester,
+    ) async {
+      await pumpApp(
+        tester,
+        signedIn: false,
+        authRepository: _FakeAuthRepository(
+          error: const ApiException(ApiErrorType.noConnection),
+        ),
+      );
+
+      await tester.enterText(find.byType(TextField), '52 123 4567');
+      await tester.tap(find.text('Send OTP'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(
+          'No internet connection. Check your connection and try again.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Verify your number'), findsNothing);
+      // The button works again, so the user can retry
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      expect(button.onPressed, isNotNull);
+    });
+
     testWidgets('signed-out users start on login, 111111 signs in', (
       tester,
     ) async {

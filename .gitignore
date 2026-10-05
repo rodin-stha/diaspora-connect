@@ -46,3 +46,8 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Env config (see env/example.json for the keys). Values are bundled into
+# the app binary, so never put real secrets here.
+env/*.json
+!env/example.json

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/api/api_error_message.dart';
+import '../../app/api/api_exception.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
@@ -13,16 +15,14 @@ import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import '../../widgets/labeled_field.dart';
 import '../../widgets/link_button.dart';
+import '../../widgets/loading_button.dart';
 import 'data/auth_provider.dart';
 import 'widgets/otp_input.dart';
 
-/// 02 · Verify code: enter the 6-digit code sent by SMS.
-///
-/// On success there's no navigation here: signing in changes [authProvider],
-/// and the router's redirect takes the user to Home (or to onboarding, the
-/// first time).
 class VerifyCodeScreen extends ConsumerStatefulWidget {
-  const VerifyCodeScreen({super.key});
+  const VerifyCodeScreen({super.key, required this.phone});
+
+  final String phone;
 
   @override
   ConsumerState<VerifyCodeScreen> createState() => _VerifyCodeScreenState();
@@ -30,7 +30,6 @@ class VerifyCodeScreen extends ConsumerStatefulWidget {
 
 class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
   static const _codeLength = 6;
-  static const _resendAfter = Duration(seconds: 60);
 
   final _code = TextEditingController();
   String? _error;
@@ -38,7 +37,7 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
 
   // "Resend in 00:42" countdown.
   Timer? _timer;
-  Duration _resendIn = _resendAfter;
+  Duration _resendIn = Duration(seconds: 60);
 
   @override
   void initState() {
@@ -56,7 +55,8 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
 
   void _startCountdown() {
     _timer?.cancel();
-    setState(() => _resendIn = _resendAfter);
+    final expireOtpTime = ref.read(authProvider).otpExpireTime ?? 60;
+    setState(() => _resendIn = Duration(seconds: expireOtpTime));
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() => _resendIn -= const Duration(seconds: 1));
       if (_resendIn == Duration.zero) timer.cancel();
@@ -66,27 +66,42 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
   Future<void> _resend() async {
     final phone = ref.read(authProvider).pendingPhone;
     if (phone == null) return;
-    await ref.read(authProvider.notifier).sendCode(phone);
-    if (!mounted) return;
-    _startCountdown();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context).codeResent)),
-    );
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await ref.read(authProvider.notifier).register(phone);
+      _startCountdown();
+      messenger.showSnackBar(SnackBar(content: Text(l10n.codeResent)));
+    } on ApiException catch (e) {
+      messenger.showSnackBar(
+        SnackBar(content: Text("failed")),
+      );
+    }
   }
 
   Future<void> _verify() async {
     final l10n = AppLocalizations.of(context);
-    if (_code.text.length < _codeLength) {
-      setState(() => _error = l10n.errorOtpIncomplete);
-      return;
+    try {
+      if (_code.text.length < _codeLength) {
+        setState(() => _error = l10n.errorOtpIncomplete);
+        return;
+      }
+      setState(() => _verifying = true);
+      await ref
+          .read(authProvider.notifier)
+          .verifyCode(widget.phone, _code.text);
+      if (!mounted) return;
+    } on ApiException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(apiErrorMessage(AppLocalizations.of(context), e)),
+        ),
+      );
+    } finally {
+      setState(() {
+        _verifying = false;
+      });
     }
-    setState(() => _verifying = true);
-    final ok = await ref.read(authProvider.notifier).verifyCode(_code.text);
-    if (!mounted) return;
-    setState(() {
-      _verifying = false;
-      if (!ok) _error = l10n.errorOtpWrong;
-    });
   }
 
   @override
@@ -147,9 +162,10 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
                       LinkButton(label: l10n.resendAction, onPressed: _resend),
                   ],
                 ),
-                FilledButton(
-                  onPressed: _verifying ? null : _verify,
-                  child: Text(l10n.verifyAction),
+                LoadingButton(
+                  label: l10n.verifyAction,
+                  onPressed: _verify,
+                  isLoading: _verifying,
                 ),
               ],
             ),

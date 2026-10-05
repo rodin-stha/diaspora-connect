@@ -54,7 +54,7 @@ lib/
 ## Commands
 
 ```bash
-flutter run                 # run the app
+flutter run --dart-define-from-file=env/dev.json   # run the app (or VS Code "Dev" launch config)
 flutter analyze             # lint + type check
 flutter test                # widget tests
 dart format .               # format all files

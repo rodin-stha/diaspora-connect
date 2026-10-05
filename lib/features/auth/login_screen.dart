@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/api/api_error_message.dart';
+import '../../app/api/api_exception.dart';
 import '../../app/locale_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
@@ -10,11 +12,12 @@ import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/labeled_field.dart';
+import '../../widgets/loading_button.dart';
 import '../../widgets/selectable_chip.dart';
 import 'data/auth_provider.dart';
 
 /// Only Israeli numbers for now (the app is for workers in Israel).
-const _countryCode = '+972';
+const _countryCode = '+977';
 
 /// A brand name, so it's the same in every language (not in the ARB files).
 const _companyName = 'Kumo Labs™';
@@ -38,15 +41,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _sendCode() async {
+  Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _sending = true);
-    await ref
-        .read(authProvider.notifier)
-        .sendCode('$_countryCode ${_number.text.trim()}');
-    if (!mounted) return;
-    setState(() => _sending = false);
-    context.push('/login/verify');
+    final phoneNumber = '$_countryCode ${_number.text.trim()}';
+    try {
+      await ref.read(authProvider.notifier).register(phoneNumber);
+      if (!mounted) return;
+      context.push('/login/verify', extra: phoneNumber);
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(apiErrorMessage(AppLocalizations.of(context), e)),
+        ),
+      );
+    } finally {
+      // Runs on success and failure, so the button never stays disabled.
+      if (mounted) setState(() => _sending = false);
+    }
   }
 
   @override
@@ -121,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                           ),
                                         ],
                                         textInputAction: TextInputAction.done,
-                                        onSubmitted: (_) => _sendCode(),
+                                        onSubmitted: (_) => _register(),
                                         style: TTextStyles.body.copyWith(
                                           color: colors.textPrimary,
                                         ),
@@ -143,9 +156,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                         ),
                       ),
-                      FilledButton(
-                        onPressed: _sending ? null : _sendCode,
-                        child: Text(l10n.sendOtp),
+                      LoadingButton(
+                        label: l10n.sendOtp,
+                        onPressed: _register,
+                        isLoading: _sending,
                       ),
                       Wrap(
                         spacing: TSizes.sm,

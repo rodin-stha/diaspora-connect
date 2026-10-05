@@ -197,5 +197,8 @@
   "uploadPhotoPage": "फोटो पृष्ठ",
   "uploadWorkPermit": "कार्य अनुमतिपत्र अपलोड गर्नुहोस् (Rishayon Avoda)",
   "identityConsent": "म पहिचान प्रमाणीकरणमा सहमत छु",
-  "errorIdentityConsent": "जारी राख्न बाकसमा टिक लगाउनुहोस्"
+  "errorIdentityConsent": "जारी राख्न बाकसमा टिक लगाउनुहोस्",
+  "errorNoConnection": "इन्टरनेट जडान छैन। जडान जाँचेर फेरि प्रयास गर्नुहोस्।",
+  "errorTimeout": "सर्भरले धेरै समय लियो। केही बेरपछि फेरि प्रयास गर्नुहोस्।",
+  "errorGeneric": "केही गडबड भयो। फेरि प्रयास गर्नुहोस्।"
 }

@@ -639,4 +639,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorIdentityConsent => 'Tick the box to continue';
+
+  @override
+  String get errorNoConnection =>
+      'No internet connection. Check your connection and try again.';
+
+  @override
+  String get errorTimeout =>
+      'The server is taking too long. Try again in a moment.';
+
+  @override
+  String get errorGeneric => 'Something went wrong. Try again.';
 }

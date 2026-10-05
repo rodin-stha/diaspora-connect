@@ -1285,6 +1285,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tick the box to continue'**
   String get errorIdentityConsent;
+
+  /// No description provided for @errorNoConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Check your connection and try again.'**
+  String get errorNoConnection;
+
+  /// No description provided for @errorTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is taking too long. Try again in a moment.'**
+  String get errorTimeout;
+
+  /// No description provided for @errorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get errorGeneric;
 }
 
 class _AppLocalizationsDelegate

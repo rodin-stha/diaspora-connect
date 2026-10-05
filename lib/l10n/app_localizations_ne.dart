@@ -642,4 +642,15 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get errorIdentityConsent => 'जारी राख्न बाकसमा टिक लगाउनुहोस्';
+
+  @override
+  String get errorNoConnection =>
+      'इन्टरनेट जडान छैन। जडान जाँचेर फेरि प्रयास गर्नुहोस्।';
+
+  @override
+  String get errorTimeout =>
+      'सर्भरले धेरै समय लियो। केही बेरपछि फेरि प्रयास गर्नुहोस्।';
+
+  @override
+  String get errorGeneric => 'केही गडबड भयो। फेरि प्रयास गर्नुहोस्।';
 }

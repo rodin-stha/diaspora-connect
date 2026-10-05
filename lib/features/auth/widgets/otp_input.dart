@@ -5,11 +5,6 @@ import '../../../theme/colors.dart';
 import '../../../theme/sizes.dart';
 import '../../../theme/text_styles.dart';
 
-/// A row of boxes, one per digit, for entering a one-time code.
-///
-/// Under the boxes is a single invisible text field that does the real
-/// typing: that keeps the keyboard, paste and iOS "From Messages" autofill
-/// working, and the boxes just draw its current value.
 class OtpInput extends StatefulWidget {
   final TextEditingController controller;
   final int length;
@@ -24,7 +19,7 @@ class OtpInput extends StatefulWidget {
     super.key,
     required this.controller,
     required this.semanticsLabel,
-    this.length = 6,
+    this.length = 5,
     this.onChanged,
     this.onCompleted,
     this.hasError = false,
@@ -60,7 +55,7 @@ class _OtpInputState extends State<OtpInput> {
     final code = widget.controller.text;
 
     return SizedBox(
-      width: widget.length * _boxWidth + (widget.length - 1) * _gap,
+      // width: widget.length * _boxWidth + (widget.length - 1) * _gap,
       height: _boxHeight,
       child: Stack(
         children: [
