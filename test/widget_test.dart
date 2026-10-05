@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:diaspora_connect/app/locale_provider.dart';
+import 'package:diaspora_connect/features/issues/data/issues_api.dart';
+import 'package:diaspora_connect/features/issues/models/issue.dart';
 import 'package:diaspora_connect/features/personal_details/models/personal_details.dart';
 import 'package:diaspora_connect/main.dart';
 import 'package:diaspora_connect/theme/sizes.dart';
@@ -14,8 +16,97 @@ import 'package:diaspora_connect/widgets/selectable_chip.dart';
 import 'package:diaspora_connect/widgets/toggle_row.dart';
 import 'package:diaspora_connect/widgets/toggle_switch.dart';
 
+/// Stands in for the backend: tests have no network.
+class FakeIssuesApi implements IssuesApi {
+  final bool fails;
+
+  /// Issues per page; the real API uses 15.
+  final int pageSize;
+
+  /// Pages from this one on fail (to test "load more" errors).
+  final int? failFromPage;
+
+  /// All issues on the "server"; the sample issues unless given.
+  final List<Issue>? issues;
+
+  const FakeIssuesApi({
+    this.fails = false,
+    this.pageSize = 15,
+    this.failFromPage,
+    this.issues,
+  });
+
+  static const categories = [
+    IssueCategory(id: 2, name: 'Financial'),
+    IssueCategory(id: 3, name: 'Health'),
+    IssueCategory(id: 6, name: 'Housing'),
+    IssueCategory(id: 7, name: 'Immigration'),
+  ];
+
+  @override
+  Future<IssuesPage> fetchIssues({int page = 1}) async {
+    if (fails || (failFromPage != null && page >= failFromPage!)) {
+      throw Exception('No connection');
+    }
+    final all = issues ?? _sampleIssues;
+    final start = (page - 1) * pageSize;
+    return IssuesPage(
+      issues: all.skip(start).take(pageSize).toList(),
+      page: page,
+      lastPage: (all.length / pageSize).ceil(),
+      total: all.length,
+    );
+  }
+
+  @override
+  Future<List<IssueCategory>> fetchCategories() async => categories;
+}
+
+final _sampleIssues = [
+  Issue(
+    id: 4512,
+    title: 'Wage shortfall, October pay',
+    category: FakeIssuesApi.categories[0],
+    status: IssueStatus.inProgress,
+    createdAt: DateTime(2026, 9, 3, 10, 42),
+    dueInDays: 4,
+    assignedTo: 'Case worker',
+    timeline: [
+      IssueEvent(IssueEventType.submitted, DateTime(2026, 9, 3, 10, 42)),
+      IssueEvent(IssueEventType.assignedToEmployer, DateTime(2026, 9, 3, 14)),
+      const IssueEvent(IssueEventType.resolved),
+    ],
+  ),
+  Issue(
+    id: 4498,
+    title: 'Permit renewal delayed',
+    category: FakeIssuesApi.categories[3],
+    status: IssueStatus.escalated,
+    createdAt: DateTime(2026, 8, 28),
+    dueInDays: -1,
+    assignedTo: 'Case worker',
+  ),
+  Issue(
+    id: 4530,
+    title: 'Housing dispute, live-in contract',
+    category: FakeIssuesApi.categories[2],
+    status: IssueStatus.submitted,
+    createdAt: DateTime(2026, 9, 6),
+  ),
+  Issue(
+    id: 4533,
+    title: 'Passport held by employer',
+    category: FakeIssuesApi.categories[3],
+    status: IssueStatus.escalated,
+    createdAt: DateTime(2026, 9, 4),
+    dueInDays: 2,
+    assignedTo: 'Case worker',
+  ),
+];
+
 Future<void> pumpApp(
   WidgetTester tester, {
+  IssuesApi issuesApi = const FakeIssuesApi(),
   Map<String, Object> savedPrefs = const {},
   bool signedIn = true,
   // null = never saved (a session from before onboarding existed).
@@ -30,7 +121,12 @@ Future<void> pumpApp(
 
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      // Fail at once in tests; by default Riverpod retries failed providers.
+      retry: (_, _) => null,
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        issuesApiProvider.overrideWithValue(issuesApi),
+      ],
       child: const MyApp(),
     ),
   );
@@ -237,8 +333,8 @@ void main() {
     expect(find.text('Namaste, Sita'), findsOneWidget);
     expect(find.text('Report an issue'), findsOneWidget);
     expect(find.text('Wage shortfall, October pay'), findsOneWidget);
-    expect(find.text('GN-2083-004512 · Due in 4 days'), findsOneWidget);
-    expect(find.text('GN-2083-004498 · Overdue'), findsOneWidget);
+    expect(find.text('#4512 · Due in 4 days'), findsOneWidget);
+    expect(find.text('#4498 · Overdue'), findsOneWidget);
     expect(find.text('In progress'), findsOneWidget);
     expect(find.text('Escalated'), findsOneWidget);
   });
@@ -282,7 +378,8 @@ void main() {
 
       await tester.tap(find.text('Select'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Safety').last);
+      // Options come from the categories API
+      await tester.tap(find.text('Health').last);
       await tester.pumpAndSettle();
       await tester.enterText(
         find.widgetWithText(TextField, 'e.g. Wage shortfall, October pay'),
@@ -297,9 +394,9 @@ void main() {
       await tester.tap(submit);
       await tester.pumpAndSettle();
 
-      // Track issue for the new one, with the next reference number
+      // Track issue for the new one, with the next id
       expect(find.text('Track issue'), findsOneWidget);
-      expect(find.text('GN-2083-004534'), findsOneWidget);
+      expect(find.text('#4534'), findsOneWidget);
       expect(find.text('No safety equipment on site'), findsOneWidget);
       expect(find.text('New'), findsOneWidget); // status pill
 
@@ -313,7 +410,7 @@ void main() {
       await tester.tap(find.text('Activity'));
       await tester.pumpAndSettle();
       expect(
-        find.text('GN-2083-004534 · No safety equipment on site'),
+        find.text('#4534 · No safety equipment on site'),
         findsOneWidget,
       );
     });
@@ -333,7 +430,7 @@ void main() {
 
       expect(find.byType(IssueCard), findsNWidgets(4));
       expect(
-        find.text('GN-2083-004512 · Wages · Due in 4 days'),
+        find.text('#4512 · Financial · Due in 4 days'),
         findsOneWidget,
       );
       expect(find.text('New'), findsOneWidget);
@@ -378,7 +475,7 @@ void main() {
     testWidgets('search matches reference number or title', (tester) async {
       await openIssuesTab(tester);
 
-      await tester.enterText(find.byType(TextField), '004530');
+      await tester.enterText(find.byType(TextField), '4530');
       await tester.pumpAndSettle();
       expect(find.byType(IssueCard), findsOneWidget);
       expect(find.text('Housing dispute, live-in contract'), findsOneWidget);
@@ -387,6 +484,93 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(IssueCard), findsOneWidget);
       expect(find.text('Passport held by employer'), findsOneWidget);
+    });
+
+    testWidgets('a failed load shows an error with Try again', (tester) async {
+      await pumpApp(tester, issuesApi: const FakeIssuesApi(fails: true));
+      await tester.tap(find.text('View all'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(IssueCard), findsNothing);
+      expect(
+        find.text(
+          "Couldn't load your issues. Check your connection and try again.",
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Try again'), findsOneWidget);
+    });
+
+    group('infinite scroll', () {
+      Future<void> openWithPages(
+        WidgetTester tester, {
+        int? failFromPage,
+      }) async {
+        await pumpApp(
+          tester,
+          issuesApi: FakeIssuesApi(pageSize: 2, failFromPage: failFromPage),
+        );
+        await tester.tap(find.text('View all'));
+        await tester.pumpAndSettle();
+      }
+
+      testWidgets('loads the next page at the end of the list', (
+        tester,
+      ) async {
+        await openWithPages(tester);
+
+        // Page 2 loads by itself: the 2 cards of page 1 don't fill the
+        // screen, so the footer is already in view.
+        expect(find.text('Passport held by employer'), findsOneWidget);
+        expect(find.byType(IssueCard), findsNWidgets(4));
+        // The count is all issues on the server, not just loaded ones
+        expect(find.text('All · 4'), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsNothing);
+      });
+
+      testWidgets('scrolling down loads more pages until the last', (
+        tester,
+      ) async {
+        final manyIssues = [
+          for (var id = 30; id >= 1; id--)
+            Issue(
+              id: id,
+              title: 'Issue number $id',
+              category: FakeIssuesApi.categories[0],
+              status: IssueStatus.submitted,
+              createdAt: DateTime(2026, 9, id),
+            ),
+        ];
+        await pumpApp(
+          tester,
+          issuesApi: FakeIssuesApi(pageSize: 10, issues: manyIssues),
+        );
+        await tester.tap(find.text('View all'));
+        await tester.pumpAndSettle();
+
+        // Only page 1 so far: the list is longer than the screen
+        expect(find.text('All · 30'), findsOneWidget);
+        expect(find.text('Issue number 11', skipOffstage: false), findsNothing);
+
+        // Scrolling to the end of each page loads the next one
+        await tester.scrollUntilVisible(
+          find.text('Issue number 1'),
+          300,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(find.text('Issue number 1'), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsNothing);
+      });
+
+      testWidgets('a failed page keeps loaded issues and offers Try again', (
+        tester,
+      ) async {
+        await openWithPages(tester, failFromPage: 2);
+
+        expect(find.byType(IssueCard), findsNWidgets(2));
+        expect(find.text("Couldn't load more issues."), findsOneWidget);
+        expect(find.text('Try again'), findsOneWidget);
+      });
     });
 
     testWidgets('tapping an issue opens Track issue, back returns', (
@@ -398,7 +582,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Track issue'), findsOneWidget);
-      expect(find.text('GN-2083-004512'), findsOneWidget);
+      expect(find.text('#4512'), findsOneWidget);
       expect(find.text('Submitted'), findsOneWidget);
       expect(find.text('3 Sep, 10:42 AM'), findsOneWidget);
       expect(find.text('Resolved · pending your feedback'), findsOneWidget);

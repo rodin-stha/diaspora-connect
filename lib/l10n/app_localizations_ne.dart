@@ -13,12 +13,6 @@ class AppLocalizationsNe extends AppLocalizations {
   String get appName => 'Diaspora Connect';
 
   @override
-  String get categorySafety => 'सुरक्षा';
-
-  @override
-  String get categoryOther => 'अन्य';
-
-  @override
   String get categoryLabel => 'वर्ग';
 
   @override
@@ -114,18 +108,6 @@ class AppLocalizationsNe extends AppLocalizations {
   String get statusResolved => 'समाधान भयो';
 
   @override
-  String get categoryWages => 'तलब';
-
-  @override
-  String get categoryPermit => 'अनुमतिपत्र';
-
-  @override
-  String get categoryHousing => 'आवास';
-
-  @override
-  String get categoryDocuments => 'कागजात';
-
-  @override
   String get issuesTitle => 'समस्याहरू';
 
   @override
@@ -147,6 +129,20 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get noIssuesFound => 'तपाईंको खोजसँग मिल्ने कुनै समस्या छैन';
+
+  @override
+  String get noIssuesYet =>
+      'तपाईंले अहिलेसम्म कुनै समस्या रिपोर्ट गर्नुभएको छैन';
+
+  @override
+  String get issuesLoadError =>
+      'तपाईंका समस्याहरू लोड गर्न सकिएन। इन्टरनेट जाँच गरेर फेरि प्रयास गर्नुहोस्।';
+
+  @override
+  String get loadMoreError => 'थप समस्याहरू लोड गर्न सकिएन।';
+
+  @override
+  String get tryAgain => 'फेरि प्रयास गर्नुहोस्';
 
   @override
   String get trackIssueTitle => 'समस्या ट्र्याक गर्नुहोस्';

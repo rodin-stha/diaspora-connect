@@ -13,12 +13,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'Diaspora Connect';
 
   @override
-  String get categorySafety => 'Safety';
-
-  @override
-  String get categoryOther => 'Other';
-
-  @override
   String get categoryLabel => 'Category';
 
   @override
@@ -115,18 +109,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusResolved => 'Resolved';
 
   @override
-  String get categoryWages => 'Wages';
-
-  @override
-  String get categoryPermit => 'Permit';
-
-  @override
-  String get categoryHousing => 'Housing';
-
-  @override
-  String get categoryDocuments => 'Documents';
-
-  @override
   String get issuesTitle => 'Issues';
 
   @override
@@ -148,6 +130,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noIssuesFound => 'No issues match your search';
+
+  @override
+  String get noIssuesYet => 'You haven\'t reported any issues yet';
+
+  @override
+  String get issuesLoadError =>
+      'Couldn\'t load your issues. Check your connection and try again.';
+
+  @override
+  String get loadMoreError => 'Couldn\'t load more issues.';
+
+  @override
+  String get tryAgain => 'Try again';
 
   @override
   String get trackIssueTitle => 'Track issue';

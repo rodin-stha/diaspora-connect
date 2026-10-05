@@ -17,15 +17,17 @@ import 'widgets/issue_timeline.dart';
 
 /// "Track issue": one issue's details and progress timeline.
 class IssueDetailScreen extends ConsumerWidget {
-  final String reference;
+  final int id;
 
-  const IssueDetailScreen({super.key, required this.reference});
+  const IssueDetailScreen({super.key, required this.id});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final issue = ref.watch(issueByReferenceProvider(reference));
+    final issue = ref.watch(issueByIdProvider(id));
+    // Opened by a deep link before the list has loaded.
+    final isLoading = issue == null && ref.watch(issuesProvider).isLoading;
 
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
@@ -49,7 +51,9 @@ class IssueDetailScreen extends ConsumerWidget {
                   fallbackLocation: '/issues',
                 ),
                 const SizedBox(height: TSizes.timelineGap),
-                if (issue == null)
+                if (isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else if (issue == null)
                   Text(
                     l10n.issueNotFound,
                     style: TTextStyles.body.copyWith(
@@ -96,13 +100,15 @@ class _IssueSummary extends StatelessWidget {
         Row(
           children: [
             StatusPill(status: issue.status),
-            const SizedBox(width: TSizes.sm),
-            Text(
-              issue.isOverdue ? l10n.overdue : l10n.dueInDays(issue.dueInDays),
-              style: TTextStyles.bodySmall.copyWith(
-                color: colors.textSecondary,
+            if (issue.dueInDays case final days?) ...[
+              const SizedBox(width: TSizes.sm),
+              Text(
+                days < 0 ? l10n.overdue : l10n.dueInDays(days),
+                style: TTextStyles.bodySmall.copyWith(
+                  color: colors.textSecondary,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ],

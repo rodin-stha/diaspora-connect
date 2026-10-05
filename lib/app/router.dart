@@ -108,11 +108,12 @@ final routerProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) => const IssuesScreen(),
                 routes: [
                   GoRoute(
-                    path: ':reference', // → /issues/GN-2083-004512
+                    path: ':id', // → /issues/12
                     // Full screen, no bottom nav (as in the design)
                     parentNavigatorKey: rootNavigatorKey,
+                    // A non-number id (bad link) shows "not found".
                     builder: (context, state) => IssueDetailScreen(
-                      reference: state.pathParameters['reference']!,
+                      id: int.tryParse(state.pathParameters['id']!) ?? -1,
                     ),
                   ),
                 ],

@@ -19,7 +19,6 @@ import '../activity/data/activity_provider.dart';
 import '../activity/models/activity.dart';
 import '../issues/data/issues_provider.dart';
 import '../issues/models/issue.dart';
-import '../issues/models/issue_labels.dart';
 import '../work_details/data/work_details_provider.dart';
 
 /// Home → Report an issue. Submitting adds the issue to Issues and Activity,
@@ -79,13 +78,16 @@ class _ReportIssueScreenState extends ConsumerState<ReportIssueScreen> {
     _showMessage(AppLocalizations.of(context).issueSubmitted);
     // Replace this form with the new issue's page, so Back goes to where
     // the user started (e.g. Home), not to a filled-in form.
-    context.pushReplacement('/issues/${issue.reference}');
+    context.pushReplacement('/issues/${issue.id}');
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
+    // Empty until loaded (or if loading failed); the dropdown just has no
+    // options then.
+    final categories = ref.watch(issueCategoriesProvider).value ?? const [];
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
     // TODO: attach evidence once camera, location and recording are set up.
     void evidenceComingSoon() => _showMessage(l10n.evidenceComingSoon);
@@ -119,8 +121,8 @@ class _ReportIssueScreenState extends ConsumerState<ReportIssueScreen> {
                     label: l10n.categoryLabel,
                     isRequired: true,
                     value: _category,
-                    options: IssueCategory.values,
-                    optionLabel: (category) => category.label(l10n),
+                    options: categories,
+                    optionLabel: (category) => category.name,
                     hintText: l10n.selectHint,
                     validator: (value) =>
                         value == null ? l10n.errorCategory : null,

@@ -51,10 +51,15 @@ lib/
 - Figma file: `TsDBbBVMcZHlzkSfgvy109` ("Diaspora Connect"), accessed via the Figma MCP plugin. Screens are named like `06 · Home`. Worker app node IDs: Home `20:131`, Activity `20:185`, Issues `21:131`, Track issue `21:192`, Profile `21:227`, Notification settings `21:287`. The file also has Login/Onboarding/Report screens and an Admin app (A*/M* frames).
 - Match the Figma design closely; verify on the simulator with a screenshot.
 
+## API
+
+- Backend: Laravel REST API, Postman collection "Israel Diaspora". One `Dio` client in `apiClientProvider` (`lib/app/api_client.dart`); each feature has a `data/<feature>_api.dart` class that tests override with a fake.
+- Base URL and a temporary dev bearer token come from `env.json` (gitignored; copy `env.example.json`). Never commit tokens.
+
 ## Commands
 
 ```bash
-flutter run                 # run the app
+flutter run --dart-define-from-file=env.json   # run the app (VS Code F5 does this)
 flutter analyze             # lint + type check
 flutter test                # widget tests
 dart format .               # format all files

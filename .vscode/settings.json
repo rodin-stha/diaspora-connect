@@ -1,4 +1,5 @@
 {
+  "dart.flutterRunAdditionalArgs": ["--dart-define-from-file=env.json"],
   "editor.formatOnSave": true,
   "[dart]": {
     "editor.formatOnSave": true,
