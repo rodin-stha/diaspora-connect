@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/api/api_response.dart';
 import '../../../app/api/dio_provider.dart';
 import '../models/register.dart';
+import '../models/verify_otp_response.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepository(ref.read(dioProvider)),
@@ -27,15 +27,18 @@ class AuthRepository {
     ).data;
   }
 
-  Future<void> verifyCode(String phone, String code) async {
-    debugPrint('phone: $phone, code: $code');
-
-    await apiCall(
-      () => _dio.post<void>(
+  Future<VerifyOtpResponse> verifyCode(String phone, String code) async {
+    final res = await apiCall(
+      () => _dio.post<Map<String, dynamic>>(
         '/register/verify-otp',
-        data: {'phone': phone, "otp": code},
+        data: {'phone': normalizePhone(phone), 'otp': code},
       ),
     );
+
+    return ApiResponse.fromJson(
+      res.data!,
+      (data) => VerifyOtpResponse.fromJson(data as Map<String, dynamic>),
+    ).data;
   }
 }
 

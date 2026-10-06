@@ -608,42 +608,6 @@ abstract class AppLocalizations {
   /// **'District'**
   String get districtLabel;
 
-  /// No description provided for @districtJerusalem.
-  ///
-  /// In en, this message translates to:
-  /// **'Jerusalem District'**
-  String get districtJerusalem;
-
-  /// No description provided for @districtNorthern.
-  ///
-  /// In en, this message translates to:
-  /// **'Northern District'**
-  String get districtNorthern;
-
-  /// No description provided for @districtHaifa.
-  ///
-  /// In en, this message translates to:
-  /// **'Haifa District'**
-  String get districtHaifa;
-
-  /// No description provided for @districtCentral.
-  ///
-  /// In en, this message translates to:
-  /// **'Central District'**
-  String get districtCentral;
-
-  /// No description provided for @districtTelAviv.
-  ///
-  /// In en, this message translates to:
-  /// **'Tel Aviv District'**
-  String get districtTelAviv;
-
-  /// No description provided for @districtSouthern.
-  ///
-  /// In en, this message translates to:
-  /// **'Southern District'**
-  String get districtSouthern;
-
   /// No description provided for @localAuthorityLabel.
   ///
   /// In en, this message translates to:
@@ -1303,6 +1267,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Try again.'**
   String get errorGeneric;
+
+  /// No description provided for @loadingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get loadingHint;
+
+  /// No description provided for @errorLoadDistricts.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the districts.'**
+  String get errorLoadDistricts;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @chooseDistrictFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the council type and district first'**
+  String get chooseDistrictFirst;
+
+  /// No description provided for @errorLoadAuthorities.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the local authorities.'**
+  String get errorLoadAuthorities;
+
+  /// No description provided for @localityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Locality'**
+  String get localityLabel;
+
+  /// No description provided for @errorLocality.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your locality'**
+  String get errorLocality;
+
+  /// No description provided for @chooseLocalAuthorityFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the local authority first'**
+  String get chooseLocalAuthorityFirst;
+
+  /// No description provided for @errorLoadLocalities.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the localities.'**
+  String get errorLoadLocalities;
 }
 
 class _AppLocalizationsDelegate

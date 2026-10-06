@@ -85,12 +85,6 @@
   "councilLocal": "लोकल काउन्सिल",
   "councilRegional": "रिजनल काउन्सिल",
   "districtLabel": "जिल्ला",
-  "districtJerusalem": "जेरुसलेम जिल्ला",
-  "districtNorthern": "उत्तरी जिल्ला",
-  "districtHaifa": "हाइफा जिल्ला",
-  "districtCentral": "मध्य जिल्ला",
-  "districtTelAviv": "तेल अभिभ जिल्ला",
-  "districtSouthern": "दक्षिणी जिल्ला",
   "localAuthorityLabel": "स्थानीय निकाय",
   "neighborhoodLabel": "टोल वा बस्ती",
   "neighborhoodHint": "जस्तै: Kibbutz Afikim",
@@ -200,5 +194,14 @@
   "errorIdentityConsent": "जारी राख्न बाकसमा टिक लगाउनुहोस्",
   "errorNoConnection": "इन्टरनेट जडान छैन। जडान जाँचेर फेरि प्रयास गर्नुहोस्।",
   "errorTimeout": "सर्भरले धेरै समय लियो। केही बेरपछि फेरि प्रयास गर्नुहोस्।",
-  "errorGeneric": "केही गडबड भयो। फेरि प्रयास गर्नुहोस्।"
+  "errorGeneric": "केही गडबड भयो। फेरि प्रयास गर्नुहोस्।",
+  "loadingHint": "लोड हुँदैछ…",
+  "errorLoadDistricts": "जिल्लाहरू लोड गर्न सकिएन।",
+  "retry": "फेरि प्रयास गर्नुहोस्",
+  "chooseDistrictFirst": "पहिले काउन्सिलको प्रकार र जिल्ला छान्नुहोस्",
+  "errorLoadAuthorities": "स्थानीय निकायहरू लोड गर्न सकिएन।",
+  "localityLabel": "बस्ती",
+  "errorLocality": "आफ्नो बस्ती छान्नुहोस्",
+  "chooseLocalAuthorityFirst": "पहिले स्थानीय निकाय छान्नुहोस्",
+  "errorLoadLocalities": "बस्तीहरू लोड गर्न सकिएन।"
 }

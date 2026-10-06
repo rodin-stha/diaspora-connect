@@ -120,12 +120,6 @@
   "councilLocal": "Local Council",
   "councilRegional": "Regional Council",
   "districtLabel": "District",
-  "districtJerusalem": "Jerusalem District",
-  "districtNorthern": "Northern District",
-  "districtHaifa": "Haifa District",
-  "districtCentral": "Central District",
-  "districtTelAviv": "Tel Aviv District",
-  "districtSouthern": "Southern District",
   "localAuthorityLabel": "Local Authority",
   "neighborhoodLabel": "Neighborhood or Settlement",
   "neighborhoodHint": "e.g. Kibbutz Afikim",
@@ -239,5 +233,14 @@
   "errorIdentityConsent": "Tick the box to continue",
   "errorNoConnection": "No internet connection. Check your connection and try again.",
   "errorTimeout": "The server is taking too long. Try again in a moment.",
-  "errorGeneric": "Something went wrong. Try again."
+  "errorGeneric": "Something went wrong. Try again.",
+  "loadingHint": "Loading…",
+  "errorLoadDistricts": "Couldn't load the districts.",
+  "retry": "Retry",
+  "chooseDistrictFirst": "Choose the council type and district first",
+  "errorLoadAuthorities": "Couldn't load the local authorities.",
+  "localityLabel": "Locality",
+  "errorLocality": "Choose your locality",
+  "chooseLocalAuthorityFirst": "Choose the local authority first",
+  "errorLoadLocalities": "Couldn't load the localities."
 }

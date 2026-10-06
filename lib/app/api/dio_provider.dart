@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../features/auth/data/auth_provider.dart';
 import '../env.dart';
 import '../locale_provider.dart';
 import 'api_exception.dart';
@@ -25,6 +26,12 @@ final dioProvider = Provider<Dio>((ref) {
         options.headers['Accept-Language'] = ref
             .read(localeProvider)
             .languageCode;
+        // The in-memory token, not the saved one: during onboarding it isn't
+        // saved to the device yet, but those requests still need it.
+        final token = ref.read(authProvider).token;
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
         handler.next(options);
       },
     ),

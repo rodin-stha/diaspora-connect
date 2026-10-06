@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../../theme/colors.dart';
@@ -10,23 +11,22 @@ import '../../../widgets/date_field.dart';
 import '../../../widgets/form_section_header.dart';
 import '../../../widgets/labeled_field.dart';
 import '../../../widgets/labeled_text_field.dart';
+import '../../../widgets/link_button.dart';
+import '../../../widgets/loading_button.dart';
 import '../../../widgets/select_field.dart';
 import '../../../widgets/selectable_chip.dart';
+import '../data/personal_details_provider.dart';
+import '../models/authority.dart';
+import '../models/district.dart';
+import '../models/locality.dart';
 import '../models/personal_details.dart';
 
-/// The personal details form, shared by Profile → Personal details
-/// ("Save changes") and onboarding step 1 ("Continue").
-///
-/// Holds its own editing state; [onSubmit] gets the result only when every
-/// field is valid. The screen around it decides the title and what happens
-/// after submitting.
-class PersonalDetailsForm extends StatefulWidget {
+class PersonalDetailsForm extends ConsumerStatefulWidget {
   final PersonalDetails initialValue;
   final String submitLabel;
-  final ValueChanged<PersonalDetails> onSubmit;
 
-  /// Extra explanations under the address and contact sections. Shown during
-  /// onboarding, where people fill this in for the first time.
+  final Future<void> Function(PersonalDetails) onSubmit;
+
   final bool showHints;
 
   const PersonalDetailsForm({
@@ -38,36 +38,43 @@ class PersonalDetailsForm extends StatefulWidget {
   });
 
   @override
-  State<PersonalDetailsForm> createState() => _PersonalDetailsFormState();
+  ConsumerState<PersonalDetailsForm> createState() =>
+      _PersonalDetailsFormState();
 }
 
-class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
+class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
   final _formKey = GlobalKey<FormState>();
 
   // Text fields: a controller each (like a ref to an uncontrolled input).
-  late final _fullName = TextEditingController(text: _initial.fullName);
-  late final _mobile = TextEditingController(text: _initial.mobileNumber);
-  late final _localAuthority = TextEditingController(
-    text: _initial.localAuthority,
+  late final _fullName = TextEditingController(text: _initial.name);
+  late final _neighborhood = TextEditingController(
+    text: _initial.neighborhoodName,
   );
-  late final _neighborhood = TextEditingController(text: _initial.neighborhood);
   late final _postalCode = TextEditingController(text: _initial.postalCode);
-  late final _contactName = TextEditingController(text: _initial.contactName);
-  late final _relationship = TextEditingController(
-    text: _initial.contactRelationship,
+  late final _contactName = TextEditingController(
+    text: _initial.contactPersonName,
   );
-  late final _contactPhone = TextEditingController(text: _initial.contactPhone);
-  late final _email = TextEditingController(text: _initial.email);
+  late final _relationship = TextEditingController(
+    text: _initial.contactPersonRelationship,
+  );
+  late final _contactPhone = TextEditingController(
+    text: _initial.contactPersonContact,
+  );
+  late final _email = TextEditingController(text: _initial.contactPersonEmail);
 
   // Choices: plain state.
-  late DateTime? _dob = _initial.dateOfBirth;
+  late DateTime? _dob = _initial.dob;
   late Gender? _gender = _initial.gender;
-  late CouncilType? _councilType = _initial.councilType;
-  late IsraelDistrict? _district = _initial.district;
+  late AuthorityType? _authorityType = _initial.authorityType;
 
-  /// Show errors as the user types, but only after the first Save attempt,
-  /// so an untouched form isn't covered in red.
+  late int? _districtId = _initial.districtId;
+  late int? _localAuthorityId = _initial.localAuthorityId;
+  late int? _localityId = _initial.localityId;
+  late String _localityName = _initial.localityName;
+
   bool _submitted = false;
+
+  bool _saving = false;
 
   PersonalDetails get _initial => widget.initialValue;
 
@@ -75,8 +82,6 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
   void dispose() {
     for (final controller in [
       _fullName,
-      _mobile,
-      _localAuthority,
       _neighborhood,
       _postalCode,
       _contactName,
@@ -89,27 +94,35 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     setState(() => _submitted = true);
     if (!_formKey.currentState!.validate()) return;
 
-    widget.onSubmit(
-      PersonalDetails(
-        fullName: _fullName.text.trim(),
-        dateOfBirth: _dob,
-        gender: _gender,
-        mobileNumber: _mobile.text.trim(),
-        councilType: _councilType,
-        district: _district,
-        localAuthority: _localAuthority.text.trim(),
-        neighborhood: _neighborhood.text.trim(),
-        postalCode: _postalCode.text.trim(),
-        contactName: _contactName.text.trim(),
-        contactRelationship: _relationship.text.trim(),
-        contactPhone: _contactPhone.text.trim(),
-        email: _email.text.trim(),
-      ),
-    );
+    setState(() => _saving = true);
+    try {
+      await widget.onSubmit(
+        PersonalDetails(
+          name: _fullName.text.trim(),
+          dob: _dob,
+          gender: _gender,
+          authorityType: _authorityType,
+          districtId: _districtId,
+          localAuthorityId: _localAuthorityId,
+          localityId: _localityId,
+          localityName: _localityName,
+          neighborhoodName: _neighborhood.text.trim(),
+          postalCode: _postalCode.text.trim(),
+          contactPersonName: _contactName.text.trim(),
+          contactPersonRelationship: _relationship.text.trim(),
+          contactPersonContact: _contactPhone.text.trim(),
+          contactPersonEmail: _email.text.trim(),
+        ),
+      );
+    } finally {
+      // Runs on success and failure. After a successful save the screen may
+      // already have navigated away, hence the mounted check.
+      if (mounted) setState(() => _saving = false);
+    }
   }
 
   @override
@@ -185,23 +198,10 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
                 ),
               ],
             ),
-            LabeledTextField(
-              label: l10n.mobileIsraelLabel,
-              isRequired: true,
-              controller: _mobile,
-              hintText: l10n.mobileIsraelHint,
-              validator: requiredAnd(
-                l10n.errorMobileEmpty,
-                TValidators.isIsraeliMobile,
-                l10n.errorIsraeliMobile,
-              ),
-              keyboardType: TextInputType.phone,
-              autofillHints: const [AutofillHints.telephoneNumber],
-            ),
 
             FormSectionHeader(title: l10n.homeInIsraelSection),
-            FormField<CouncilType>(
-              initialValue: _councilType,
+            FormField<AuthorityType>(
+              initialValue: _authorityType,
               validator: requiredChoice(l10n.errorCouncilType),
               builder: (field) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,13 +210,18 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
                     spacing: TSizes.sm,
                     runSpacing: TSizes.formGap,
                     children: [
-                      for (final type in CouncilType.values)
+                      for (final type in AuthorityType.values)
                         SelectableChip(
                           label: _councilLabel(l10n, type),
                           isSelected: field.value == type,
                           onTap: () {
                             field.didChange(type);
-                            setState(() => _councilType = type);
+                            setState(() {
+                              if (type != _authorityType) {
+                                _clearLocalAuthority();
+                              }
+                              _authorityType = type;
+                            });
                           },
                         ),
                     ],
@@ -225,23 +230,9 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
                 ],
               ),
             ),
-            SelectField<IsraelDistrict>(
-              label: l10n.districtLabel,
-              isRequired: true,
-              value: _district,
-              options: IsraelDistrict.values,
-              optionLabel: (district) => _districtLabel(l10n, district),
-              hintText: l10n.selectHint,
-              validator: requiredChoice(l10n.errorDistrict),
-              onChanged: (value) => setState(() => _district = value),
-            ),
-            LabeledTextField(
-              label: l10n.localAuthorityLabel,
-              isRequired: true,
-              controller: _localAuthority,
-              validator: required(l10n.errorLocalAuthority),
-              textCapitalization: TextCapitalization.words,
-            ),
+            _districtField(l10n),
+            _localAuthorityField(l10n),
+            _localityField(l10n),
             LabeledTextField(
               label: l10n.neighborhoodLabel,
               isRequired: true,
@@ -323,7 +314,11 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
             ),
             if (widget.showHints) Text(l10n.contactHint, style: hintStyle),
 
-            FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),
+            LoadingButton(
+              label: widget.submitLabel,
+              isLoading: _saving,
+              onPressed: _submit,
+            ),
           ],
         ),
       ),
@@ -337,20 +332,168 @@ class _PersonalDetailsFormState extends State<PersonalDetailsForm> {
         Gender.other => l10n.genderOther,
       };
 
-  static String _councilLabel(AppLocalizations l10n, CouncilType type) =>
-      switch (type) {
-        CouncilType.city => l10n.councilCity,
-        CouncilType.local => l10n.councilLocal,
-        CouncilType.regional => l10n.councilRegional,
-      };
+  /// The chosen authority belongs to a district and type, so it's cleared
+  /// when either changes (and the locality with it). Call inside setState.
+  void _clearLocalAuthority() {
+    _localAuthorityId = null;
+    _localityName = '';
+    _localityId = null;
+  }
 
-  static String _districtLabel(AppLocalizations l10n, IsraelDistrict d) =>
-      switch (d) {
-        IsraelDistrict.jerusalem => l10n.districtJerusalem,
-        IsraelDistrict.northern => l10n.districtNorthern,
-        IsraelDistrict.haifa => l10n.districtHaifa,
-        IsraelDistrict.central => l10n.districtCentral,
-        IsraelDistrict.telAviv => l10n.districtTelAviv,
-        IsraelDistrict.southern => l10n.districtSouthern,
+  Widget _districtField(AppLocalizations l10n) => _apiSelectField<District>(
+    key: 'districts',
+    label: l10n.districtLabel,
+    options: ref.watch(districtsProvider),
+    selectedId: _districtId,
+    idOf: (district) => district.id,
+    nameOf: (district) => district.name,
+    requiredMessage: l10n.errorDistrict,
+    loadErrorMessage: l10n.errorLoadDistricts,
+    onRetry: () => ref.invalidate(districtsProvider),
+    onChanged: (district) => setState(() {
+      if (district?.id != _districtId) _clearLocalAuthority();
+      _districtId = district?.id;
+    }),
+  );
+
+  /// Depends on the local authority: until one is chosen there's nothing
+  /// to fetch, so it says to choose it first.
+  Widget _localityField(AppLocalizations l10n) {
+    final localAuthorityId = _localAuthorityId;
+    if (localAuthorityId == null) {
+      return _placeholderSelect<Locality>(
+        key: 'localities-waiting',
+        label: l10n.localityLabel,
+        hint: l10n.chooseLocalAuthorityFirst,
+        requiredMessage: l10n.errorLocality,
+      );
+    }
+
+    final query = (localAuthorityId: localAuthorityId);
+    return _apiSelectField<Locality>(
+      key: ('localities', query),
+      label: l10n.localityLabel,
+      options: ref.watch(localityProvider(query)),
+      selectedId: _localityId,
+      idOf: (locality) => locality.id,
+      nameOf: (locality) => locality.name,
+      requiredMessage: l10n.errorLocality,
+      loadErrorMessage: l10n.errorLoadLocalities,
+      onRetry: () => ref.invalidate(localityProvider(query)),
+      onChanged: (locality) => setState(() => _localityId = locality?.id),
+    );
+  }
+
+  /// Depends on the district and authority type: until both are chosen
+  /// there's nothing to fetch, so it says to choose them first.
+  Widget _localAuthorityField(AppLocalizations l10n) {
+    final districtId = _districtId;
+    final type = _authorityType;
+    if (districtId == null || type == null) {
+      return _placeholderSelect<Authority>(
+        key: 'authorities-waiting',
+        label: l10n.localAuthorityLabel,
+        hint: l10n.chooseDistrictFirst,
+        requiredMessage: l10n.errorLocalAuthority,
+      );
+    }
+
+    final query = (districtId: districtId, type: type);
+    return _apiSelectField<Authority>(
+      // Includes the query, so picking another district or type starts a
+      // fresh dropdown with nothing selected.
+      key: ('authorities', query),
+      label: l10n.localAuthorityLabel,
+      options: ref.watch(authoritiesProvider(query)),
+      selectedId: _localAuthorityId,
+      idOf: (authority) => authority.id,
+      nameOf: (authority) => authority.name,
+      requiredMessage: l10n.errorLocalAuthority,
+      loadErrorMessage: l10n.errorLoadAuthorities,
+      onRetry: () => ref.invalidate(authoritiesProvider(query)),
+      onChanged: (authority) => setState(() {
+        // Localities belong to one authority.
+        if (authority?.id != _localAuthorityId) _localityId = null;
+        _localAuthorityId = authority?.id;
+        _localityName = authority?.name ?? '';
+      }),
+    );
+  }
+
+  /// A required dropdown whose options come from the API: disabled while
+  /// they load, and a message with Retry if loading fails.
+  Widget _apiSelectField<T>({
+    required Object key,
+    required String label,
+    required AsyncValue<List<T>> options,
+    required int? selectedId,
+    required int Function(T option) idOf,
+    required String Function(T option) nameOf,
+    required String requiredMessage,
+    required String loadErrorMessage,
+    required VoidCallback onRetry,
+    required ValueChanged<T?> onChanged,
+  }) {
+    final l10n = AppLocalizations.of(context);
+
+    return options.when(
+      data: (list) => SelectField<T>(
+        // A new key once the list arrives: the dropdown is a FormField,
+        // which only reads `value` when first created.
+        key: ValueKey((key, 'loaded')),
+        label: label,
+        isRequired: true,
+        // Taken from the list itself: the dropdown needs the exact same
+        // object as one of its options.
+        value: list.where((option) => idOf(option) == selectedId).firstOrNull,
+        options: list,
+        optionLabel: nameOf,
+        hintText: l10n.selectHint,
+        validator: (option) => option == null ? requiredMessage : null,
+        onChanged: onChanged,
+      ),
+      loading: () => _placeholderSelect<T>(
+        key: (key, 'loading'),
+        label: label,
+        hint: l10n.loadingHint,
+        requiredMessage: requiredMessage,
+      ),
+      error: (error, _) => LabeledField(
+        label: label,
+        isRequired: true,
+        errorText: loadErrorMessage,
+        child: Align(
+          alignment: AlignmentDirectional.centerStart,
+          // Invalidating drops the failed result, so it fetches again.
+          child: LinkButton(label: l10n.retry, onPressed: onRetry),
+        ),
+      ),
+    );
+  }
+
+  /// An empty dropdown showing [hint]. Still fails validation, so Save
+  /// can't go through without a choice.
+  Widget _placeholderSelect<T>({
+    required Object key,
+    required String label,
+    required String hint,
+    required String requiredMessage,
+  }) => SelectField<T>(
+    key: ValueKey(key),
+    label: label,
+    isRequired: true,
+    value: null,
+    options: const [],
+    optionLabel: (_) => '',
+    hintText: hint,
+    validator: (_) => requiredMessage,
+    onChanged: (_) {},
+  );
+
+  static String _councilLabel(AppLocalizations l10n, AuthorityType type) =>
+      switch (type) {
+        AuthorityType.city => l10n.councilCity,
+        AuthorityType.localCouncil => l10n.councilLocal,
+        AuthorityType.regionalCouncil => l10n.councilRegional,
       };
 }

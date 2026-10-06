@@ -16,8 +16,8 @@ class LegalDetails {
     this.passportExpiry,
     required this.nationalId,
     required this.citizenshipCertificateNumber,
-    this.passportPhotoPage,
-    this.israelVisaPage,
+    required this.passportPhotoPage,
+    required this.israelVisaPage,
   });
 
   const LegalDetails.empty()
@@ -25,5 +25,15 @@ class LegalDetails {
         passportNumber: '',
         nationalId: '',
         citizenshipCertificateNumber: '',
+        passportPhotoPage: '',
+        israelVisaPage: '',
       );
+
+  Map<String, dynamic> toJson() => {
+    'passport_number': passportNumber,
+    'passport_expiry_date': passportExpiry,
+    'citizenship_number': citizenshipCertificateNumber,
+    'attachment_visa': israelVisaPage,
+    'attachment_photo': passportPhotoPage,
+  };
 }

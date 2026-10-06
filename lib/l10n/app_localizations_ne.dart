@@ -284,24 +284,6 @@ class AppLocalizationsNe extends AppLocalizations {
   String get districtLabel => 'जिल्ला';
 
   @override
-  String get districtJerusalem => 'जेरुसलेम जिल्ला';
-
-  @override
-  String get districtNorthern => 'उत्तरी जिल्ला';
-
-  @override
-  String get districtHaifa => 'हाइफा जिल्ला';
-
-  @override
-  String get districtCentral => 'मध्य जिल्ला';
-
-  @override
-  String get districtTelAviv => 'तेल अभिभ जिल्ला';
-
-  @override
-  String get districtSouthern => 'दक्षिणी जिल्ला';
-
-  @override
   String get localAuthorityLabel => 'स्थानीय निकाय';
 
   @override
@@ -653,4 +635,32 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get errorGeneric => 'केही गडबड भयो। फेरि प्रयास गर्नुहोस्।';
+
+  @override
+  String get loadingHint => 'लोड हुँदैछ…';
+
+  @override
+  String get errorLoadDistricts => 'जिल्लाहरू लोड गर्न सकिएन।';
+
+  @override
+  String get retry => 'फेरि प्रयास गर्नुहोस्';
+
+  @override
+  String get chooseDistrictFirst =>
+      'पहिले काउन्सिलको प्रकार र जिल्ला छान्नुहोस्';
+
+  @override
+  String get errorLoadAuthorities => 'स्थानीय निकायहरू लोड गर्न सकिएन।';
+
+  @override
+  String get localityLabel => 'बस्ती';
+
+  @override
+  String get errorLocality => 'आफ्नो बस्ती छान्नुहोस्';
+
+  @override
+  String get chooseLocalAuthorityFirst => 'पहिले स्थानीय निकाय छान्नुहोस्';
+
+  @override
+  String get errorLoadLocalities => 'बस्तीहरू लोड गर्न सकिएन।';
 }

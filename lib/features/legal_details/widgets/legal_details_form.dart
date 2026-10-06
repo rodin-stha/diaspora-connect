@@ -67,7 +67,7 @@ class _LegalDetailsFormState extends State<LegalDetailsForm> {
   late DateTime? _passportExpiry = _initial.passportExpiry;
 
   /// Show errors as the user types, but only after the first Save attempt.
-  bool _submitted = false;
+  late bool _submitted = false;
 
   LegalDetails get _initial => widget.initialValue;
 

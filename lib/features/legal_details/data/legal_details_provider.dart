@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/legal_details.dart';
+import 'legal_details_repository.dart';
 
 /// The signed-in user's identity documents.
 ///
@@ -14,10 +15,12 @@ class LegalDetailsNotifier extends Notifier<LegalDetails> {
   @override
   LegalDetails build() => _sample;
 
-  void save(LegalDetails details) => state = details;
+  Future<void> save(LegalDetails details) async {
+    await ref.read(legalDetailsRepositroy).saveLegalDetails(details);
+    state = details;
+  }
 }
 
-// As in the Figma design: fields empty (placeholders), both scans uploaded.
 const _sample = LegalDetails(
   passportNumber: '',
   nationalId: '',

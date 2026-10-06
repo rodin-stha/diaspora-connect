@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/api/api_error_message.dart';
+import '../../app/api/api_exception.dart';
 import '../../l10n/app_localizations.dart';
 import '../legal_details/data/legal_details_provider.dart';
 import '../legal_details/models/legal_details.dart';
@@ -28,9 +30,19 @@ class OnboardingLegalScreen extends ConsumerWidget {
         onUploadDocument: () => ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(l10n.uploadComingSoon))),
-        onSubmit: (details) {
-          ref.read(legalDetailsProvider.notifier).save(details);
-          context.push('/onboarding/work');
+        onSubmit: (details) async {
+          try {
+            await ref.read(legalDetailsProvider.notifier).save(details);
+            if (!context.mounted) return;
+            context.push('/onboarding/work');
+          } on ApiException catch (e) {
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(apiErrorMessage(AppLocalizations.of(context), e)),
+              ),
+            );
+          }
         },
       ),
     );

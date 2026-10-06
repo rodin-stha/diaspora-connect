@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/api/api_error_message.dart';
+import '../../app/api/api_exception.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/sizes.dart';
 import '../../widgets/app_background.dart';
@@ -25,14 +27,20 @@ class PersonalDetailsScreen extends ConsumerWidget {
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
 
-    void save(PersonalDetails updated) {
-      ref.read(personalDetailsProvider.notifier).save(updated);
+    Future<void> save(PersonalDetails updated) async {
       // The messenger belongs to the whole app, so the message stays
       // visible on Profile after this screen closes.
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.detailsSaved)));
-      context.canPop() ? context.pop() : context.go('/profile');
+      final messenger = ScaffoldMessenger.of(context);
+      try {
+        await ref.read(personalDetailsProvider.notifier).save(updated);
+        if (!context.mounted) return;
+        messenger.showSnackBar(SnackBar(content: Text(l10n.detailsSaved)));
+        context.canPop() ? context.pop() : context.go('/profile');
+      } on ApiException catch (e) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(apiErrorMessage(l10n, e))),
+        );
+      }
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -56,8 +64,6 @@ class PersonalDetailsScreen extends ConsumerWidget {
                   fallbackLocation: '/profile',
                 ),
                 PersonalDetailsForm(
-                  // `initialValue` is only read once, when the form is created,
-                  // so later provider changes don't wipe what's being typed.
                   initialValue: details,
                   submitLabel: l10n.saveChanges,
                   onSubmit: save,

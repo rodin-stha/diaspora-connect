@@ -284,24 +284,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get districtLabel => 'District';
 
   @override
-  String get districtJerusalem => 'Jerusalem District';
-
-  @override
-  String get districtNorthern => 'Northern District';
-
-  @override
-  String get districtHaifa => 'Haifa District';
-
-  @override
-  String get districtCentral => 'Central District';
-
-  @override
-  String get districtTelAviv => 'Tel Aviv District';
-
-  @override
-  String get districtSouthern => 'Southern District';
-
-  @override
   String get localAuthorityLabel => 'Local Authority';
 
   @override
@@ -650,4 +632,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorGeneric => 'Something went wrong. Try again.';
+
+  @override
+  String get loadingHint => 'Loading…';
+
+  @override
+  String get errorLoadDistricts => 'Couldn\'t load the districts.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get chooseDistrictFirst =>
+      'Choose the council type and district first';
+
+  @override
+  String get errorLoadAuthorities => 'Couldn\'t load the local authorities.';
+
+  @override
+  String get localityLabel => 'Locality';
+
+  @override
+  String get errorLocality => 'Choose your locality';
+
+  @override
+  String get chooseLocalAuthorityFirst => 'Choose the local authority first';
+
+  @override
+  String get errorLoadLocalities => 'Couldn\'t load the localities.';
 }

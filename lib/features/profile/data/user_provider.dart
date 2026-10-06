@@ -9,14 +9,14 @@ import '../models/user_profile.dart';
 /// recomputes and both screens update.
 final currentUserProvider = Provider<UserProfile>((ref) {
   final details = ref.watch(personalDetailsProvider);
-  final names = details.fullName.trim().split(RegExp(r'\s+'));
+  final names = details.name.trim().split(RegExp(r'\s+'));
 
   return UserProfile(
     givenName: names.first,
-    fullName: details.fullName,
+    fullName: details.name,
     location: [
-      details.neighborhood,
-      details.localAuthority,
+      details.neighborhoodName,
+      details.localityName,
     ].where((part) => part.isNotEmpty).join(' · '),
   );
 });

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/api/api_error_message.dart';
+import '../../app/api/api_exception.dart';
 import '../../l10n/app_localizations.dart';
 import '../personal_details/data/personal_details_provider.dart';
 import '../personal_details/models/personal_details.dart';
@@ -23,9 +25,19 @@ class OnboardingPersonalScreen extends ConsumerWidget {
         initialValue: const PersonalDetails.empty(),
         submitLabel: l10n.continueAction,
         showHints: true,
-        onSubmit: (details) {
-          ref.read(personalDetailsProvider.notifier).save(details);
-          context.push('/onboarding/legal');
+        onSubmit: (details) async {
+          try {
+            await ref.read(personalDetailsProvider.notifier).save(details);
+            if (!context.mounted) return;
+            context.push('/onboarding/legal');
+          } on ApiException catch (e) {
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(apiErrorMessage(AppLocalizations.of(context), e)),
+              ),
+            );
+          }
         },
       ),
     );
