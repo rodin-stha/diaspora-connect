@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../theme/colors.dart';
 import '../theme/sizes.dart';
 import '../theme/text_styles.dart';
+import 'skeleton.dart';
 
 /// A colored dot followed by a title and optional detail lines, used for
 /// timelines and activity feeds.
@@ -112,6 +113,52 @@ class DotListItem extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Stands in for a [DotListItem] while a feed loads: a grey dot, a title
+/// bar and two detail bars. Wrap a group of them in one [Skeleton] so they
+/// pulse together.
+class DotListItemSkeleton extends StatelessWidget {
+  const DotListItemSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Nudged down to sit level with the title bar, as the real dot does.
+        Padding(
+          padding: EdgeInsets.only(top: 3),
+          child: SkeletonBox(
+            width: TSizes.dotMd,
+            height: TSizes.dotMd,
+            radius: TSizes.dotMd,
+          ),
+        ),
+        SizedBox(width: TSizes.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 6,
+            children: [
+              FractionallySizedBox(
+                widthFactor: 0.55,
+                child: SkeletonBox(height: 14),
+              ),
+              FractionallySizedBox(
+                widthFactor: 0.85,
+                child: SkeletonBox(height: 11),
+              ),
+              FractionallySizedBox(
+                widthFactor: 0.3,
+                child: SkeletonBox(height: 11),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -14,4 +14,10 @@ class TFormatters {
   /// match what people type and what official forms use.
   static String shortDate(DateTime date) =>
       DateFormat('dd/MM/yyyy').format(date);
+
+  /// "1:05", for recording timers and audio lengths.
+  static String duration(Duration duration) {
+    final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+    return '${duration.inMinutes}:$seconds';
+  }
 }

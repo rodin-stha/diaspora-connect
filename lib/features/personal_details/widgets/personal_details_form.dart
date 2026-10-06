@@ -7,11 +7,11 @@ import '../../../theme/colors.dart';
 import '../../../theme/sizes.dart';
 import '../../../theme/text_styles.dart';
 import '../../../utils/validators.dart';
+import '../../../widgets/async_select_field.dart';
 import '../../../widgets/date_field.dart';
 import '../../../widgets/form_section_header.dart';
 import '../../../widgets/labeled_field.dart';
 import '../../../widgets/labeled_text_field.dart';
-import '../../../widgets/link_button.dart';
 import '../../../widgets/loading_button.dart';
 import '../../../widgets/select_field.dart';
 import '../../../widgets/selectable_chip.dart';
@@ -340,8 +340,8 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
     _localityId = null;
   }
 
-  Widget _districtField(AppLocalizations l10n) => _apiSelectField<District>(
-    key: 'districts',
+  Widget _districtField(AppLocalizations l10n) => AsyncSelectField<District>(
+    key: const ValueKey('districts'),
     label: l10n.districtLabel,
     options: ref.watch(districtsProvider),
     selectedId: _districtId,
@@ -361,8 +361,8 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
   Widget _localityField(AppLocalizations l10n) {
     final localAuthorityId = _localAuthorityId;
     if (localAuthorityId == null) {
-      return _placeholderSelect<Locality>(
-        key: 'localities-waiting',
+      return PlaceholderSelectField<Locality>(
+        key: const ValueKey('localities-waiting'),
         label: l10n.localityLabel,
         hint: l10n.chooseLocalAuthorityFirst,
         requiredMessage: l10n.errorLocality,
@@ -370,8 +370,8 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
     }
 
     final query = (localAuthorityId: localAuthorityId);
-    return _apiSelectField<Locality>(
-      key: ('localities', query),
+    return AsyncSelectField<Locality>(
+      key: ValueKey(('localities', query)),
       label: l10n.localityLabel,
       options: ref.watch(localityProvider(query)),
       selectedId: _localityId,
@@ -390,8 +390,8 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
     final districtId = _districtId;
     final type = _authorityType;
     if (districtId == null || type == null) {
-      return _placeholderSelect<Authority>(
-        key: 'authorities-waiting',
+      return PlaceholderSelectField<Authority>(
+        key: const ValueKey('authorities-waiting'),
         label: l10n.localAuthorityLabel,
         hint: l10n.chooseDistrictFirst,
         requiredMessage: l10n.errorLocalAuthority,
@@ -399,10 +399,10 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
     }
 
     final query = (districtId: districtId, type: type);
-    return _apiSelectField<Authority>(
+    return AsyncSelectField<Authority>(
       // Includes the query, so picking another district or type starts a
       // fresh dropdown with nothing selected.
-      key: ('authorities', query),
+      key: ValueKey(('authorities', query)),
       label: l10n.localAuthorityLabel,
       options: ref.watch(authoritiesProvider(query)),
       selectedId: _localAuthorityId,
@@ -419,76 +419,6 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
       }),
     );
   }
-
-  /// A required dropdown whose options come from the API: disabled while
-  /// they load, and a message with Retry if loading fails.
-  Widget _apiSelectField<T>({
-    required Object key,
-    required String label,
-    required AsyncValue<List<T>> options,
-    required int? selectedId,
-    required int Function(T option) idOf,
-    required String Function(T option) nameOf,
-    required String requiredMessage,
-    required String loadErrorMessage,
-    required VoidCallback onRetry,
-    required ValueChanged<T?> onChanged,
-  }) {
-    final l10n = AppLocalizations.of(context);
-
-    return options.when(
-      data: (list) => SelectField<T>(
-        // A new key once the list arrives: the dropdown is a FormField,
-        // which only reads `value` when first created.
-        key: ValueKey((key, 'loaded')),
-        label: label,
-        isRequired: true,
-        // Taken from the list itself: the dropdown needs the exact same
-        // object as one of its options.
-        value: list.where((option) => idOf(option) == selectedId).firstOrNull,
-        options: list,
-        optionLabel: nameOf,
-        hintText: l10n.selectHint,
-        validator: (option) => option == null ? requiredMessage : null,
-        onChanged: onChanged,
-      ),
-      loading: () => _placeholderSelect<T>(
-        key: (key, 'loading'),
-        label: label,
-        hint: l10n.loadingHint,
-        requiredMessage: requiredMessage,
-      ),
-      error: (error, _) => LabeledField(
-        label: label,
-        isRequired: true,
-        errorText: loadErrorMessage,
-        child: Align(
-          alignment: AlignmentDirectional.centerStart,
-          // Invalidating drops the failed result, so it fetches again.
-          child: LinkButton(label: l10n.retry, onPressed: onRetry),
-        ),
-      ),
-    );
-  }
-
-  /// An empty dropdown showing [hint]. Still fails validation, so Save
-  /// can't go through without a choice.
-  Widget _placeholderSelect<T>({
-    required Object key,
-    required String label,
-    required String hint,
-    required String requiredMessage,
-  }) => SelectField<T>(
-    key: ValueKey(key),
-    label: label,
-    isRequired: true,
-    value: null,
-    options: const [],
-    optionLabel: (_) => '',
-    hintText: hint,
-    validator: (_) => requiredMessage,
-    onChanged: (_) {},
-  );
 
   static String _councilLabel(AppLocalizations l10n, AuthorityType type) =>
       switch (type) {

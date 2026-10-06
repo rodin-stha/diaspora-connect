@@ -43,5 +43,6 @@ class TSizes {
   static const double iconSm = 16.0;
   static const double iconMd = 22.0;
   static const double iconLg = 26.0;
+  static const double iconEmptyState = 48.0; // above "nothing here yet"
   static const double spinnerSm = 18.0; // loading spinner inside a button
 }

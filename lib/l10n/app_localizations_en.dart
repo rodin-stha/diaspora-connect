@@ -13,12 +13,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'Diaspora Connect';
 
   @override
-  String get categorySafety => 'Safety';
-
-  @override
-  String get categoryOther => 'Other';
-
-  @override
   String get categoryLabel => 'Category';
 
   @override
@@ -60,9 +54,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get issueSubmitted => 'Your issue has been submitted';
-
-  @override
-  String get evidenceComingSoon => 'Adding evidence isn\'t available yet';
 
   @override
   String get errorCategory => 'Select what the issue is about';
@@ -113,18 +104,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statusResolved => 'Resolved';
-
-  @override
-  String get categoryWages => 'Wages';
-
-  @override
-  String get categoryPermit => 'Permit';
-
-  @override
-  String get categoryHousing => 'Housing';
-
-  @override
-  String get categoryDocuments => 'Documents';
 
   @override
   String get issuesTitle => 'Issues';
@@ -689,4 +668,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorLoadActivity => 'Couldn\'t load your activity.';
+
+  @override
+  String get errorLoadCategories => 'Couldn\'t load the categories.';
+
+  @override
+  String get pinLocationTitle => 'Pin location';
+
+  @override
+  String get pinLocationHint =>
+      'Move the map so the pin marks where it happened.';
+
+  @override
+  String get useThisLocation => 'Use this location';
+
+  @override
+  String get locationPinned => 'Location pinned';
+
+  @override
+  String get voiceNote => 'Voice note';
+
+  @override
+  String get recordingTitle => 'Recording…';
+
+  @override
+  String get stopRecording => 'Stop';
+
+  @override
+  String get playAction => 'Play';
+
+  @override
+  String get pauseAction => 'Pause';
+
+  @override
+  String get errorMicrophoneAccess =>
+      'Allow microphone access in Settings to record a voice note.';
+
+  @override
+  String get noIssuesYet => 'You haven\'t reported any issues yet.';
+
+  @override
+  String get errorLoadIssues => 'Couldn\'t load your issues.';
+
+  @override
+  String get reportNewIssue => 'Report a new issue';
 }

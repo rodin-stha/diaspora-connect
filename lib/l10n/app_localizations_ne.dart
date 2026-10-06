@@ -13,12 +13,6 @@ class AppLocalizationsNe extends AppLocalizations {
   String get appName => 'Diaspora Connect';
 
   @override
-  String get categorySafety => 'सुरक्षा';
-
-  @override
-  String get categoryOther => 'अन्य';
-
-  @override
   String get categoryLabel => 'वर्ग';
 
   @override
@@ -60,9 +54,6 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get issueSubmitted => 'तपाईंको समस्या पेश भयो';
-
-  @override
-  String get evidenceComingSoon => 'प्रमाण थप्ने सुविधा अहिले उपलब्ध छैन';
 
   @override
   String get errorCategory => 'समस्या केको बारेमा हो, छान्नुहोस्';
@@ -112,18 +103,6 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get statusResolved => 'समाधान भयो';
-
-  @override
-  String get categoryWages => 'तलब';
-
-  @override
-  String get categoryPermit => 'अनुमतिपत्र';
-
-  @override
-  String get categoryHousing => 'आवास';
-
-  @override
-  String get categoryDocuments => 'कागजात';
 
   @override
   String get issuesTitle => 'समस्याहरू';
@@ -693,4 +672,49 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get errorLoadActivity => 'तपाईंको गतिविधि लोड गर्न सकिएन।';
+
+  @override
+  String get errorLoadCategories => 'श्रेणीहरू लोड गर्न सकिएन।';
+
+  @override
+  String get pinLocationTitle => 'स्थान पिन गर्नुहोस्';
+
+  @override
+  String get pinLocationHint =>
+      'घटना भएको ठाउँमा पिन पर्ने गरी नक्सा सार्नुहोस्।';
+
+  @override
+  String get useThisLocation => 'यो स्थान प्रयोग गर्नुहोस्';
+
+  @override
+  String get locationPinned => 'स्थान पिन गरियो';
+
+  @override
+  String get voiceNote => 'भ्वाइस नोट';
+
+  @override
+  String get recordingTitle => 'रेकर्ड हुँदैछ…';
+
+  @override
+  String get stopRecording => 'रोक्नुहोस्';
+
+  @override
+  String get playAction => 'बजाउनुहोस्';
+
+  @override
+  String get pauseAction => 'रोक्नुहोस्';
+
+  @override
+  String get errorMicrophoneAccess =>
+      'भ्वाइस नोट रेकर्ड गर्न सेटिङमा माइक्रोफोन पहुँच दिनुहोस्।';
+
+  @override
+  String get noIssuesYet =>
+      'तपाईंले अहिलेसम्म कुनै समस्या रिपोर्ट गर्नुभएको छैन।';
+
+  @override
+  String get errorLoadIssues => 'तपाईंका समस्याहरू लोड गर्न सकिएन।';
+
+  @override
+  String get reportNewIssue => 'नयाँ समस्या रिपोर्ट गर्नुहोस्';
 }

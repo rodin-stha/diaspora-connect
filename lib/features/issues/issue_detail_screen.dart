@@ -10,6 +10,7 @@ import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
+import '../../widgets/load_error.dart';
 import '../../widgets/status_pill.dart';
 import 'data/issues_provider.dart';
 import 'models/issue.dart';
@@ -25,7 +26,7 @@ class IssueDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final issue = ref.watch(issueByReferenceProvider(reference));
+    final issueAsync = ref.watch(issueByReferenceProvider(reference));
 
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
@@ -49,18 +50,31 @@ class IssueDetailScreen extends ConsumerWidget {
                   fallbackLocation: '/issues',
                 ),
                 const SizedBox(height: TSizes.timelineGap),
-                if (issue == null)
-                  Text(
-                    l10n.issueNotFound,
-                    style: TTextStyles.body.copyWith(
-                      color: colors.textSecondary,
-                    ),
-                  )
-                else ...[
-                  _IssueSummary(issue: issue),
-                  const SizedBox(height: TSizes.timelineGap),
-                  IssueTimeline(issue: issue),
-                ],
+                issueAsync.when(
+                  data: (issue) => issue == null
+                      ? Text(
+                          l10n.issueNotFound,
+                          style: TTextStyles.body.copyWith(
+                            color: colors.textSecondary,
+                          ),
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          spacing: TSizes.timelineGap,
+                          children: [
+                            _IssueSummary(issue: issue),
+                            IssueTimeline(issue: issue),
+                          ],
+                        ),
+                  loading: () => const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  error: (error, _) => LoadError(
+                    message: l10n.errorLoadIssues,
+                    onRetry: () => ref.invalidate(issuesProvider),
+                  ),
+                ),
               ],
             ),
           ),

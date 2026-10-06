@@ -9,13 +9,19 @@ import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/issue_card.dart';
+import '../../widgets/load_error.dart';
+import '../../widgets/skeleton.dart';
 import '../issues/data/issues_provider.dart';
 import '../profile/data/user_provider.dart';
 import 'widgets/home_header.dart';
 import 'widgets/report_issue_card.dart';
 
-// Home previews a few open issues; the full list is on the Issues tab.
-const _maxPreviewIssues = 2;
+// Home previews the latest issues; the full list is on the Issues tab.
+const _maxPreviewIssues = 5;
+
+// How many placeholder cards to show while loading. The real count isn't
+// known yet; a few look like "a list" without overpromising.
+const _skeletonCount = 3;
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -24,10 +30,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final user = ref.watch(currentUserProvider);
-    final openIssues = ref
-        .watch(issuesProvider)
-        .where((issue) => issue.isOpen)
-        .take(_maxPreviewIssues);
+    final issuesAsync = ref.watch(issuesProvider);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // White status bar icons on the blue header
@@ -60,14 +63,49 @@ class HomeScreen extends ConsumerWidget {
                         onAction: () => context.go('/issues'),
                       ),
                       const SizedBox(height: TSizes.md),
-                      for (final (index, issue) in openIssues.indexed) ...[
-                        if (index > 0) const SizedBox(height: TSizes.md),
-                        IssueCard(
-                          issue: issue,
-                          onTap: () =>
-                              context.push('/issues/${issue.reference}'),
+                      issuesAsync.when(
+                        data: (issues) {
+                          // The API sends them newest first.
+                          final latestIssues = issues.take(_maxPreviewIssues);
+                          if (latestIssues.isEmpty) {
+                            return Text(
+                              l10n.noIssuesYet,
+                              style: TTextStyles.bodySmall.copyWith(
+                                color: context.colors.textSecondary,
+                              ),
+                            );
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            spacing: TSizes.md,
+                            children: [
+                              for (final issue in latestIssues)
+                                IssueCard(
+                                  issue: issue,
+                                  onTap: () => context.push(
+                                    '/issues/${issue.reference}',
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                        // Placeholder cards in the shape of the real ones, so
+                        // nothing jumps when the issues arrive.
+                        loading: () => Skeleton(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            spacing: TSizes.md,
+                            children: [
+                              for (var i = 0; i < _skeletonCount; i++)
+                                const IssueCardSkeleton(),
+                            ],
+                          ),
                         ),
-                      ],
+                        error: (error, _) => LoadError(
+                          message: l10n.errorLoadIssues,
+                          onRetry: () => ref.invalidate(issuesProvider),
+                        ),
+                      ),
                     ],
                   ),
                 ),

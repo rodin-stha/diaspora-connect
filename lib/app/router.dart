@@ -16,6 +16,8 @@ import '../features/onboarding/onboarding_personal_screen.dart';
 import '../features/onboarding/onboarding_work_screen.dart';
 import '../features/personal_details/personal_details_screen.dart';
 import '../features/profile/profile_screen.dart';
+import '../features/report_issue/location_picker_screen.dart';
+import '../features/report_issue/models/evidence.dart';
 import '../features/report_issue/report_issue_screen.dart';
 import '../features/saved_documents/saved_documents_screen.dart';
 import '../features/work_details/work_details_screen.dart';
@@ -89,6 +91,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/report-issue',
         builder: (context, state) => const ReportIssueScreen(),
+        routes: [
+          GoRoute(
+            path: 'location', // → /report-issue/location
+            builder: (context, state) => LocationPickerScreen(
+              initial: state.extra as PinnedLocation?,
+            ),
+          ),
+        ],
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

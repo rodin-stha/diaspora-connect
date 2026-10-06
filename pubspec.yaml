@@ -20,6 +20,11 @@ dependencies:
   dio: ^5.11.1
   flutter_secure_storage: ^11.2.0
   image_picker: ^1.2.4
+  google_maps_flutter: ^2.18.2
+  geolocator: ^14.1.1
+  record: ^7.1.1
+  audioplayers: ^6.8.1
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:

@@ -104,18 +104,6 @@ abstract class AppLocalizations {
   /// **'Diaspora Connect'**
   String get appName;
 
-  /// No description provided for @categorySafety.
-  ///
-  /// In en, this message translates to:
-  /// **'Safety'**
-  String get categorySafety;
-
-  /// No description provided for @categoryOther.
-  ///
-  /// In en, this message translates to:
-  /// **'Other'**
-  String get categoryOther;
-
   /// No description provided for @categoryLabel.
   ///
   /// In en, this message translates to:
@@ -200,12 +188,6 @@ abstract class AppLocalizations {
   /// **'Your issue has been submitted'**
   String get issueSubmitted;
 
-  /// No description provided for @evidenceComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Adding evidence isn\'t available yet'**
-  String get evidenceComingSoon;
-
   /// No description provided for @errorCategory.
   ///
   /// In en, this message translates to:
@@ -283,30 +265,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resolved'**
   String get statusResolved;
-
-  /// No description provided for @categoryWages.
-  ///
-  /// In en, this message translates to:
-  /// **'Wages'**
-  String get categoryWages;
-
-  /// No description provided for @categoryPermit.
-  ///
-  /// In en, this message translates to:
-  /// **'Permit'**
-  String get categoryPermit;
-
-  /// No description provided for @categoryHousing.
-  ///
-  /// In en, this message translates to:
-  /// **'Housing'**
-  String get categoryHousing;
-
-  /// No description provided for @categoryDocuments.
-  ///
-  /// In en, this message translates to:
-  /// **'Documents'**
-  String get categoryDocuments;
 
   /// No description provided for @issuesTitle.
   ///
@@ -1375,6 +1333,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load your activity.'**
   String get errorLoadActivity;
+
+  /// No description provided for @errorLoadCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the categories.'**
+  String get errorLoadCategories;
+
+  /// No description provided for @pinLocationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin location'**
+  String get pinLocationTitle;
+
+  /// No description provided for @pinLocationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the map so the pin marks where it happened.'**
+  String get pinLocationHint;
+
+  /// No description provided for @useThisLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this location'**
+  String get useThisLocation;
+
+  /// No description provided for @locationPinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Location pinned'**
+  String get locationPinned;
+
+  /// No description provided for @voiceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note'**
+  String get voiceNote;
+
+  /// No description provided for @recordingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording…'**
+  String get recordingTitle;
+
+  /// No description provided for @stopRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stopRecording;
+
+  /// No description provided for @playAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get playAction;
+
+  /// No description provided for @pauseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pauseAction;
+
+  /// No description provided for @errorMicrophoneAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow microphone access in Settings to record a voice note.'**
+  String get errorMicrophoneAccess;
+
+  /// No description provided for @noIssuesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t reported any issues yet.'**
+  String get noIssuesYet;
+
+  /// No description provided for @errorLoadIssues.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your issues.'**
+  String get errorLoadIssues;
+
+  /// No description provided for @reportNewIssue.
+  ///
+  /// In en, this message translates to:
+  /// **'Report a new issue'**
+  String get reportNewIssue;
 }
 
 class _AppLocalizationsDelegate

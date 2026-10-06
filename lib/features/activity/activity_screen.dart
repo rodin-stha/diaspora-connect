@@ -12,8 +12,13 @@ import '../../utils/formatters.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/dot_list_item.dart';
 import '../../widgets/link_button.dart';
+import '../../widgets/skeleton.dart';
 import 'data/activity_provider.dart';
 import 'models/activity.dart';
+
+// Placeholder items while the feed loads: enough to fill most of the
+// screen, like a real feed would.
+const _skeletonCount = 5;
 
 class ActivityScreen extends ConsumerWidget {
   const ActivityScreen({super.key});
@@ -91,9 +96,17 @@ class ActivityScreen extends ConsumerWidget {
                                 _ActivityItem(activity: activity),
                             ],
                           ),
-                    loading: () => const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32),
-                      child: Center(child: CircularProgressIndicator()),
+                    // Placeholder items in the shape of the real feed, so
+                    // nothing jumps when it arrives.
+                    loading: () => Skeleton(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        spacing: TSizes.lg,
+                        children: [
+                          for (var i = 0; i < _skeletonCount; i++)
+                            const DotListItemSkeleton(),
+                        ],
+                      ),
                     ),
                     error: (error, _) => Column(
                       spacing: TSizes.sm,
