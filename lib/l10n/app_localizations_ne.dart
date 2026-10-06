@@ -663,4 +663,34 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get errorLoadLocalities => 'बस्तीहरू लोड गर्न सकिएन।';
+
+  @override
+  String get takePhoto => 'फोटो खिच्नुहोस्';
+
+  @override
+  String get chooseFromGallery => 'ग्यालरीबाट छान्नुहोस्';
+
+  @override
+  String get errorImageAccess =>
+      'कागजात अपलोड गर्न सेटिङमा क्यामेरा र फोटो पहुँच दिनुहोस्।';
+
+  @override
+  String get errorPhotoPage => 'राहदानीको फोटो पेज अपलोड गर्नुहोस्';
+
+  @override
+  String get errorVisaPage => 'इजरायलको भिसा पेज अपलोड गर्नुहोस्';
+
+  @override
+  String get activityPersonalDetailsSavedDetail =>
+      'व्यक्तिगत विवरण सुरक्षित गरियो';
+
+  @override
+  String get activityAccountCreated => 'खाता बनाइयो';
+
+  @override
+  String get activityAccountCreatedDetail =>
+      'तपाईंको मोबाइल नम्बरबाट साइन अप गरियो';
+
+  @override
+  String get errorLoadActivity => 'तपाईंको गतिविधि लोड गर्न सकिएन।';
 }

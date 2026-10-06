@@ -26,10 +26,6 @@ class OnboardingLegalScreen extends ConsumerWidget {
         submitLabel: l10n.verifyAndContinue,
         useUploadTiles: true,
         requireConsent: true,
-        // TODO: pick and upload the file once uploads exist.
-        onUploadDocument: () => ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.uploadComingSoon))),
         onSubmit: (details) async {
           try {
             await ref.read(legalDetailsProvider.notifier).save(details);

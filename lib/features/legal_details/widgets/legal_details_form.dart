@@ -5,12 +5,14 @@ import '../../../theme/sizes.dart';
 import '../../../utils/validators.dart';
 import '../../../widgets/checkbox_row.dart';
 import '../../../widgets/dashed_button.dart';
-import '../../../widgets/dashed_tile.dart';
 import '../../../widgets/date_field.dart';
 import '../../../widgets/document_row.dart';
 import '../../../widgets/form_section_header.dart';
+import '../../../widgets/image_source_sheet.dart';
+import '../../../widgets/image_upload_tile.dart';
 import '../../../widgets/labeled_field.dart';
 import '../../../widgets/labeled_text_field.dart';
+import '../../../widgets/loading_button.dart';
 import '../models/legal_details.dart';
 
 /// The legal details form, shared by Profile → Legal details ("Save changes")
@@ -21,11 +23,9 @@ import '../models/legal_details.dart';
 class LegalDetailsForm extends StatefulWidget {
   final LegalDetails initialValue;
   final String submitLabel;
-  final ValueChanged<LegalDetails> onSubmit;
 
-  /// Called when the user taps Upload/Replace on a document. The screen
-  /// decides how to pick the file.
-  final VoidCallback? onUploadDocument;
+  /// Saves the details. The button shows a spinner until it completes.
+  final Future<void> Function(LegalDetails) onSubmit;
 
   /// Called by "Upload new document" under the list. New documents go to
   /// Saved documents (not the passport/visa slots). Hidden when null.
@@ -44,7 +44,6 @@ class LegalDetailsForm extends StatefulWidget {
     required this.initialValue,
     required this.submitLabel,
     required this.onSubmit,
-    this.onUploadDocument,
     this.onUploadNewDocument,
     this.useUploadTiles = false,
     this.requireConsent = false,
@@ -66,8 +65,16 @@ class _LegalDetailsFormState extends State<LegalDetailsForm> {
   );
   late DateTime? _passportExpiry = _initial.passportExpiry;
 
+  // Photos picked on this device; null until the user picks one.
+  late String? _photoPageFile = _initial.passportPhotoPageFile;
+  late String? _visaPageFile = _initial.israelVisaPageFile;
+
   /// Show errors as the user types, but only after the first Save attempt.
-  late bool _submitted = false;
+  bool _submitted = false;
+
+  /// True while [LegalDetailsForm.onSubmit] runs: shows the spinner and
+  /// blocks a second tap from saving twice.
+  bool _saving = false;
 
   LegalDetails get _initial => widget.initialValue;
 
@@ -79,21 +86,31 @@ class _LegalDetailsFormState extends State<LegalDetailsForm> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     setState(() => _submitted = true);
     if (!_formKey.currentState!.validate()) return;
 
-    widget.onSubmit(
-      LegalDetails(
-        passportNumber: _passportNumber.text.replaceAll(' ', '').toUpperCase(),
-        passportExpiry: _passportExpiry,
-        nationalId: _nationalId.text.trim(),
-        citizenshipCertificateNumber: _citizenshipNumber.text.trim(),
-        // Uploads aren't edited by this form yet.
-        passportPhotoPage: _initial.passportPhotoPage,
-        israelVisaPage: _initial.israelVisaPage,
-      ),
-    );
+    setState(() => _saving = true);
+    try {
+      await widget.onSubmit(
+        LegalDetails(
+          passportNumber: _passportNumber.text
+              .replaceAll(' ', '')
+              .toUpperCase(),
+          passportExpiry: _passportExpiry,
+          nationalId: _nationalId.text.trim(),
+          citizenshipCertificateNumber: _citizenshipNumber.text.trim(),
+          passportPhotoPage: _initial.passportPhotoPage,
+          israelVisaPage: _initial.israelVisaPage,
+          passportPhotoPageFile: _photoPageFile,
+          israelVisaPageFile: _visaPageFile,
+        ),
+      );
+    } finally {
+      // Runs on success and failure. After a successful save the screen may
+      // already have navigated away, hence the mounted check.
+      if (mounted) setState(() => _saving = false);
+    }
   }
 
   @override
@@ -167,33 +184,17 @@ class _LegalDetailsFormState extends State<LegalDetailsForm> {
           FormSectionHeader(title: l10n.uploadedDocumentsSection),
           if (widget.useUploadTiles)
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 10,
               children: [
-                for (final label in [
-                  l10n.uploadPhotoPage,
-                  l10n.documentIsraelVisaPage,
-                ])
-                  Expanded(
-                    child: DashedTile.large(
-                      label: label,
-                      iconAsset: 'assets/icons/plus_bold.svg',
-                      onTap: widget.onUploadDocument,
-                    ),
-                  ),
+                Expanded(child: _photoPageField(l10n)),
+                Expanded(child: _visaPageField(l10n)),
               ],
             )
-          else
-            for (final (name, file) in [
-              (l10n.documentPassportPhotoPage, _initial.passportPhotoPage),
-              (l10n.documentIsraelVisaPage, _initial.israelVisaPage),
-            ])
-              DocumentRow(
-                name: name,
-                actionLabel: file == null
-                    ? l10n.uploadAction
-                    : l10n.replaceAction,
-                onAction: widget.onUploadDocument,
-              ),
+          else ...[
+            _photoPageField(l10n),
+            _visaPageField(l10n),
+          ],
           if (widget.onUploadNewDocument != null)
             DashedButton(
               label: l10n.uploadNewDocument,
@@ -220,9 +221,84 @@ class _LegalDetailsFormState extends State<LegalDetailsForm> {
               ),
             ),
 
-          FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),
+          LoadingButton(
+            label: widget.submitLabel,
+            isLoading: _saving,
+            onPressed: _submit,
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _photoPageField(AppLocalizations l10n) => _documentField(
+    tileLabel: l10n.uploadPhotoPage,
+    rowLabel: l10n.documentPassportPhotoPage,
+    uploaded: _initial.passportPhotoPage,
+    picked: _photoPageFile,
+    requiredMessage: l10n.errorPhotoPage,
+    onPicked: (path) => _photoPageFile = path,
+  );
+
+  Widget _visaPageField(AppLocalizations l10n) => _documentField(
+    tileLabel: l10n.documentIsraelVisaPage,
+    rowLabel: l10n.documentIsraelVisaPage,
+    uploaded: _initial.israelVisaPage,
+    picked: _visaPageFile,
+    requiredMessage: l10n.errorVisaPage,
+    onPicked: (path) => _visaPageFile = path,
+  );
+
+  /// A required document photo: an upload tile in onboarding, a row with
+  /// Upload/Replace in Profile. Valid once a file is uploaded or picked.
+  ///
+  /// A FormField (like the consent checkbox) so the same validate() call
+  /// checks it and shows its error the same way.
+  Widget _documentField({
+    required String tileLabel,
+    required String rowLabel,
+    required String? uploaded,
+    required String? picked,
+    required String requiredMessage,
+    required ValueChanged<String> onPicked,
+  }) {
+    final l10n = AppLocalizations.of(context);
+    final current = picked ?? uploaded;
+
+    return FormField<String>(
+      initialValue: current,
+      validator: (value) =>
+          (value == null || value.isEmpty) ? requiredMessage : null,
+      builder: (field) {
+        Future<void> pick() async {
+          final image = await pickImage(context);
+          if (image == null) return;
+          setState(() => onPicked(image.path));
+          field.didChange(image.path);
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (widget.useUploadTiles)
+              ImageUploadTile(
+                label: tileLabel,
+                imagePath: picked,
+                hasError: field.hasError,
+                onTap: pick,
+              )
+            else
+              DocumentRow(
+                name: rowLabel,
+                actionLabel: current == null
+                    ? l10n.uploadAction
+                    : l10n.replaceAction,
+                onAction: pick,
+              ),
+            if (field.hasError) FieldErrorText(field.errorText!),
+          ],
+        );
+      },
     );
   }
 }

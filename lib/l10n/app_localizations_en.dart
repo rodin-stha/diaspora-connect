@@ -660,4 +660,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorLoadLocalities => 'Couldn\'t load the localities.';
+
+  @override
+  String get takePhoto => 'Take photo';
+
+  @override
+  String get chooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get errorImageAccess =>
+      'Allow camera and photo access in Settings to upload documents.';
+
+  @override
+  String get errorPhotoPage => 'Upload your passport photo page';
+
+  @override
+  String get errorVisaPage => 'Upload your Israel visa page';
+
+  @override
+  String get activityPersonalDetailsSavedDetail => 'Personal details saved';
+
+  @override
+  String get activityAccountCreated => 'Account created';
+
+  @override
+  String get activityAccountCreatedDetail =>
+      'Signed up with your mobile number';
+
+  @override
+  String get errorLoadActivity => 'Couldn\'t load your activity.';
 }

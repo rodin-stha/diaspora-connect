@@ -81,4 +81,25 @@ class PersonalDetails {
     'contact_person_contact': contactPersonContact,
     'contact_person_email': contactPersonEmail,
   };
+
+  factory PersonalDetails.fromJson(Map<String, dynamic> json) =>
+      PersonalDetails(
+        name: json['name'] as String? ?? '',
+        dob: DateTime.tryParse(json['dob'] as String? ?? ''),
+        gender: Gender.values.asNameMap()[json['gender']],
+        authorityType: AuthorityType.values
+            .where((t) => t.apiValue == json['authority_type']?['value'])
+            .firstOrNull,
+        districtId: (json['district']?['id'] as num?)?.toInt(),
+        localAuthorityId: (json['local_authority']?['id'] as num?)?.toInt(),
+        localityId: (json['locality']?['id'] as num?)?.toInt(),
+        localityName: json['locality_name'] as String? ?? '',
+        neighborhoodName: json['neighborhood_name'] as String? ?? '',
+        postalCode: json['postal_code'] as String? ?? '',
+        contactPersonContact: json['contact_person_contact'] as String? ?? '',
+        contactPersonEmail: json['contact_person_email'] as String? ?? '',
+        contactPersonName: json['contact_person_name'] as String? ?? '',
+        contactPersonRelationship:
+            json['contact_person_relationship'] as String? ?? '',
+      );
 }

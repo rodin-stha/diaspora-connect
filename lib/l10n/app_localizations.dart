@@ -1321,6 +1321,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load the localities.'**
   String get errorLoadLocalities;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get takePhoto;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @errorImageAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera and photo access in Settings to upload documents.'**
+  String get errorImageAccess;
+
+  /// No description provided for @errorPhotoPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload your passport photo page'**
+  String get errorPhotoPage;
+
+  /// No description provided for @errorVisaPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload your Israel visa page'**
+  String get errorVisaPage;
+
+  /// No description provided for @activityPersonalDetailsSavedDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal details saved'**
+  String get activityPersonalDetailsSavedDetail;
+
+  /// No description provided for @activityAccountCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created'**
+  String get activityAccountCreated;
+
+  /// No description provided for @activityAccountCreatedDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed up with your mobile number'**
+  String get activityAccountCreatedDetail;
+
+  /// No description provided for @errorLoadActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your activity.'**
+  String get errorLoadActivity;
 }
 
 class _AppLocalizationsDelegate

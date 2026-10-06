@@ -16,6 +16,9 @@ class DashedTile extends StatelessWidget {
   final String label;
   final String iconAsset;
   final VoidCallback? onTap;
+
+  /// Outlines the tile in the error color, e.g. a required upload is missing.
+  final bool hasError;
   final bool _large;
 
   const DashedTile({
@@ -23,6 +26,7 @@ class DashedTile extends StatelessWidget {
     required this.label,
     required this.iconAsset,
     required this.onTap,
+    this.hasError = false,
   }) : _large = false;
 
   const DashedTile.large({
@@ -30,6 +34,7 @@ class DashedTile extends StatelessWidget {
     required this.label,
     required this.iconAsset,
     required this.onTap,
+    this.hasError = false,
   }) : _large = true;
 
   @override
@@ -42,6 +47,7 @@ class DashedTile extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(TSizes.inputRadius),
         child: DashedBorder(
+          color: hasError ? colors.onErrorContainer : null,
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 6,

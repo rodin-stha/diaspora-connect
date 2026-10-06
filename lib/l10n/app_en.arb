@@ -242,5 +242,14 @@
   "localityLabel": "Locality",
   "errorLocality": "Choose your locality",
   "chooseLocalAuthorityFirst": "Choose the local authority first",
-  "errorLoadLocalities": "Couldn't load the localities."
+  "errorLoadLocalities": "Couldn't load the localities.",
+  "takePhoto": "Take photo",
+  "chooseFromGallery": "Choose from gallery",
+  "errorImageAccess": "Allow camera and photo access in Settings to upload documents.",
+  "errorPhotoPage": "Upload your passport photo page",
+  "errorVisaPage": "Upload your Israel visa page",
+  "activityPersonalDetailsSavedDetail": "Personal details saved",
+  "activityAccountCreated": "Account created",
+  "activityAccountCreatedDetail": "Signed up with your mobile number",
+  "errorLoadActivity": "Couldn't load your activity."
 }

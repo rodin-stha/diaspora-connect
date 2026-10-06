@@ -23,6 +23,17 @@ class PersonalDetailsRepository {
     );
   }
 
+  Future<PersonalDetails> fetchPersonalDetails() async {
+    final res = await apiCall(
+      () => _dio.get<Map<String, dynamic>>('/personal-details'),
+    );
+
+    return ApiResponse.fromJson(
+      res.data!,
+      (data) => PersonalDetails.fromJson(data as Map<String, dynamic>),
+    ).data;
+  }
+
   Future<List<District>> fetchDistricts() async {
     final res = await apiCall(
       () => _dio.get<Map<String, dynamic>>('/il/districts'),

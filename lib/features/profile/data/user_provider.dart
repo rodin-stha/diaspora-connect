@@ -8,15 +8,16 @@ import '../models/user_profile.dart';
 /// Derived from [personalDetailsProvider]: when the details are saved, this
 /// recomputes and both screens update.
 final currentUserProvider = Provider<UserProfile>((ref) {
-  final details = ref.watch(personalDetailsProvider);
-  final names = details.name.trim().split(RegExp(r'\s+'));
+  final details = ref.watch(personalDetailsProvider).value;
+  final name = details?.name ?? '';
+  final names = name.trim().split(RegExp(r'\s+'));
 
   return UserProfile(
     givenName: names.first,
-    fullName: details.name,
+    fullName: name,
     location: [
-      details.neighborhoodName,
-      details.localityName,
+      details?.neighborhoodName ?? '',
+      details?.localityName ?? '',
     ].where((part) => part.isNotEmpty).join(' · '),
   );
 });

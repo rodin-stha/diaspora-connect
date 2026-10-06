@@ -11,17 +11,21 @@ class DashedBorder extends StatelessWidget {
   final Widget child;
   final double radius;
 
+  /// Outline color; defaults to the theme's border color.
+  final Color? color;
+
   const DashedBorder({
     super.key,
     required this.child,
     this.radius = TSizes.inputRadius,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _DashedRRectPainter(
-        color: context.colors.border,
+        color: color ?? context.colors.border,
         radius: radius,
       ),
       child: child,

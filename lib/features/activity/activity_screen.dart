@@ -22,7 +22,9 @@ class ActivityScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final activities = ref.watch(activityProvider);
+    final activitiesAsync = ref.watch(activityProvider);
+    // Empty while loading, so "Mark all read" stays disabled until then.
+    final activities = activitiesAsync.value ?? const <Activity>[];
     final hasUnread = activities.any((activity) => !activity.isRead);
 
     // Design uses 54px top padding, which sits just below the status bar.
@@ -32,63 +34,83 @@ class ActivityScreen extends ConsumerWidget {
       value: SystemUiOverlayStyle.dark,
       child: AppBackground(
         child: Scaffold(
-          body: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(
-              TSizes.pagePadding,
-              topPadding,
-              TSizes.pagePadding,
-              30,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.activityTitle,
-                        style: TTextStyles.titleLarge.copyWith(
-                          color: colors.textPrimary,
+          // Pull down to fetch the latest. `refresh` returns the new fetch's
+          // Future, so the spinner stays until it completes.
+          body: RefreshIndicator(
+            onRefresh: () => ref.refresh(activityProvider.future),
+            child: SingleChildScrollView(
+              // Lets the pull work even when the list is too short to scroll.
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.fromLTRB(
+                TSizes.pagePadding,
+                topPadding,
+                TSizes.pagePadding,
+                30,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.activityTitle,
+                          style: TTextStyles.titleLarge.copyWith(
+                            color: colors.textPrimary,
+                          ),
                         ),
                       ),
-                    ),
-                    LinkButton(
-                      label: l10n.markAllRead,
-                      // `read`, not `watch`: we only call a method here, we
-                      // don't need to rebuild when the provider changes.
-                      onPressed: hasUnread
-                          ? () => ref
-                                .read(activityProvider.notifier)
-                                .markAllRead()
-                          : null,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: TSizes.lg),
-                Text(
-                  l10n.activityDescription,
-                  style: TTextStyles.bodySmall.copyWith(
-                    color: colors.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: TSizes.lg),
-                if (activities.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32),
-                    child: Text(
-                      l10n.noActivity,
-                      textAlign: TextAlign.center,
-                      style: TTextStyles.body.copyWith(
-                        color: colors.textSecondary,
+                      LinkButton(
+                        label: l10n.markAllRead,
+                        // `read`, not `watch`: we only call a method here, we
+                        // don't need to rebuild when the provider changes.
+                        onPressed: hasUnread
+                            ? () => ref
+                                  .read(activityProvider.notifier)
+                                  .markAllRead()
+                            : null,
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: TSizes.lg),
+                  Text(
+                    l10n.activityDescription,
+                    style: TTextStyles.bodySmall.copyWith(
+                      color: colors.textSecondary,
                     ),
-                  )
-                else
-                  for (final (index, activity) in activities.indexed) ...[
-                    if (index > 0) const SizedBox(height: TSizes.lg),
-                    _ActivityItem(activity: activity),
-                  ],
-              ],
+                  ),
+                  const SizedBox(height: TSizes.lg),
+                  activitiesAsync.when(
+                    data: (activities) => activities.isEmpty
+                        ? _CenteredMessage(l10n.noActivity)
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            spacing: TSizes.lg,
+                            children: [
+                              for (final activity in activities)
+                                _ActivityItem(activity: activity),
+                            ],
+                          ),
+                    loading: () => const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    error: (error, _) => Column(
+                      spacing: TSizes.sm,
+                      children: [
+                        _CenteredMessage(l10n.errorLoadActivity),
+                        LinkButton(
+                          label: l10n.retry,
+                          onPressed: () => ref.invalidate(activityProvider),
+                        ),
+                      ],
+                    ),
+                    // After an error, Retry shows the spinner. With a list on screen,
+                    // pull-to-refresh keeps it (the pull has its own spinner).
+                    skipLoadingOnRefresh: !activitiesAsync.hasError,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -127,15 +149,42 @@ class _ActivityItem extends StatelessWidget {
         l10n.activityProfileUpdated,
         l10n.activityProfileUpdatedDetail,
       ),
+      PersonalDetailsSaved() => (
+        l10n.activityProfileUpdated,
+        l10n.activityPersonalDetailsSavedDetail,
+      ),
+      AccountCreated() => (
+        l10n.activityAccountCreated,
+        l10n.activityAccountCreatedDetail,
+      ),
+      OtherActivity(:final description) => (description, null),
     };
 
     return DotListItem(
       title: title,
-      details: [detail, TFormatters.dateTime(context, activity.date)],
+      details: [?detail, TFormatters.dateTime(context, activity.date)],
       // Green = unread, grey = read
       dotColor: activity.isRead
           ? colors.iconInactive
           : colors.onSuccessContainer,
+    );
+  }
+}
+
+class _CenteredMessage extends StatelessWidget {
+  final String message;
+
+  const _CenteredMessage(this.message);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32),
+      child: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: TTextStyles.body.copyWith(color: context.colors.textSecondary),
+      ),
     );
   }
 }

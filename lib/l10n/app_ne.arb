@@ -203,5 +203,14 @@
   "localityLabel": "बस्ती",
   "errorLocality": "आफ्नो बस्ती छान्नुहोस्",
   "chooseLocalAuthorityFirst": "पहिले स्थानीय निकाय छान्नुहोस्",
-  "errorLoadLocalities": "बस्तीहरू लोड गर्न सकिएन।"
+  "errorLoadLocalities": "बस्तीहरू लोड गर्न सकिएन।",
+  "takePhoto": "फोटो खिच्नुहोस्",
+  "chooseFromGallery": "ग्यालरीबाट छान्नुहोस्",
+  "errorImageAccess": "कागजात अपलोड गर्न सेटिङमा क्यामेरा र फोटो पहुँच दिनुहोस्।",
+  "errorPhotoPage": "राहदानीको फोटो पेज अपलोड गर्नुहोस्",
+  "errorVisaPage": "इजरायलको भिसा पेज अपलोड गर्नुहोस्",
+  "activityPersonalDetailsSavedDetail": "व्यक्तिगत विवरण सुरक्षित गरियो",
+  "activityAccountCreated": "खाता बनाइयो",
+  "activityAccountCreatedDetail": "तपाईंको मोबाइल नम्बरबाट साइन अप गरियो",
+  "errorLoadActivity": "तपाईंको गतिविधि लोड गर्न सकिएन।"
 }

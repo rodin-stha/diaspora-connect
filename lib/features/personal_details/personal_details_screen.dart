@@ -11,6 +11,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/sizes.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
+import '../../widgets/link_button.dart';
 import 'data/personal_details_provider.dart';
 import 'models/personal_details.dart';
 import 'widgets/personal_details_form.dart';
@@ -22,14 +23,11 @@ class PersonalDetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final details = ref.watch(personalDetailsProvider);
+    final detailsAsync = ref.watch(personalDetailsProvider);
 
-    // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
 
     Future<void> save(PersonalDetails updated) async {
-      // The messenger belongs to the whole app, so the message stays
-      // visible on Profile after this screen closes.
       final messenger = ScaffoldMessenger.of(context);
       try {
         await ref.read(personalDetailsProvider.notifier).save(updated);
@@ -63,10 +61,33 @@ class PersonalDetailsScreen extends ConsumerWidget {
                   title: l10n.personalDetails,
                   fallbackLocation: '/profile',
                 ),
-                PersonalDetailsForm(
-                  initialValue: details,
-                  submitLabel: l10n.saveChanges,
-                  onSubmit: save,
+                // The form reads initialValue only once, so it's built only
+                // after the details have loaded.
+                detailsAsync.when(
+                  data: (details) => PersonalDetailsForm(
+                    initialValue: details,
+                    submitLabel: l10n.saveChanges,
+                    onSubmit: save,
+                  ),
+                  loading: () => const Padding(
+                    padding: EdgeInsets.only(top: TSizes.xl),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  error: (error, _) => Column(
+                    spacing: TSizes.sm,
+                    children: [
+                      Text(l10n.errorGeneric),
+                      LinkButton(
+                        label: l10n.retry,
+                        // Drops the failed result, so build() fetches again.
+                        onPressed: () =>
+                            ref.invalidate(personalDetailsProvider),
+                      ),
+                    ],
+                  ),
+                  // Show the spinner on Retry instead of keeping the old
+                  // error on screen until the new result arrives.
+                  skipLoadingOnRefresh: false,
                 ),
               ],
             ),

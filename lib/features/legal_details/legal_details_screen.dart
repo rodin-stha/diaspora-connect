@@ -5,10 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/api/api_error_message.dart';
+import '../../app/api/api_exception.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/sizes.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
+import '../../widgets/image_source_sheet.dart';
 import 'data/legal_details_provider.dart';
 import 'models/legal_details.dart';
 import 'widgets/legal_details_form.dart';
@@ -29,10 +32,18 @@ class LegalDetailsScreen extends ConsumerWidget {
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
 
-    void save(LegalDetails updated) {
-      ref.read(legalDetailsProvider.notifier).save(updated);
-      showMessage(l10n.detailsSaved);
-      context.canPop() ? context.pop() : context.go('/profile');
+    Future<void> save(LegalDetails updated) async {
+      final messenger = ScaffoldMessenger.of(context);
+      try {
+        await ref.read(legalDetailsProvider.notifier).save(updated);
+        if (!context.mounted) return;
+        showMessage(l10n.detailsSaved);
+        context.canPop() ? context.pop() : context.go('/profile');
+      } on ApiException catch (e) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(apiErrorMessage(l10n, e))),
+        );
+      }
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -59,11 +70,14 @@ class LegalDetailsScreen extends ConsumerWidget {
                   initialValue: details,
                   submitLabel: l10n.saveChanges,
                   onSubmit: save,
-                  // TODO: pick a photo/file and upload it once the backend
-                  // and file permissions are set up.
-                  onUploadDocument: () => showMessage(l10n.uploadComingSoon),
                   // Same as Saved documents' button: adds to that list.
-                  onUploadNewDocument: () => showMessage(l10n.uploadComingSoon),
+                  onUploadNewDocument: () async {
+                    final image = await pickImage(context);
+                    if (image == null) return;
+                    // TODO: upload image.path once the backend endpoint
+                    // exists, then add it to Saved documents.
+                    showMessage(l10n.uploadComingSoon);
+                  },
                 ),
               ],
             ),
