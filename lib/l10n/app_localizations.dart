@@ -236,11 +236,29 @@ abstract class AppLocalizations {
   /// **'{days, plural, =0{Due today} =1{Due in 1 day} other{Due in {days} days}}'**
   String dueInDays(int days);
 
+  /// No description provided for @completedToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed today'**
+  String get completedToday;
+
+  /// No description provided for @completedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed {date}'**
+  String completedOn(String date);
+
   /// No description provided for @overdue.
   ///
   /// In en, this message translates to:
   /// **'Overdue'**
   String get overdue;
+
+  /// No description provided for @statusAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned'**
+  String get statusAssigned;
 
   /// No description provided for @statusInProgress.
   ///
@@ -259,6 +277,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New'**
   String get statusNew;
+
+  /// No description provided for @statusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get statusRejected;
 
   /// No description provided for @statusResolved.
   ///
@@ -314,35 +338,11 @@ abstract class AppLocalizations {
   /// **'Track issue'**
   String get trackIssueTitle;
 
-  /// No description provided for @issueNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'This issue could not be found'**
-  String get issueNotFound;
-
   /// No description provided for @timelineSubmitted.
   ///
   /// In en, this message translates to:
   /// **'Submitted'**
   String get timelineSubmitted;
-
-  /// No description provided for @timelineAssignedToEmployer.
-  ///
-  /// In en, this message translates to:
-  /// **'Assigned to employer'**
-  String get timelineAssignedToEmployer;
-
-  /// No description provided for @timelineEscalatedToEmbassy.
-  ///
-  /// In en, this message translates to:
-  /// **'Escalated to Embassy Labour Desk'**
-  String get timelineEscalatedToEmbassy;
-
-  /// No description provided for @timelineResolved.
-  ///
-  /// In en, this message translates to:
-  /// **'Resolved · pending your feedback'**
-  String get timelineResolved;
 
   /// No description provided for @activityTitle.
   ///
@@ -997,6 +997,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select whether you live in or out'**
   String get errorCareArrangement;
+
+  /// No description provided for @alertIssueStatusChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'“{title}” is now {status}'**
+  String alertIssueStatusChanged(String title, String status);
+
+  /// No description provided for @alertIssueAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'“{title}” was assigned to {caseWorker}'**
+  String alertIssueAssigned(String title, String caseWorker);
+
+  /// No description provided for @alertIssuesUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 of your issues was updated} other{{count} of your issues were updated}}'**
+  String alertIssuesUpdated(int count);
 
   /// No description provided for @howNotifiedSection.
   ///

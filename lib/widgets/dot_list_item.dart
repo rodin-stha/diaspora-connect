@@ -22,6 +22,10 @@ class DotListItem extends StatelessWidget {
   /// Color of the line below the dot. Null means no line (e.g. last step).
   final Color? connectorColor;
 
+  /// Adds a small down arrow in the middle of the line, so the line reads
+  /// as "this led to the next step".
+  final bool showConnectorArrow;
+
   /// Empty space below the item. Kept inside the item (not as a SizedBox
   /// between items) so the connector line can run through it.
   final double bottomSpacing;
@@ -33,6 +37,7 @@ class DotListItem extends StatelessWidget {
     required this.dotColor,
     this.dotSize = TSizes.dotMd,
     this.connectorColor,
+    this.showConnectorArrow = false,
     this.bottomSpacing = 0,
   });
 
@@ -61,6 +66,15 @@ class DotListItem extends StatelessWidget {
       ),
     );
 
+    final lineColor = connectorColor;
+    Widget line(Color color) => Container(
+      width: TSizes.connectorWidth,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(TSizes.connectorWidth),
+      ),
+    );
+
     // IntrinsicHeight makes the Row as tall as its tallest child (the text),
     // so the line below the dot can stretch to fill that height.
     return IntrinsicHeight(
@@ -70,19 +84,21 @@ class DotListItem extends StatelessWidget {
           Column(
             children: [
               dot,
-              if (connectorColor != null)
+              if (lineColor != null)
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(top: TSizes.xs),
-                    child: Container(
-                      width: TSizes.connectorWidth,
-                      decoration: BoxDecoration(
-                        color: connectorColor,
-                        borderRadius: BorderRadius.circular(
-                          TSizes.connectorWidth,
-                        ),
-                      ),
-                    ),
+                    child: showConnectorArrow
+                        // Line, arrow, line: the two halves share the space
+                        // equally, so the arrow sits in the middle.
+                        ? Column(
+                            children: [
+                              Expanded(child: line(lineColor)),
+                              _ConnectorArrow(width: dotSize, color: lineColor),
+                              Expanded(child: line(lineColor)),
+                            ],
+                          )
+                        : line(lineColor),
                   ),
                 ),
             ],
@@ -112,6 +128,34 @@ class DotListItem extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// The down arrow on a connector line. Drawn larger than the column is
+/// wide (the dot's width) without widening it: a wider column would push
+/// the text right, out of line with lists that have no arrow (Activity).
+class _ConnectorArrow extends StatelessWidget {
+  final double width;
+  final Color color;
+
+  const _ConnectorArrow({required this.width, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: TSizes.iconXs,
+      // Lets the icon be wider than this box; the box keeps the layout size.
+      child: OverflowBox(
+        maxWidth: TSizes.iconXs,
+        child: SvgPicture.asset(
+          'assets/icons/chevron_down.svg',
+          width: TSizes.iconXs,
+          height: TSizes.iconXs,
+          colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+        ),
       ),
     );
   }

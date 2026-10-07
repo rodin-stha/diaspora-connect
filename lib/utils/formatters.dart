@@ -10,6 +10,12 @@ class TFormatters {
     Localizations.localeOf(context).toLanguageTag(),
   ).format(date);
 
+  /// "3 Sep 2026", in the app's current language.
+  static String date(BuildContext context, DateTime date) => DateFormat(
+    'd MMM yyyy',
+    Localizations.localeOf(context).toLanguageTag(),
+  ).format(date);
+
   /// "03/09/1995" (DD/MM/YYYY), for date inputs. Always Latin digits, to
   /// match what people type and what official forms use.
   static String shortDate(DateTime date) =>

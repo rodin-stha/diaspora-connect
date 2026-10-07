@@ -21,6 +21,7 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color background; // page background
   final Color surface; // cards, bottom nav
   final Color border;
+  final Color connector; // lines linking timeline steps
 
   // Content
   final Color textPrimary;
@@ -48,6 +49,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.background,
     required this.surface,
     required this.border,
+    required this.connector,
     required this.textPrimary,
     required this.textSecondary,
     required this.iconInactive,
@@ -73,6 +75,9 @@ class AppColors extends ThemeExtension<AppColors> {
     background: Color(0xFFFAFAF9),
     surface: Color(0xFFFFFFFF),
     border: Color(0xFFDFDBD0),
+    // Between border and iconInactive: visible on the background, but
+    // lighter than the dots it connects.
+    connector: Color(0xFFA8A496),
     textPrimary: Color(0xFF1C1B1A),
     textSecondary: Color(0xFF6B675F),
     iconInactive: Color(0xFF8A8676),
@@ -101,6 +106,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? background,
     Color? surface,
     Color? border,
+    Color? connector,
     Color? textPrimary,
     Color? textSecondary,
     Color? iconInactive,
@@ -124,6 +130,7 @@ class AppColors extends ThemeExtension<AppColors> {
       background: background ?? this.background,
       surface: surface ?? this.surface,
       border: border ?? this.border,
+      connector: connector ?? this.connector,
       textPrimary: textPrimary ?? this.textPrimary,
       textSecondary: textSecondary ?? this.textSecondary,
       iconInactive: iconInactive ?? this.iconInactive,
@@ -153,6 +160,7 @@ class AppColors extends ThemeExtension<AppColors> {
       background: Color.lerp(background, other.background, t)!,
       surface: Color.lerp(surface, other.surface, t)!,
       border: Color.lerp(border, other.border, t)!,
+      connector: Color.lerp(connector, other.connector, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       iconInactive: Color.lerp(iconInactive, other.iconInactive, t)!,

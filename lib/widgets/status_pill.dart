@@ -6,6 +6,17 @@ import '../theme/colors.dart';
 import '../theme/sizes.dart';
 import '../theme/text_styles.dart';
 
+/// An issue status as the user sees it ("In progress").
+String issueStatusLabel(AppLocalizations l10n, IssueStatus status) =>
+    switch (status) {
+      IssueStatus.submitted => l10n.statusNew,
+      IssueStatus.assigned => l10n.statusAssigned,
+      IssueStatus.inProgress => l10n.statusInProgress,
+      IssueStatus.escalated => l10n.statusEscalated,
+      IssueStatus.resolved => l10n.statusResolved,
+      IssueStatus.rejected => l10n.statusRejected,
+    };
+
 class StatusPill extends StatelessWidget {
   final IssueStatus status;
 
@@ -13,26 +24,31 @@ class StatusPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final (label, background, foreground) = switch (status) {
+    final label = issueStatusLabel(AppLocalizations.of(context), status);
+    final (background, foreground) = switch (status) {
       IssueStatus.submitted => (
-        l10n.statusNew,
+        colors.infoContainer,
+        colors.onInfoContainer,
+      ),
+      // Same colours as New: still waiting for work to start.
+      IssueStatus.assigned => (
         colors.infoContainer,
         colors.onInfoContainer,
       ),
       IssueStatus.inProgress => (
-        l10n.statusInProgress,
         colors.warningContainer,
         colors.onWarningContainer,
       ),
       IssueStatus.escalated => (
-        l10n.statusEscalated,
+        colors.errorContainer,
+        colors.onErrorContainer,
+      ),
+      IssueStatus.rejected => (
         colors.errorContainer,
         colors.onErrorContainer,
       ),
       IssueStatus.resolved => (
-        l10n.statusResolved,
         colors.successContainer,
         colors.onSuccessContainer,
       ),

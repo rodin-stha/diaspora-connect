@@ -51,6 +51,18 @@ class IssuesRepository {
     ).data;
   }
 
+  /// One issue with its full status history.
+  Future<Issue> fetchIssue(String reference) async {
+    final res = await apiCall(
+      () => _dio.get<Map<String, dynamic>>('/issues/$reference'),
+    );
+
+    return ApiResponse.fromJson(
+      res.data!,
+      (data) => Issue.fromJson(data as Map<String, dynamic>),
+    ).data;
+  }
+
   Future<List<IssueCategory>> fetchCategories() async {
     final res = await apiCall(
       () => _dio.get<Map<String, dynamic>>('/issue-categories'),

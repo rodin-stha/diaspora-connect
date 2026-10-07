@@ -8,6 +8,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
+import '../../utils/formatters.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import '../../widgets/load_error.dart';
@@ -25,8 +26,7 @@ class IssueDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
-    final issueAsync = ref.watch(issueByReferenceProvider(reference));
+    final issueAsync = ref.watch(issueDetailProvider(reference));
 
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
@@ -35,47 +35,50 @@ class IssueDetailScreen extends ConsumerWidget {
       value: SystemUiOverlayStyle.dark,
       child: AppBackground(
         child: Scaffold(
-          body: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(
-              TSizes.pagePadding,
-              topPadding,
-              TSizes.pagePadding,
-              30,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                BackTitleBar(
-                  title: l10n.trackIssueTitle,
-                  fallbackLocation: '/issues',
-                ),
-                const SizedBox(height: TSizes.timelineGap),
-                issueAsync.when(
-                  data: (issue) => issue == null
-                      ? Text(
-                          l10n.issueNotFound,
-                          style: TTextStyles.body.copyWith(
-                            color: colors.textSecondary,
-                          ),
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          spacing: TSizes.timelineGap,
-                          children: [
-                            _IssueSummary(issue: issue),
-                            IssueTimeline(issue: issue),
-                          ],
-                        ),
-                  loading: () => const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32),
-                    child: Center(child: CircularProgressIndicator()),
+          // Pull down to fetch the latest, e.g. after a case worker updates
+          // the issue.
+          body: RefreshIndicator(
+            onRefresh: () => ref.refresh(issueDetailProvider(reference).future),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.fromLTRB(
+                TSizes.pagePadding,
+                topPadding,
+                TSizes.pagePadding,
+                30,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BackTitleBar(
+                    title: l10n.trackIssueTitle,
+                    fallbackLocation: '/issues',
                   ),
-                  error: (error, _) => LoadError(
-                    message: l10n.errorLoadIssues,
-                    onRetry: () => ref.invalidate(issuesProvider),
+                  const SizedBox(height: TSizes.timelineGap),
+                  issueAsync.when(
+                    data: (issue) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: TSizes.timelineGap,
+                      children: [
+                        _IssueSummary(issue: issue),
+                        IssueTimeline(issue: issue),
+                      ],
+                    ),
+                    loading: () => const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    error: (error, _) => LoadError(
+                      message: l10n.errorLoadIssues,
+                      onRetry: () =>
+                          ref.invalidate(issueDetailProvider(reference)),
+                    ),
+                    // Retry after an error shows the spinner; a pull-to-refresh
+                    // keeps the issue (the pull has its own spinner).
+                    skipLoadingOnRefresh: !issueAsync.hasError,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -111,15 +114,29 @@ class _IssueSummary extends StatelessWidget {
           children: [
             StatusPill(status: issue.status),
             const SizedBox(width: TSizes.sm),
-            Text(
-              issue.isOverdue ? l10n.overdue : l10n.dueInDays(issue.dueInDays),
-              style: TTextStyles.bodySmall.copyWith(
-                color: colors.textSecondary,
+            if (_deadlineText(context, l10n) case final text?)
+              Text(
+                text,
+                style: TTextStyles.bodySmall.copyWith(
+                  color: colors.textSecondary,
+                ),
               ),
-            ),
           ],
         ),
       ],
     );
+  }
+
+  /// Next to the status: when it was completed once the issue has ended,
+  /// otherwise how long until it's due.
+  String? _deadlineText(BuildContext context, AppLocalizations l10n) {
+    if (!issue.isOpen) {
+      final completedAt = issue.completedAt;
+      if (completedAt == null) return null; // Ended, but no date to show.
+      return DateUtils.isSameDay(completedAt, DateTime.now())
+          ? l10n.completedToday
+          : l10n.completedOn(TFormatters.date(context, completedAt));
+    }
+    return issue.isOverdue ? l10n.overdue : l10n.dueInDays(issue.dueInDays);
   }
 }

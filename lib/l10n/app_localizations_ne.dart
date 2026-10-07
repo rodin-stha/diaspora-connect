@@ -90,7 +90,18 @@ class AppLocalizationsNe extends AppLocalizations {
   }
 
   @override
+  String get completedToday => 'आज सम्पन्न भयो';
+
+  @override
+  String completedOn(String date) {
+    return '$date मा सम्पन्न भयो';
+  }
+
+  @override
   String get overdue => 'म्याद नाघेको';
+
+  @override
+  String get statusAssigned => 'सुम्पिइएको';
 
   @override
   String get statusInProgress => 'प्रगतिमा';
@@ -100,6 +111,9 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get statusNew => 'नयाँ';
+
+  @override
+  String get statusRejected => 'अस्वीकृत';
 
   @override
   String get statusResolved => 'समाधान भयो';
@@ -131,19 +145,7 @@ class AppLocalizationsNe extends AppLocalizations {
   String get trackIssueTitle => 'समस्या ट्र्याक गर्नुहोस्';
 
   @override
-  String get issueNotFound => 'यो समस्या फेला परेन';
-
-  @override
   String get timelineSubmitted => 'पेश गरियो';
-
-  @override
-  String get timelineAssignedToEmployer => 'रोजगारदातालाई तोकियो';
-
-  @override
-  String get timelineEscalatedToEmbassy => 'दूतावासको श्रम डेस्कमा पठाइयो';
-
-  @override
-  String get timelineResolved => 'समाधान भयो · तपाईंको प्रतिक्रिया बाँकी';
 
   @override
   String get activityTitle => 'गतिविधि';
@@ -489,6 +491,26 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get errorCareArrangement => 'घरमै बस्ने वा बाहिर बस्ने छान्नुहोस्';
+
+  @override
+  String alertIssueStatusChanged(String title, String status) {
+    return '“$title” अब $status छ';
+  }
+
+  @override
+  String alertIssueAssigned(String title, String caseWorker) {
+    return '“$title” $caseWorker लाई सुम्पिइयो';
+  }
+
+  @override
+  String alertIssuesUpdated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'तपाईंका $count वटा समस्याहरू अपडेट भए',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get howNotifiedSection => 'तपाईंलाई कसरी सूचना दिइन्छ';

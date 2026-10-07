@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/api/api_exception.dart';
 import '../models/issue.dart';
 import '../models/issue_filter.dart';
 import '../models/new_issue.dart';
@@ -21,6 +22,19 @@ class IssuesNotifier extends AsyncNotifier<List<Issue>> {
   @override
   Future<List<Issue>> build() =>
       ref.read(issuesRepositoryProvider).fetchIssues();
+
+  /// Fetches the list again in the background, e.g. to check for changes.
+  /// No loading state, and a failure (offline…) keeps the current list:
+  /// the user didn't ask for this, so it shouldn't replace the list with
+  /// a spinner or an error.
+  Future<void> refreshQuietly() async {
+    try {
+      final issues = await ref.read(issuesRepositoryProvider).fetchIssues();
+      state = AsyncData(issues);
+    } on ApiException {
+      // Try again on the next check.
+    }
+  }
 
   /// Sends a new issue to the API, then fetches the list again so it
   /// includes the issue as the server saved it. Throws [ApiException] if
@@ -47,13 +61,11 @@ final issueSearchProvider = FutureProvider.autoDispose
           ),
     );
 
-/// One issue by its reference number, or null if there's none. Loading and
-/// errors come from [issuesProvider].
-final issueByReferenceProvider = Provider.family<AsyncValue<Issue?>, String>(
-  (ref, reference) => ref
-      .watch(issuesProvider)
-      .whenData(
-        (issues) =>
-            issues.where((issue) => issue.reference == reference).firstOrNull,
-      ),
+/// One issue with its status history, for Track issue. Fetched on its own
+/// because the list doesn't include the history, and so it works for any
+/// issue (e.g. opened from an alert), not just the first page.
+///
+/// autoDispose: fetched fresh each time the screen opens.
+final issueDetailProvider = FutureProvider.autoDispose.family<Issue, String>(
+  (ref, reference) => ref.read(issuesRepositoryProvider).fetchIssue(reference),
 );

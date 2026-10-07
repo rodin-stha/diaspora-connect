@@ -5,9 +5,12 @@ import '../../../theme/colors.dart';
 import '../../../theme/sizes.dart';
 import '../../../utils/formatters.dart';
 import '../../../widgets/dot_list_item.dart';
+import '../../../widgets/status_pill.dart';
 import '../models/issue.dart';
 
-/// The steps of an issue: done (green), current (amber), upcoming (grey).
+/// An issue's status history, oldest first. Every dot is grey, except the
+/// latest change once the issue has ended: green if resolved, red if
+/// rejected.
 class IssueTimeline extends StatelessWidget {
   final Issue issue;
 
@@ -17,47 +20,34 @@ class IssueTimeline extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
+    final history = issue.history;
 
-    // The latest completed step is the current one, unless the issue is
-    // already closed.
-    final currentIndex = issue.isOpen
-        ? issue.timeline.lastIndexWhere((event) => event.isDone)
-        : -1;
-    bool isLast(int index) => index == issue.timeline.length - 1;
+    final outcomeColor = switch (issue.status) {
+      IssueStatus.resolved => colors.onSuccessContainer,
+      IssueStatus.rejected => colors.onErrorContainer,
+      _ => colors.iconInactive, // Still open: no outcome yet.
+    };
+    bool isLast(int index) => index == history.length - 1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (final (index, event) in issue.timeline.indexed)
+        for (final (index, change) in history.indexed)
           DotListItem(
-            title: _label(l10n, event.type),
-            details: [
-              if (event.date != null)
-                TFormatters.dateTime(context, event.date!),
-            ],
-            dotColor: index == currentIndex
-                ? colors.onWarningContainer
-                : event.isDone
-                ? colors.onSuccessContainer
-                : colors.border,
-            // Line down to the next step: green once that step is reached,
-            // grey while it's still ahead. The last step has no line.
-            connectorColor: isLast(index)
-                ? null
-                : issue.timeline[index + 1].isDone
-                ? colors.onSuccessContainer
-                : colors.border,
+            // The first entry is the report itself: "Submitted" reads
+            // better there than the status name "New".
+            title: index == 0
+                ? l10n.timelineSubmitted
+                : issueStatusLabel(l10n, change.status),
+            details: [TFormatters.dateTime(context, change.date)],
+            // Same grey as read items on Activity.
+            dotColor: isLast(index) ? outcomeColor : colors.iconInactive,
+            // The last entry has no line below it.
+            connectorColor: isLast(index) ? null : colors.connector,
+            showConnectorArrow: true,
             bottomSpacing: isLast(index) ? 0 : TSizes.timelineGap,
           ),
       ],
     );
   }
-
-  static String _label(AppLocalizations l10n, IssueEventType type) =>
-      switch (type) {
-        IssueEventType.submitted => l10n.timelineSubmitted,
-        IssueEventType.assignedToEmployer => l10n.timelineAssignedToEmployer,
-        IssueEventType.escalatedToEmbassy => l10n.timelineEscalatedToEmbassy,
-        IssueEventType.resolved => l10n.timelineResolved,
-      };
 }

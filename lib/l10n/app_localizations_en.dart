@@ -91,7 +91,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get completedToday => 'Completed today';
+
+  @override
+  String completedOn(String date) {
+    return 'Completed $date';
+  }
+
+  @override
   String get overdue => 'Overdue';
+
+  @override
+  String get statusAssigned => 'Assigned';
 
   @override
   String get statusInProgress => 'In progress';
@@ -101,6 +112,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statusNew => 'New';
+
+  @override
+  String get statusRejected => 'Rejected';
 
   @override
   String get statusResolved => 'Resolved';
@@ -132,19 +146,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trackIssueTitle => 'Track issue';
 
   @override
-  String get issueNotFound => 'This issue could not be found';
-
-  @override
   String get timelineSubmitted => 'Submitted';
-
-  @override
-  String get timelineAssignedToEmployer => 'Assigned to employer';
-
-  @override
-  String get timelineEscalatedToEmbassy => 'Escalated to Embassy Labour Desk';
-
-  @override
-  String get timelineResolved => 'Resolved · pending your feedback';
 
   @override
   String get activityTitle => 'Activity';
@@ -486,6 +488,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorCareArrangement => 'Select whether you live in or out';
+
+  @override
+  String alertIssueStatusChanged(String title, String status) {
+    return '“$title” is now $status';
+  }
+
+  @override
+  String alertIssueAssigned(String title, String caseWorker) {
+    return '“$title” was assigned to $caseWorker';
+  }
+
+  @override
+  String alertIssuesUpdated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count of your issues were updated',
+      one: '1 of your issues was updated',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get howNotifiedSection => 'How you\'re notified';

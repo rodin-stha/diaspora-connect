@@ -7,28 +7,28 @@ enum IssueStatus {
   /// Just reported, nobody has picked it up yet. Shown as "New"
   /// (`new` is a reserved word in Dart).
   submitted,
+
+  /// A case worker has taken it but not started yet.
+  assigned,
   inProgress,
   escalated,
   resolved,
+
+  /// Closed without a fix (the API's `rejected` or `failed`).
+  rejected,
 }
 
-/// A step on an issue's timeline ("Submitted", "Escalated to…").
-enum IssueEventType {
-  submitted,
-  assignedToEmployer,
-  escalatedToEmbassy,
-  resolved,
-}
+/// One change of an issue's status, from the API's `status_history`.
+class StatusChange {
+  final IssueStatus status;
+  final DateTime date;
 
-class IssueEvent {
-  final IssueEventType type;
+  const StatusChange(this.status, this.date);
 
-  /// When the step happened, or null if it hasn't happened yet.
-  final DateTime? date;
-
-  const IssueEvent(this.type, [this.date]);
-
-  bool get isDone => date != null;
+  factory StatusChange.fromJson(Map<String, dynamic> json) => StatusChange(
+    Issue.statusFromJson(json['to_status']),
+    DateTime.parse(json['changed_at'] as String).toLocal(),
+  );
 }
 
 class Issue {
@@ -49,8 +49,9 @@ class Issue {
   /// Employer or embassy the issue is about; may be empty.
   final String concerned;
 
-  /// Steps in order: completed ones first, then upcoming ones.
-  final List<IssueEvent> timeline;
+  /// Every status the issue has had, oldest first. Only in the single-issue
+  /// response (GET /issues/{id}); empty in the list.
+  final List<StatusChange> history;
 
   const Issue({
     required this.title,
@@ -61,25 +62,18 @@ class Issue {
     this.assignedTo,
     this.description = '',
     this.concerned = '',
-    this.timeline = const [],
+    this.history = const [],
   });
 
-  /// From one entry of `GET /issues`.
+  /// From one entry of `GET /issues`, or the single issue of
+  /// `GET /issues/{id}` (which adds `status_history`).
   ///
-  /// TODO: the keys below are a best guess (no issues existed yet to see a
-  /// real response). Check them against the first real issue, especially
-  /// reference, status, due date and the timeline.
+  /// `status` and `assigned_to` are objects (`{value, label}` and
+  /// `{id, name}`). There's no `reference` or `due_date` in the response
+  /// yet, so the id stands in for the reference and the due date is 0.
   factory Issue.fromJson(Map<String, dynamic> json) {
     final dueDate = DateTime.tryParse(json['due_date'] as String? ?? '');
-    final createdAt = DateTime.tryParse(
-      json['created_at'] as String? ?? '',
-    )?.toLocal();
-    final status = switch (json['status']) {
-      'in_progress' => IssueStatus.inProgress,
-      'escalated' => IssueStatus.escalated,
-      'resolved' || 'closed' => IssueStatus.resolved,
-      _ => IssueStatus.submitted,
-    };
+    final status = statusFromJson(json['status']);
     final category = json['issue_category'] ?? json['category'];
 
     return Issue(
@@ -92,28 +86,35 @@ class Issue {
           ? 0
           : dueDate.difference(DateTime.now()).inDays,
       status: status,
-      assignedTo: json['assigned_to'] as String?,
+      assignedTo:
+          (json['assigned_to'] as Map<String, dynamic>?)?['name'] as String?,
       description: json['description'] as String? ?? '',
       concerned: json['employer'] as String? ?? '',
-      timeline: _timelineFrom(status, createdAt),
+      history: [
+        for (final change in json['status_history'] as List? ?? const [])
+          StatusChange.fromJson(change as Map<String, dynamic>),
+      ],
     );
   }
 
-  /// The steps shown on Track issue, built from the status and creation date
-  /// until the API's own history is mapped. Steps without a date show as
-  /// upcoming (grey).
-  static List<IssueEvent> _timelineFrom(
-    IssueStatus status,
-    DateTime? createdAt,
-  ) => [
-    IssueEvent(IssueEventType.submitted, createdAt),
-    const IssueEvent(IssueEventType.assignedToEmployer),
-    if (status == IssueStatus.escalated)
-      const IssueEvent(IssueEventType.escalatedToEmbassy),
-    const IssueEvent(IssueEventType.resolved),
-  ];
+  /// A `{value, label}` status object. Unknown values count as new.
+  static IssueStatus statusFromJson(Object? json) =>
+      switch ((json as Map<String, dynamic>?)?['value']) {
+        'assigned' => IssueStatus.assigned,
+        'in_progress' => IssueStatus.inProgress,
+        'escalated' => IssueStatus.escalated,
+        'resolved' || 'closed' => IssueStatus.resolved,
+        'rejected' || 'failed' => IssueStatus.rejected,
+        _ => IssueStatus.submitted, // 'new'
+      };
+
+  /// When the issue reached its final status (resolved or rejected): the
+  /// latest history entry. Null while it's open, or without history (the
+  /// list response has none).
+  DateTime? get completedAt => isOpen ? null : history.lastOrNull?.date;
 
   bool get isOverdue => dueInDays < 0;
   bool get isAssigned => assignedTo != null;
-  bool get isOpen => status != IssueStatus.resolved;
+  bool get isOpen =>
+      status != IssueStatus.resolved && status != IssueStatus.rejected;
 }

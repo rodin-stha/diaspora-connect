@@ -37,10 +37,21 @@
       }
     }
   },
+  "completedToday": "Completed today",
+  "completedOn": "Completed {date}",
+  "@completedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "overdue": "Overdue",
+  "statusAssigned": "Assigned",
   "statusInProgress": "In progress",
   "statusEscalated": "Escalated",
   "statusNew": "New",
+  "statusRejected": "Rejected",
   "statusResolved": "Resolved",
   "issuesTitle": "Issues",
   "searchIssuesHint": "Search ticket or subject",
@@ -57,11 +68,7 @@
   "filterResolved": "Resolved",
   "noIssuesFound": "No issues match your search",
   "trackIssueTitle": "Track issue",
-  "issueNotFound": "This issue could not be found",
   "timelineSubmitted": "Submitted",
-  "timelineAssignedToEmployer": "Assigned to employer",
-  "timelineEscalatedToEmbassy": "Escalated to Embassy Labour Desk",
-  "timelineResolved": "Resolved · pending your feedback",
   "activityTitle": "Activity",
   "markAllRead": "Mark all read",
   "activityDescription": "Account activity — signing in, updating your number, submitting an issue. Issue status updates live in Issues.",
@@ -185,6 +192,36 @@
   "hostFamilyHint": "Name of household or facility",
   "errorBusinessType": "Select the type of business you work in",
   "errorCareArrangement": "Select whether you live in or out",
+  "alertIssueStatusChanged": "“{title}” is now {status}",
+  "@alertIssueStatusChanged": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "alertIssueAssigned": "“{title}” was assigned to {caseWorker}",
+  "@alertIssueAssigned": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "caseWorker": {
+        "type": "String"
+      }
+    }
+  },
+  "alertIssuesUpdated": "{count, plural, =1{1 of your issues was updated} other{{count} of your issues were updated}}",
+  "@alertIssuesUpdated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "howNotifiedSection": "How you're notified",
   "whatNotifiedSection": "What you're notified about",
   "notifySms": "SMS alerts",
