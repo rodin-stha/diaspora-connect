@@ -15,9 +15,11 @@ final currentUserProvider = Provider<UserProfile>((ref) {
   return UserProfile(
     givenName: names.first,
     fullName: name,
+    // "Haifa • Hof HaCarmel • Geva Karmel"; parts not filled in are skipped.
     location: [
-      details?.neighborhoodName ?? '',
+      details?.districtName ?? '',
+      details?.localAuthorityName ?? '',
       details?.localityName ?? '',
-    ].where((part) => part.isNotEmpty).join(' · '),
+    ].where((part) => part.isNotEmpty).join(' • '),
   );
 });

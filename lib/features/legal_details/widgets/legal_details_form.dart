@@ -4,7 +4,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../../theme/sizes.dart';
 import '../../../utils/validators.dart';
 import '../../../widgets/checkbox_row.dart';
-import '../../../widgets/dashed_button.dart';
 import '../../../widgets/date_field.dart';
 import '../../../widgets/document_row.dart';
 import '../../../widgets/form_section_header.dart';
@@ -27,10 +26,6 @@ class LegalDetailsForm extends StatefulWidget {
   /// Saves the details. The button shows a spinner until it completes.
   final Future<void> Function(LegalDetails) onSubmit;
 
-  /// Called by "Upload new document" under the list. New documents go to
-  /// Saved documents (not the passport/visa slots). Hidden when null.
-  final VoidCallback? onUploadNewDocument;
-
   /// Shows the passport and visa as two empty upload tiles instead of rows
   /// with Upload/Replace. Used in onboarding, where nothing is uploaded yet.
   final bool useUploadTiles;
@@ -44,7 +39,6 @@ class LegalDetailsForm extends StatefulWidget {
     required this.initialValue,
     required this.submitLabel,
     required this.onSubmit,
-    this.onUploadNewDocument,
     this.useUploadTiles = false,
     this.requireConsent = false,
   });
@@ -195,11 +189,6 @@ class _LegalDetailsFormState extends State<LegalDetailsForm> {
             _photoPageField(l10n),
             _visaPageField(l10n),
           ],
-          if (widget.onUploadNewDocument != null)
-            DashedButton(
-              label: l10n.uploadNewDocument,
-              onPressed: widget.onUploadNewDocument,
-            ),
           if (widget.requireConsent)
             // A FormField so the box is checked by the same validate() call
             // as the text fields, and shows its error the same way.

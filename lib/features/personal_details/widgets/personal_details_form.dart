@@ -70,6 +70,9 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
   late int? _districtId = _initial.districtId;
   late int? _localAuthorityId = _initial.localAuthorityId;
   late int? _localityId = _initial.localityId;
+  // Names of the choices above, for Home and Profile to show.
+  late String _districtName = _initial.districtName;
+  late String _localAuthorityName = _initial.localAuthorityName;
   late String _localityName = _initial.localityName;
 
   bool _submitted = false;
@@ -109,6 +112,8 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
           districtId: _districtId,
           localAuthorityId: _localAuthorityId,
           localityId: _localityId,
+          districtName: _districtName,
+          localAuthorityName: _localAuthorityName,
           localityName: _localityName,
           neighborhoodName: _neighborhood.text.trim(),
           postalCode: _postalCode.text.trim(),
@@ -336,8 +341,14 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
   /// when either changes (and the locality with it). Call inside setState.
   void _clearLocalAuthority() {
     _localAuthorityId = null;
-    _localityName = '';
+    _localAuthorityName = '';
+    _clearLocality();
+  }
+
+  /// The chosen locality belongs to one authority. Call inside setState.
+  void _clearLocality() {
     _localityId = null;
+    _localityName = '';
   }
 
   Widget _districtField(AppLocalizations l10n) => AsyncSelectField<District>(
@@ -353,6 +364,7 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
     onChanged: (district) => setState(() {
       if (district?.id != _districtId) _clearLocalAuthority();
       _districtId = district?.id;
+      _districtName = district?.name ?? '';
     }),
   );
 
@@ -380,7 +392,10 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
       requiredMessage: l10n.errorLocality,
       loadErrorMessage: l10n.errorLoadLocalities,
       onRetry: () => ref.invalidate(localityProvider(query)),
-      onChanged: (locality) => setState(() => _localityId = locality?.id),
+      onChanged: (locality) => setState(() {
+        _localityId = locality?.id;
+        _localityName = locality?.name ?? '';
+      }),
     );
   }
 
@@ -412,10 +427,9 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
       loadErrorMessage: l10n.errorLoadAuthorities,
       onRetry: () => ref.invalidate(authoritiesProvider(query)),
       onChanged: (authority) => setState(() {
-        // Localities belong to one authority.
-        if (authority?.id != _localAuthorityId) _localityId = null;
+        if (authority?.id != _localAuthorityId) _clearLocality();
         _localAuthorityId = authority?.id;
-        _localityName = authority?.name ?? '';
+        _localAuthorityName = authority?.name ?? '';
       }),
     );
   }

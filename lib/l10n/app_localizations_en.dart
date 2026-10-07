@@ -429,7 +429,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get viewAction => 'View';
 
   @override
-  String get viewComingSoon => 'Viewing documents isn\'t available yet';
+  String get errorOpenDocument =>
+      'Couldn\'t open the document. Pull down to refresh and try again.';
+
+  @override
+  String get noSavedDocuments => 'You haven\'t uploaded any documents yet.';
+
+  @override
+  String get errorLoadDocuments => 'Couldn\'t load your documents.';
 
   @override
   String get uploadNewDocument => 'Upload new document';

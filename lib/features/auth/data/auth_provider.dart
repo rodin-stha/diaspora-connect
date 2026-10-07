@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/api/api_exception.dart';
+
 import 'auth_repository.dart';
 import 'token_storage.dart';
 
@@ -79,7 +81,17 @@ class AuthNotifier extends Notifier<AuthState> {
     );
   }
 
+  /// Signs out on the server, then on this device.
   Future<void> signOut() async {
+    // First, while the token is still in `state`: the request needs it in
+    // its Authorization header to say which session to end.
+    try {
+      await ref.read(authRepositoryProvider).logout();
+    } on ApiException {
+      // Offline, or the token had already expired: sign out on the device
+      // anyway. The user asked to leave, and a token we've deleted can't
+      // be used from this phone again.
+    }
     await ref.read(tokenStorageProvider).delete();
     state = const AuthState();
   }

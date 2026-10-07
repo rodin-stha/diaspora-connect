@@ -11,8 +11,8 @@ import '../../widgets/app_background.dart';
 import '../../widgets/language_toggle.dart';
 import '../../widgets/list_section.dart';
 import '../../widgets/menu_row.dart';
-import '../auth/data/auth_provider.dart';
 import 'data/user_provider.dart';
+import 'widgets/log_out_dialog.dart';
 import 'widgets/profile_header.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -98,7 +98,7 @@ class ProfileScreen extends ConsumerWidget {
                       // Outlined, not filled: logging out is never the main
                       // thing to do here, so it shouldn't be the loudest.
                       OutlinedButton(
-                        onPressed: () => _confirmLogOut(context, ref),
+                        onPressed: () => _confirmLogOut(context),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: colors.accent,
                           side: BorderSide(color: colors.accent),
@@ -116,31 +116,10 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  /// Asks first, so an accidental tap doesn't sign the user out. After
-  /// signing out, the router's redirect shows the login screen.
-  Future<void> _confirmLogOut(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.logOutConfirmTitle),
-        content: Text(l10n.logOutConfirmBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            // Red, like the Log out button: it's the destructive choice.
-            style: TextButton.styleFrom(
-              foregroundColor: context.colors.accent,
-            ),
-            child: Text(l10n.logOut),
-          ),
-        ],
-      ),
-    );
-    if (confirmed == true) await ref.read(authProvider.notifier).signOut();
-  }
+  void _confirmLogOut(BuildContext context) => showDialog<void>(
+    context: context,
+    // No tap-outside to close: the dialog decides when it's done.
+    barrierDismissible: false,
+    builder: (_) => const LogOutDialog(),
+  );
 }

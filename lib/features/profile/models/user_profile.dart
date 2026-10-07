@@ -4,7 +4,7 @@ class UserProfile {
   final String givenName;
   final String fullName;
 
-  /// Workplace and region, e.g. "Kibbutz Afikim · Emek HaMa'ayanot…".
+  /// Where the user lives: district • local authority • locality.
   final String location;
 
   const UserProfile({

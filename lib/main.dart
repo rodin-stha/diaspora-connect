@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,9 @@ Future<void> main() async {
   Env.validate();
   final prefs = await SharedPreferences.getInstance();
   final savedToken = await TokenStorage(const FlutterSecureStorage()).read();
+  // Debug builds only: copy it into Postman/curl to call the API by hand.
+  // TODO: remove once the Saved documents endpoints are wired up.
+  if (kDebugMode) debugPrint('[auth] token: $savedToken');
   runApp(
     ProviderScope(
       overrides: [

@@ -884,11 +884,23 @@ abstract class AppLocalizations {
   /// **'View'**
   String get viewAction;
 
-  /// No description provided for @viewComingSoon.
+  /// No description provided for @errorOpenDocument.
   ///
   /// In en, this message translates to:
-  /// **'Viewing documents isn\'t available yet'**
-  String get viewComingSoon;
+  /// **'Couldn\'t open the document. Pull down to refresh and try again.'**
+  String get errorOpenDocument;
+
+  /// No description provided for @noSavedDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t uploaded any documents yet.'**
+  String get noSavedDocuments;
+
+  /// No description provided for @errorLoadDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your documents.'**
+  String get errorLoadDocuments;
 
   /// No description provided for @uploadNewDocument.
   ///

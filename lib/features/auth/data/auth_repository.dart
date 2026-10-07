@@ -40,6 +40,11 @@ class AuthRepository {
       (data) => VerifyOtpResponse.fromJson(data as Map<String, dynamic>),
     ).data;
   }
+
+  /// Ends the session on the server, so this token stops working.
+  Future<void> logout() async {
+    await apiCall(() => _dio.post<void>('/logout'));
+  }
 }
 
 /// Turns what the user typed ("+972 052-123 4567") into the international

@@ -432,7 +432,15 @@ class AppLocalizationsNe extends AppLocalizations {
   String get viewAction => 'हेर्नुहोस्';
 
   @override
-  String get viewComingSoon => 'कागजात हेर्ने सुविधा अहिले उपलब्ध छैन';
+  String get errorOpenDocument =>
+      'कागजात खोल्न सकिएन। तल तानेर रिफ्रेस गर्नुहोस् र फेरि प्रयास गर्नुहोस्।';
+
+  @override
+  String get noSavedDocuments =>
+      'तपाईंले अहिलेसम्म कुनै कागजात अपलोड गर्नुभएको छैन।';
+
+  @override
+  String get errorLoadDocuments => 'तपाईंका कागजातहरू लोड गर्न सकिएन।';
 
   @override
   String get uploadNewDocument => 'नयाँ कागजात अपलोड गर्नुहोस्';

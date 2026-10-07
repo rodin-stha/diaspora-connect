@@ -23,8 +23,10 @@ class PersonalDetails {
   final int? localAuthorityId;
   final int? localityId;
 
-  /// The chosen authority's name, kept so Profile can show it without
-  /// fetching the list.
+  /// Names of the chosen district, authority and locality, kept so Home
+  /// and Profile can show where the user lives without fetching the lists.
+  final String districtName;
+  final String localAuthorityName;
   final String localityName;
   final String neighborhoodName;
   final String postalCode;
@@ -43,7 +45,9 @@ class PersonalDetails {
     this.districtId,
     this.localAuthorityId,
     this.localityId,
-    required this.localityName,
+    this.districtName = '',
+    this.localAuthorityName = '',
+    this.localityName = '',
     required this.neighborhoodName,
     required this.postalCode,
     required this.contactPersonName,
@@ -55,7 +59,6 @@ class PersonalDetails {
   const PersonalDetails.empty()
     : this(
         name: 'Rodin Shrestha',
-        localityName: '',
         neighborhoodName: 'Test',
         postalCode: '1231231',
         contactPersonName: 'Rodin Shrestha',
@@ -93,8 +96,10 @@ class PersonalDetails {
         districtId: (json['district']?['id'] as num?)?.toInt(),
         localAuthorityId: (json['local_authority']?['id'] as num?)?.toInt(),
         localityId: (json['locality']?['id'] as num?)?.toInt(),
-        localityName: json['locality_name'] as String? ?? '',
-        neighborhoodName: json['neighborhood_name'] as String? ?? '',
+        districtName: json['district']?['name'] as String? ?? '',
+        localAuthorityName: json['local_authority']?['name'] as String? ?? '',
+        localityName: json['locality']?['name'] as String? ?? '',
+        neighborhoodName: json['neighborhood'] as String? ?? '',
         postalCode: json['postal_code'] as String? ?? '',
         contactPersonContact: json['contact_person_contact'] as String? ?? '',
         contactPersonEmail: json['contact_person_email'] as String? ?? '',
