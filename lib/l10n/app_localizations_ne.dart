@@ -409,9 +409,6 @@ class AppLocalizationsNe extends AppLocalizations {
   String get uploadAction => 'अपलोड गर्नुहोस्';
 
   @override
-  String get uploadComingSoon => 'कागजात अपलोड गर्ने सुविधा अहिले उपलब्ध छैन';
-
-  @override
   String get errorPassportNumber => 'आफ्नो राहदानी नम्बर लेख्नुहोस्';
 
   @override
@@ -441,6 +438,21 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get errorLoadDocuments => 'तपाईंका कागजातहरू लोड गर्न सकिएन।';
+
+  @override
+  String get uploadDocumentTitle => 'कागजात अपलोड गर्नुहोस्';
+
+  @override
+  String get documentNameLabel => 'कागजातको नाम';
+
+  @override
+  String get documentNameHint => 'जस्तै: तलब पर्ची – मार्च';
+
+  @override
+  String get errorDocumentName => 'कागजातको नाम लेख्नुहोस्';
+
+  @override
+  String get documentUploaded => 'कागजात अपलोड भयो';
 
   @override
   String get uploadNewDocument => 'नयाँ कागजात अपलोड गर्नुहोस्';

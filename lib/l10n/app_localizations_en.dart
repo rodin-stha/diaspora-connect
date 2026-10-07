@@ -406,9 +406,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadAction => 'Upload';
 
   @override
-  String get uploadComingSoon => 'Uploading documents isn\'t available yet';
-
-  @override
   String get errorPassportNumber => 'Enter your passport number';
 
   @override
@@ -437,6 +434,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorLoadDocuments => 'Couldn\'t load your documents.';
+
+  @override
+  String get uploadDocumentTitle => 'Upload document';
+
+  @override
+  String get documentNameLabel => 'Document name';
+
+  @override
+  String get documentNameHint => 'e.g. Salary slip – March';
+
+  @override
+  String get errorDocumentName => 'Enter a name for the document';
+
+  @override
+  String get documentUploaded => 'Document uploaded';
 
   @override
   String get uploadNewDocument => 'Upload new document';

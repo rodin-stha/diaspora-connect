@@ -842,12 +842,6 @@ abstract class AppLocalizations {
   /// **'Upload'**
   String get uploadAction;
 
-  /// No description provided for @uploadComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Uploading documents isn\'t available yet'**
-  String get uploadComingSoon;
-
   /// No description provided for @errorPassportNumber.
   ///
   /// In en, this message translates to:
@@ -901,6 +895,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load your documents.'**
   String get errorLoadDocuments;
+
+  /// No description provided for @uploadDocumentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload document'**
+  String get uploadDocumentTitle;
+
+  /// No description provided for @documentNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Document name'**
+  String get documentNameLabel;
+
+  /// No description provided for @documentNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Salary slip – March'**
+  String get documentNameHint;
+
+  /// No description provided for @errorDocumentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name for the document'**
+  String get errorDocumentName;
+
+  /// No description provided for @documentUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Document uploaded'**
+  String get documentUploaded;
 
   /// No description provided for @uploadNewDocument.
   ///

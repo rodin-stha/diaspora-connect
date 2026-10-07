@@ -12,10 +12,12 @@ import '../../widgets/back_title_bar.dart';
 import '../../widgets/dashed_button.dart';
 import '../../widgets/document_row.dart';
 import '../../widgets/empty_state.dart';
+import '../../widgets/image_source_sheet.dart';
 import '../../widgets/load_error.dart';
 import '../../widgets/skeleton.dart';
 import 'data/saved_documents_provider.dart';
 import 'models/saved_document.dart';
+import 'widgets/upload_document_dialog.dart';
 
 // Placeholder rows while the list loads: most users have a passport,
 // a visa and a work permit.
@@ -46,6 +48,20 @@ class SavedDocumentsScreen extends ConsumerWidget {
         mode: LaunchMode.inAppBrowserView,
       );
       if (!opened && context.mounted) showMessage(l10n.errorOpenDocument);
+    }
+
+    // Pick a photo first, then name it: the dialog has the photo to upload
+    // as soon as the user confirms.
+    Future<void> upload() async {
+      final image = await pickImage(context);
+      if (image == null || !context.mounted) return;
+      final uploaded = await showDialog<bool>(
+        context: context,
+        builder: (_) => UploadDocumentDialog(filePath: image.path),
+      );
+      if (uploaded == true && context.mounted) {
+        showMessage(l10n.documentUploaded);
+      }
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -112,9 +128,7 @@ class SavedDocumentsScreen extends ConsumerWidget {
                   ),
                   DashedButton(
                     label: l10n.uploadNewDocument,
-                    // TODO: pick a file, ask for its name, upload it, then
-                    // ref.invalidate(savedDocumentsProvider).
-                    onPressed: () => showMessage(l10n.uploadComingSoon),
+                    onPressed: upload,
                   ),
                 ],
               ),
