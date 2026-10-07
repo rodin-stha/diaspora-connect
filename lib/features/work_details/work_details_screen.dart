@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/api/api_error_message.dart';
+import '../../app/api/api_exception.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/sizes.dart';
 import '../../widgets/app_background.dart';
@@ -29,10 +31,15 @@ class WorkDetailsScreen extends ConsumerWidget {
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
 
-    void save(WorkDetails updated) {
-      ref.read(workDetailsProvider.notifier).save(updated);
-      showMessage(l10n.detailsSaved);
-      context.canPop() ? context.pop() : context.go('/profile');
+    Future<void> save(WorkDetails updated) async {
+      try {
+        await ref.read(workDetailsProvider.notifier).save(updated);
+        if (!context.mounted) return;
+        showMessage(l10n.detailsSaved);
+        context.canPop() ? context.pop() : context.go('/profile');
+      } on ApiException catch (e) {
+        if (context.mounted) showMessage(apiErrorMessage(l10n, e));
+      }
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -59,8 +66,6 @@ class WorkDetailsScreen extends ConsumerWidget {
                   initialValue: details,
                   submitLabel: l10n.saveChanges,
                   onSubmit: save,
-                  // TODO: pick and upload the file once uploads exist.
-                  onUploadWorkPermit: () => showMessage(l10n.uploadComingSoon),
                 ),
               ],
             ),

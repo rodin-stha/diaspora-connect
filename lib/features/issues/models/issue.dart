@@ -116,12 +116,4 @@ class Issue {
   bool get isOverdue => dueInDays < 0;
   bool get isAssigned => assignedTo != null;
   bool get isOpen => status != IssueStatus.resolved;
-
-  /// Case-insensitive match on the reference number or title.
-  bool matchesSearch(String query) {
-    final q = query.trim().toLowerCase();
-    if (q.isEmpty) return true;
-    return reference.toLowerCase().contains(q) ||
-        title.toLowerCase().contains(q);
-  }
 }

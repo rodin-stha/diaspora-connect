@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/api/api_error_message.dart';
+import '../../app/api/api_exception.dart';
 import '../../l10n/app_localizations.dart';
 import '../auth/data/auth_provider.dart';
 import '../work_details/data/work_details_provider.dart';
@@ -26,13 +28,18 @@ class OnboardingWorkScreen extends ConsumerWidget {
         initialValue: const WorkDetails(),
         submitLabel: l10n.saveProfile,
         useUploadTiles: true,
-        // TODO: pick and upload the file once uploads exist.
-        onUploadWorkPermit: () => ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.uploadComingSoon))),
-        onSubmit: (details) {
-          ref.read(workDetailsProvider.notifier).save(details);
-          ref.read(authProvider.notifier).completeOnboarding();
+        onSubmit: (details) async {
+          try {
+            await ref.read(workDetailsProvider.notifier).save(details);
+            // Only once the server has the details: finishing onboarding
+            // leaves this screen, and with it the chance to retry.
+            await ref.read(authProvider.notifier).completeOnboarding();
+          } on ApiException catch (e) {
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(apiErrorMessage(l10n, e))),
+            );
+          }
         },
       ),
     );

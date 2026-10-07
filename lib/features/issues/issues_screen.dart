@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -29,14 +30,44 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
   // Temporary UI state: only this screen cares, so it lives here, not in
   // a provider.
   IssueFilter _filter = IssueFilter.all;
-  String _query = '';
+
+  /// The search text sent to the server. Updated a moment after the user
+  /// stops typing, not on every key (see [_onSearchChanged]).
+  String _search = '';
+  Timer? _searchDebounce;
+
+  @override
+  void dispose() {
+    // Timers keep running after the screen closes unless cancelled.
+    _searchDebounce?.cancel();
+    super.dispose();
+  }
+
+  /// Waits until the user pauses before searching, so typing "salary"
+  /// sends one request instead of six.
+  void _onSearchChanged(String value) {
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 400), () {
+      final search = value.trim();
+      if (search != _search) setState(() => _search = search);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final issuesAsync = ref.watch(issuesProvider);
-    final totalCount = issuesAsync.value?.length ?? 0;
+    final IssueQuery query = (search: _search, filter: _filter);
+
+    // All issues: for the "All (n)" count, and to tell "no issues yet"
+    // apart from "nothing matches".
+    final allIssuesAsync = ref.watch(issuesProvider);
+    final allIssues = allIssuesAsync.value;
+    // What the list shows. With no search or filter that's the same list,
+    // so reuse it instead of fetching it twice.
+    final issuesAsync = query.isEmpty
+        ? allIssuesAsync
+        : ref.watch(issueSearchProvider(query));
 
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
@@ -49,7 +80,13 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
           // Pull down to fetch the latest, e.g. after a case worker updates
           // an issue.
           body: RefreshIndicator(
-            onRefresh: () => ref.refresh(issuesProvider.future),
+            // Both lists: the count comes from all issues. Future.wait keeps
+            // the spinner until both have arrived.
+            onRefresh: () => Future.wait([
+              ref.refresh(issuesProvider.future),
+              if (!query.isEmpty)
+                ref.refresh(issueSearchProvider(query).future),
+            ]),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -71,7 +108,7 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                   const SizedBox(height: TSizes.listGap),
                   SearchField(
                     hintText: l10n.searchIssuesHint,
-                    onChanged: (value) => setState(() => _query = value),
+                    onChanged: _onSearchChanged,
                   ),
                   const SizedBox(height: TSizes.listGap),
                   Wrap(
@@ -80,7 +117,11 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                     children: [
                       for (final filter in IssueFilter.values)
                         SelectableChip(
-                          label: _filterLabel(l10n, filter, totalCount),
+                          label: _filterLabel(
+                            l10n,
+                            filter,
+                            allIssues?.length ?? 0,
+                          ),
                           isSelected: filter == _filter,
                           onTap: () => setState(() => _filter = filter),
                         ),
@@ -89,14 +130,7 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                   const SizedBox(height: TSizes.listGap),
                   issuesAsync.when(
                     data: (issues) {
-                      final visibleIssues = issues
-                          .where(
-                            (issue) =>
-                                _filter.matches(issue) &&
-                                issue.matchesSearch(_query),
-                          )
-                          .toList();
-                      if (issues.isEmpty) {
+                      if (allIssues != null && allIssues.isEmpty) {
                         return EmptyState(
                           iconAsset: 'assets/icons/inbox.svg',
                           message: l10n.noIssuesYet,
@@ -106,7 +140,7 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                       }
                       // The issues exist, a search or filter hides them all:
                       // no icon or "report" link, just say so.
-                      if (visibleIssues.isEmpty) {
+                      if (issues.isEmpty) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 32),
                           child: Text(
@@ -122,7 +156,7 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         spacing: TSizes.listGap,
                         children: [
-                          for (final issue in visibleIssues)
+                          for (final issue in issues)
                             IssueCard(
                               issue: issue,
                               showCategory: true,
@@ -138,7 +172,9 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                     ),
                     error: (error, _) => LoadError(
                       message: l10n.errorLoadIssues,
-                      onRetry: () => ref.invalidate(issuesProvider),
+                      onRetry: () => query.isEmpty
+                          ? ref.invalidate(issuesProvider)
+                          : ref.invalidate(issueSearchProvider(query)),
                     ),
                     // Retry after an error shows the spinner; a pull-to-refresh
                     // keeps the list (the pull has its own spinner).

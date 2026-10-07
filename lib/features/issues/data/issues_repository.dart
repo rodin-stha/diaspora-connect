@@ -29,12 +29,19 @@ class IssuesRepository {
     await apiCall(() => _dio.post<void>('/issues', data: form));
   }
 
-  /// The user's issues, newest first.
+  /// The user's issues, newest first. [search] and [type] narrow the list
+  /// on the server; leave them null for all issues.
   ///
   /// Only the first page (15 issues) for now. TODO: load more on scroll
   /// using `meta.last_page`.
-  Future<List<Issue>> fetchIssues() async {
-    final res = await apiCall(() => _dio.get<Map<String, dynamic>>('/issues'));
+  Future<List<Issue>> fetchIssues({String? search, String? type}) async {
+    final res = await apiCall(
+      () => _dio.get<Map<String, dynamic>>(
+        '/issues',
+        // Dio builds and URL-encodes the query string: ?search=…&type=…
+        queryParameters: {'search': ?search, 'type': ?type},
+      ),
+    );
 
     return ApiResponse.fromJson(
       res.data!,

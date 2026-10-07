@@ -442,19 +442,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadNewDocument => 'Upload new document';
 
   @override
+  String get errorLoadEmploymentTypes =>
+      'Couldn\'t load the types of business.';
+
+  @override
   String get businessTypeLabel => 'Type of business';
-
-  @override
-  String get businessCaregiving => 'Caregiving';
-
-  @override
-  String get businessAgriculture => 'Agriculture';
-
-  @override
-  String get businessEntrepreneur => 'Entrepreneur';
-
-  @override
-  String get businessEmployee => 'Employee';
 
   @override
   String get workPermitSection => 'Work permit';

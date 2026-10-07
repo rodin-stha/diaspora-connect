@@ -446,19 +446,10 @@ class AppLocalizationsNe extends AppLocalizations {
   String get uploadNewDocument => 'नयाँ कागजात अपलोड गर्नुहोस्';
 
   @override
+  String get errorLoadEmploymentTypes => 'व्यवसायका प्रकारहरू लोड गर्न सकिएन।';
+
+  @override
   String get businessTypeLabel => 'व्यवसायको प्रकार';
-
-  @override
-  String get businessCaregiving => 'हेरचाह (केयरगिभिङ)';
-
-  @override
-  String get businessAgriculture => 'कृषि';
-
-  @override
-  String get businessEntrepreneur => 'उद्यमी';
-
-  @override
-  String get businessEmployee => 'कर्मचारी';
 
   @override
   String get workPermitSection => 'कार्य अनुमति';

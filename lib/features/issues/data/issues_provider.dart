@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/issue.dart';
+import '../models/issue_filter.dart';
 import '../models/new_issue.dart';
 import 'issues_repository.dart';
 
@@ -27,8 +28,24 @@ class IssuesNotifier extends AsyncNotifier<List<Issue>> {
   Future<void> submit(NewIssue issue) async {
     await ref.read(issuesRepositoryProvider).createIssue(issue);
     ref.invalidateSelf();
+    // Any open search may now match the new issue too.
+    ref.invalidate(issueSearchProvider);
   }
 }
+
+/// Issues matching a search and/or filter chip, as the server finds them.
+///
+/// A family: one cached result per [IssueQuery] (like a React Query key).
+/// autoDispose: results for queries no longer on screen are dropped.
+final issueSearchProvider = FutureProvider.autoDispose
+    .family<List<Issue>, IssueQuery>(
+      (ref, query) => ref
+          .read(issuesRepositoryProvider)
+          .fetchIssues(
+            search: query.search.isEmpty ? null : query.search,
+            type: query.filter.apiValue,
+          ),
+    );
 
 /// One issue by its reference number, or null if there's none. Loading and
 /// errors come from [issuesProvider].

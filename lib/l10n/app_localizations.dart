@@ -908,35 +908,17 @@ abstract class AppLocalizations {
   /// **'Upload new document'**
   String get uploadNewDocument;
 
+  /// No description provided for @errorLoadEmploymentTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the types of business.'**
+  String get errorLoadEmploymentTypes;
+
   /// No description provided for @businessTypeLabel.
   ///
   /// In en, this message translates to:
   /// **'Type of business'**
   String get businessTypeLabel;
-
-  /// No description provided for @businessCaregiving.
-  ///
-  /// In en, this message translates to:
-  /// **'Caregiving'**
-  String get businessCaregiving;
-
-  /// No description provided for @businessAgriculture.
-  ///
-  /// In en, this message translates to:
-  /// **'Agriculture'**
-  String get businessAgriculture;
-
-  /// No description provided for @businessEntrepreneur.
-  ///
-  /// In en, this message translates to:
-  /// **'Entrepreneur'**
-  String get businessEntrepreneur;
-
-  /// No description provided for @businessEmployee.
-  ///
-  /// In en, this message translates to:
-  /// **'Employee'**
-  String get businessEmployee;
 
   /// No description provided for @workPermitSection.
   ///

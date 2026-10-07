@@ -53,5 +53,12 @@ class LegalDetails {
     ),
     nationalId: json['national_id_number'] as String? ?? '',
     citizenshipCertificateNumber: json['citizenship_number'] as String? ?? '',
+    passportPhotoPage: _fileName(json['attachment_photo']),
+    israelVisaPage: _fileName(json['attachment_visa']),
   );
+
+  /// An attachment object's file name, or null when it isn't uploaded
+  /// (the API sends `null`).
+  static String? _fileName(Object? attachment) =>
+      (attachment as Map<String, dynamic>?)?['file_name'] as String?;
 }
