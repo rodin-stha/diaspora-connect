@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app/env.dart';
 import 'app/locale_provider.dart';
 import 'app/router.dart';
+import 'app/session_provider_scope.dart';
 import 'features/auth/data/token_storage.dart';
 import 'features/connectivity/connectivity_listener.dart';
 import 'features/in_app_alerts/in_app_alerts_listener.dart';
@@ -23,11 +24,9 @@ Future<void> main() async {
   // TODO: remove once the Saved documents endpoints are wired up.
   if (kDebugMode) debugPrint('[auth] token: $savedToken');
   runApp(
-    ProviderScope(
-      overrides: [
-        sharedPreferencesProvider.overrideWithValue(prefs),
-        savedTokenProvider.overrideWithValue(savedToken),
-      ],
+    SessionProviderScope(
+      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      savedToken: savedToken,
       child: const MyApp(),
     ),
   );
