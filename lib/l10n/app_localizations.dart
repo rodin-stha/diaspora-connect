@@ -1453,6 +1453,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Report a new issue'**
   String get reportNewIssue;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternetConnection;
+
+  /// No description provided for @backOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Back online'**
+  String get backOnline;
 }
 
 class _AppLocalizationsDelegate

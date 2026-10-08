@@ -298,5 +298,7 @@
   "errorMicrophoneAccess": "Allow microphone access in Settings to record a voice note.",
   "noIssuesYet": "You haven't reported any issues yet.",
   "errorLoadIssues": "Couldn't load your issues.",
-  "reportNewIssue": "Report a new issue"
+  "reportNewIssue": "Report a new issue",
+  "noInternetConnection": "No internet connection",
+  "backOnline": "Back online"
 }

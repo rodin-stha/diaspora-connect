@@ -39,6 +39,10 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color successContainer;
   final Color onSuccessContainer;
 
+  // Inverse: dark bar on a light app (offline banner)
+  final Color inverseSurface;
+  final Color onInverseSurface;
+
   const AppColors({
     required this.primary,
     required this.onPrimary,
@@ -62,6 +66,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.onInfoContainer,
     required this.successContainer,
     required this.onSuccessContainer,
+    required this.inverseSurface,
+    required this.onInverseSurface,
   });
 
   /// Values from the Figma design.
@@ -90,6 +96,8 @@ class AppColors extends ThemeExtension<AppColors> {
     onInfoContainer: Color(0xFF4436B0),
     successContainer: Color(0xFFDEF2E4),
     onSuccessContainer: Color(0xFF1F7A4D),
+    inverseSurface: Color(0xFF1C1B1A),
+    onInverseSurface: Color(0xFFFFFFFF),
   );
 
   // To add dark mode: define `static const dark = AppColors(...)` with the
@@ -119,6 +127,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? onInfoContainer,
     Color? successContainer,
     Color? onSuccessContainer,
+    Color? inverseSurface,
+    Color? onInverseSurface,
   }) {
     return AppColors(
       primary: primary ?? this.primary,
@@ -143,6 +153,8 @@ class AppColors extends ThemeExtension<AppColors> {
       onInfoContainer: onInfoContainer ?? this.onInfoContainer,
       successContainer: successContainer ?? this.successContainer,
       onSuccessContainer: onSuccessContainer ?? this.onSuccessContainer,
+      inverseSurface: inverseSurface ?? this.inverseSurface,
+      onInverseSurface: onInverseSurface ?? this.onInverseSurface,
     );
   }
 
@@ -191,6 +203,12 @@ class AppColors extends ThemeExtension<AppColors> {
       onSuccessContainer: Color.lerp(
         onSuccessContainer,
         other.onSuccessContainer,
+        t,
+      )!,
+      inverseSurface: Color.lerp(inverseSurface, other.inverseSurface, t)!,
+      onInverseSurface: Color.lerp(
+        onInverseSurface,
+        other.onInverseSurface,
         t,
       )!,
     );

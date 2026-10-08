@@ -746,4 +746,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportNewIssue => 'Report a new issue';
+
+  @override
+  String get noInternetConnection => 'No internet connection';
+
+  @override
+  String get backOnline => 'Back online';
 }

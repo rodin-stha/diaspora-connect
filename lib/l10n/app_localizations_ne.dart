@@ -750,4 +750,10 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get reportNewIssue => 'नयाँ समस्या रिपोर्ट गर्नुहोस्';
+
+  @override
+  String get noInternetConnection => 'इन्टरनेट जडान छैन';
+
+  @override
+  String get backOnline => 'फेरि अनलाइन भयो';
 }

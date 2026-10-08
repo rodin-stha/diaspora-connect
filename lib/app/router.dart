@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,6 +22,16 @@ import '../features/report_issue/report_issue_screen.dart';
 import '../features/saved_documents/saved_documents_screen.dart';
 import '../features/work_details/work_details_screen.dart';
 import 'main_shell.dart';
+
+/// Wraps a screen in a MaterialPage, which gives iOS its slide transition and
+/// swipe-from-left-edge to go back (Android gets its normal transition).
+///
+/// Use `pageBuilder: (context, state) => _page(state, ...)` instead of
+/// `builder:`: go_router 18 checks for material_ui's MaterialApp, not
+/// Flutter's, so with `builder:` it falls back to pages with no transition
+/// and no back swipe.
+Page<void> _page(GoRouterState state, Widget child) =>
+    MaterialPage(key: state.pageKey, child: child);
 
 final routerProvider = Provider<GoRouter>((ref) {
   // The app-level navigator, above the bottom-nav shell. Pages pushed here
@@ -63,12 +73,12 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginScreen(),
+        pageBuilder: (context, state) => _page(state, const LoginScreen()),
         routes: [
           GoRoute(
             path: 'verify', // → /login/verify
-            builder: (context, state) =>
-                VerifyCodeScreen(phone: state.extra as String),
+            pageBuilder: (context, state) =>
+                _page(state, VerifyCodeScreen(phone: state.extra as String)),
           ),
         ],
       ),
@@ -77,25 +87,32 @@ final routerProvider = Provider<GoRouter>((ref) {
       // with what was typed still there.
       GoRoute(
         path: '/onboarding/personal',
-        builder: (context, state) => const OnboardingPersonalScreen(),
+        pageBuilder: (context, state) =>
+            _page(state, const OnboardingPersonalScreen()),
       ),
       GoRoute(
         path: '/onboarding/legal',
-        builder: (context, state) => const OnboardingLegalScreen(),
+        pageBuilder: (context, state) =>
+            _page(state, const OnboardingLegalScreen()),
       ),
       GoRoute(
         path: '/onboarding/work',
-        builder: (context, state) => const OnboardingWorkScreen(),
+        pageBuilder: (context, state) =>
+            _page(state, const OnboardingWorkScreen()),
       ),
       // Full-screen pages outside the tabs (no bottom nav).
       GoRoute(
         path: '/report-issue',
-        builder: (context, state) => const ReportIssueScreen(),
+        pageBuilder: (context, state) =>
+            _page(state, const ReportIssueScreen()),
         routes: [
           GoRoute(
             path: 'location', // → /report-issue/location
-            builder: (context, state) => LocationPickerScreen(
-              initial: state.extra as PinnedLocation?,
+            pageBuilder: (context, state) => _page(
+              state,
+              LocationPickerScreen(
+                initial: state.extra as PinnedLocation?,
+              ),
             ),
           ),
         ],
@@ -108,7 +125,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/home',
-                builder: (context, state) => const HomeScreen(),
+                pageBuilder: (context, state) =>
+                    _page(state, const HomeScreen()),
               ),
             ],
           ),
@@ -116,14 +134,18 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/issues',
-                builder: (context, state) => const IssuesScreen(),
+                pageBuilder: (context, state) =>
+                    _page(state, const IssuesScreen()),
                 routes: [
                   GoRoute(
                     path: ':reference', // → /issues/GN-2083-004512
                     // Full screen, no bottom nav (as in the design)
                     parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) => IssueDetailScreen(
-                      reference: state.pathParameters['reference']!,
+                    pageBuilder: (context, state) => _page(
+                      state,
+                      IssueDetailScreen(
+                        reference: state.pathParameters['reference']!,
+                      ),
                     ),
                   ),
                 ],
@@ -134,7 +156,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/activity',
-                builder: (context, state) => const ActivityScreen(),
+                pageBuilder: (context, state) =>
+                    _page(state, const ActivityScreen()),
               ),
             ],
           ),
@@ -142,33 +165,38 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/profile',
-                builder: (context, state) => const ProfileScreen(),
+                pageBuilder: (context, state) =>
+                    _page(state, const ProfileScreen()),
                 routes: [
                   GoRoute(
                     path: 'personal-details', // → /profile/personal-details
                     parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) => const PersonalDetailsScreen(),
+                    pageBuilder: (context, state) =>
+                        _page(state, const PersonalDetailsScreen()),
                   ),
                   GoRoute(
                     path: 'legal-details', // → /profile/legal-details
                     parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) => const LegalDetailsScreen(),
+                    pageBuilder: (context, state) =>
+                        _page(state, const LegalDetailsScreen()),
                   ),
                   GoRoute(
                     path: 'work-details', // → /profile/work-details
                     parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) => const WorkDetailsScreen(),
+                    pageBuilder: (context, state) =>
+                        _page(state, const WorkDetailsScreen()),
                   ),
                   GoRoute(
                     path: 'notification-settings',
                     parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) =>
-                        const NotificationSettingsScreen(),
+                    pageBuilder: (context, state) =>
+                        _page(state, const NotificationSettingsScreen()),
                   ),
                   GoRoute(
                     path: 'saved-documents', // → /profile/saved-documents
                     parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) => const SavedDocumentsScreen(),
+                    pageBuilder: (context, state) =>
+                        _page(state, const SavedDocumentsScreen()),
                   ),
                 ],
               ),

@@ -24,8 +24,18 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>GMSApiKey</key>
+	<string>$(MAPS_API_KEY)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Take photos of your documents to upload them.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Start the map at your location so you can pin where an issue happened.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Record a voice note to add to an issue you report.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Choose photos of your documents to upload them.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -66,15 +76,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Take photos of your documents to upload them.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Choose photos of your documents to upload them.</string>
-	<key>GMSApiKey</key>
-	<string>$(MAPS_API_KEY)</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Start the map at your location so you can pin where an issue happened.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Record a voice note to add to an issue you report.</string>
 </dict>
 </plist>

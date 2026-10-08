@@ -9,6 +9,7 @@ import 'app/env.dart';
 import 'app/locale_provider.dart';
 import 'app/router.dart';
 import 'features/auth/data/token_storage.dart';
+import 'features/connectivity/connectivity_listener.dart';
 import 'features/in_app_alerts/in_app_alerts_listener.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
@@ -42,8 +43,10 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: TAppTheme.light,
       routerConfig: ref.watch(routerProvider),
-      // Wraps every screen, so alerts show wherever the user is.
-      builder: (context, child) => InAppAlertsListener(child: child!),
+      // Wraps every screen, so alerts and the offline message show wherever
+      // the user is.
+      builder: (context, child) =>
+          InAppAlertsListener(child: ConnectivityListener(child: child!)),
       locale: ref.watch(localeProvider),
       supportedLocales: supportedAppLocales,
       localizationsDelegates: const [
