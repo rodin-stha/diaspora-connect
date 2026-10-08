@@ -763,4 +763,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String announcementLabel(int index, int count) {
     return 'Announcement $index of $count';
   }
+
+  @override
+  String get done => 'Done';
 }

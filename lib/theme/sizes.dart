@@ -45,4 +45,7 @@ class TSizes {
   static const double iconLg = 26.0;
   static const double iconEmptyState = 48.0; // above "nothing here yet"
   static const double spinnerSm = 18.0; // loading spinner inside a button
+
+  // "Done" bar above the keyboard (iOS standard toolbar height)
+  static const double keyboardBarHeight = 44.0;
 }

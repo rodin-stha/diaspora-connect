@@ -1483,6 +1483,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Announcement {index} of {count}'**
   String announcementLabel(int index, int count);
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
 }
 
 class _AppLocalizationsDelegate

@@ -767,4 +767,7 @@ class AppLocalizationsNe extends AppLocalizations {
   String announcementLabel(int index, int count) {
     return 'सूचना $count मध्ये $index';
   }
+
+  @override
+  String get done => 'भयो';
 }

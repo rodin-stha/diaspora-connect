@@ -14,6 +14,7 @@ import 'features/connectivity/connectivity_listener.dart';
 import 'features/in_app_alerts/in_app_alerts_listener.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
+import 'widgets/keyboard_done_bar.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,10 +43,11 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: TAppTheme.light,
       routerConfig: ref.watch(routerProvider),
-      // Wraps every screen, so alerts and the offline message show wherever
-      // the user is.
-      builder: (context, child) =>
-          InAppAlertsListener(child: ConnectivityListener(child: child!)),
+      // Wraps every screen, so alerts, the offline message and the keyboard's
+      // Done bar show wherever the user is.
+      builder: (context, child) => InAppAlertsListener(
+        child: ConnectivityListener(child: KeyboardDoneBar(child: child!)),
+      ),
       locale: ref.watch(localeProvider),
       supportedLocales: supportedAppLocales,
       localizationsDelegates: const [

@@ -230,5 +230,6 @@
   "backOnline": "फेरि अनलाइन भयो",
   "announcements": "सूचनाहरू",
   "errorLoadAnnouncements": "सूचनाहरू लोड गर्न सकिएन।",
-  "announcementLabel": "सूचना {count} मध्ये {index}"
+  "announcementLabel": "सूचना {count} मध्ये {index}",
+  "done": "भयो"
 }
