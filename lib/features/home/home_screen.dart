@@ -11,7 +11,10 @@ import '../../widgets/app_background.dart';
 import '../../widgets/issue_card.dart';
 import '../../widgets/load_error.dart';
 import '../../widgets/skeleton.dart';
+import '../announcements/widgets/announcements_section.dart';
 import '../issues/data/issues_provider.dart';
+import '../notification_settings/data/notification_settings_provider.dart';
+import '../notification_settings/models/notification_setting.dart';
 import '../profile/data/user_provider.dart';
 import 'widgets/home_header.dart';
 import 'widgets/report_issue_card.dart';
@@ -31,6 +34,12 @@ class HomeScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final user = ref.watch(currentUserProvider);
     final issuesAsync = ref.watch(issuesProvider);
+    // `select`: rebuild only when this one switch changes, not the others.
+    final showAnnouncements = ref.watch(
+      notificationSettingsProvider.select(
+        (settings) => settings[NotificationSetting.embassyAnnouncements]!,
+      ),
+    );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // White status bar icons on the blue header
@@ -57,6 +66,8 @@ class HomeScreen extends ConsumerWidget {
                         onTap: () => context.push('/report-issue'),
                       ),
                       const SizedBox(height: TSizes.spaceBtwSections),
+                      // Off: not built, so not fetched either.
+                      if (showAnnouncements) const AnnouncementsSection(),
                       _SectionHeader(
                         title: l10n.myIssues,
                         actionLabel: l10n.viewAll,

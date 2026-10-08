@@ -1465,6 +1465,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back online'**
   String get backOnline;
+
+  /// No description provided for @announcements.
+  ///
+  /// In en, this message translates to:
+  /// **'Announcements'**
+  String get announcements;
+
+  /// No description provided for @errorLoadAnnouncements.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load announcements.'**
+  String get errorLoadAnnouncements;
+
+  /// Screen reader label for a carousel image without a title
+  ///
+  /// In en, this message translates to:
+  /// **'Announcement {index} of {count}'**
+  String announcementLabel(int index, int count);
 }
 
 class _AppLocalizationsDelegate

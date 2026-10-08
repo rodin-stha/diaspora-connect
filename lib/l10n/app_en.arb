@@ -300,5 +300,19 @@
   "errorLoadIssues": "Couldn't load your issues.",
   "reportNewIssue": "Report a new issue",
   "noInternetConnection": "No internet connection",
-  "backOnline": "Back online"
+  "backOnline": "Back online",
+  "announcements": "Announcements",
+  "errorLoadAnnouncements": "Couldn't load announcements.",
+  "announcementLabel": "Announcement {index} of {count}",
+  "@announcementLabel": {
+    "description": "Screen reader label for a carousel image without a title",
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -227,5 +227,8 @@
   "errorLoadIssues": "तपाईंका समस्याहरू लोड गर्न सकिएन।",
   "reportNewIssue": "नयाँ समस्या रिपोर्ट गर्नुहोस्",
   "noInternetConnection": "इन्टरनेट जडान छैन",
-  "backOnline": "फेरि अनलाइन भयो"
+  "backOnline": "फेरि अनलाइन भयो",
+  "announcements": "सूचनाहरू",
+  "errorLoadAnnouncements": "सूचनाहरू लोड गर्न सकिएन।",
+  "announcementLabel": "सूचना {count} मध्ये {index}"
 }

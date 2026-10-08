@@ -752,4 +752,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backOnline => 'Back online';
+
+  @override
+  String get announcements => 'Announcements';
+
+  @override
+  String get errorLoadAnnouncements => 'Couldn\'t load announcements.';
+
+  @override
+  String announcementLabel(int index, int count) {
+    return 'Announcement $index of $count';
+  }
 }

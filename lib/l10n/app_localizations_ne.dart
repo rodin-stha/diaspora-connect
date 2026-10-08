@@ -756,4 +756,15 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get backOnline => 'फेरि अनलाइन भयो';
+
+  @override
+  String get announcements => 'सूचनाहरू';
+
+  @override
+  String get errorLoadAnnouncements => 'सूचनाहरू लोड गर्न सकिएन।';
+
+  @override
+  String announcementLabel(int index, int count) {
+    return 'सूचना $count मध्ये $index';
+  }
 }

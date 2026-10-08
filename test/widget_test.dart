@@ -698,15 +698,15 @@ void main() {
           .value;
 
       expect(isOn('SMS alerts'), isTrue);
-      expect(isOn('Embassy & DoFE announcements'), isFalse);
+      expect(isOn('Embassy & DoFE announcements'), isTrue);
 
       // Tapping the row label (not just the switch) flips it
       await tester.tap(find.text('Embassy & DoFE announcements'));
       await tester.pumpAndSettle();
-      expect(isOn('Embassy & DoFE announcements'), isTrue);
+      expect(isOn('Embassy & DoFE announcements'), isFalse);
 
       final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getBool('notify_embassyAnnouncements'), isTrue);
+      expect(prefs.getBool('notify_embassyAnnouncements'), isFalse);
     });
 
     testWidgets('language pill switches the app to Nepali', (tester) async {
