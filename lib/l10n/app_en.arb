@@ -184,7 +184,7 @@
   "errorLoadEmploymentTypes": "Couldn't load the types of business.",
   "businessTypeLabel": "Type of business",
   "workPermitSection": "Work permit",
-  "caregivingDetailsSection": "Caregiving details",
+  "otherDetailsSection": "Other details",
   "careArrangementLabel": "Live-in or live-out",
   "liveIn": "Live-in",
   "liveOut": "Live-out",

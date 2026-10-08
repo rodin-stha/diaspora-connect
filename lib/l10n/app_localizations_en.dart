@@ -466,7 +466,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workPermitSection => 'Work permit';
 
   @override
-  String get caregivingDetailsSection => 'Caregiving details';
+  String get otherDetailsSection => 'Other details';
 
   @override
   String get careArrangementLabel => 'Live-in or live-out';

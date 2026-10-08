@@ -950,11 +950,11 @@ abstract class AppLocalizations {
   /// **'Work permit'**
   String get workPermitSection;
 
-  /// No description provided for @caregivingDetailsSection.
+  /// No description provided for @otherDetailsSection.
   ///
   /// In en, this message translates to:
-  /// **'Caregiving details'**
-  String get caregivingDetailsSection;
+  /// **'Other details'**
+  String get otherDetailsSection;
 
   /// No description provided for @careArrangementLabel.
   ///

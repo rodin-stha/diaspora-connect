@@ -156,7 +156,7 @@ class _WorkDetailsFormState extends ConsumerState<WorkDetailsForm> {
 
           if (_allowsLiveIn) ...[
             FormSectionHeader(
-              title: l10n.caregivingDetailsSection,
+              title: l10n.otherDetailsSection,
               showDivider: false,
             ),
             SelectField<CareArrangement>(

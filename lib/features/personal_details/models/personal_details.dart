@@ -58,13 +58,13 @@ class PersonalDetails {
 
   const PersonalDetails.empty()
     : this(
-        name: 'Rodin Shrestha',
-        neighborhoodName: 'Test',
-        postalCode: '1231231',
-        contactPersonName: 'Rodin Shrestha',
-        contactPersonRelationship: 'Mother',
-        contactPersonContact: '+977 9845687142',
-        contactPersonEmail: 'test@gmail.com',
+        name: '',
+        neighborhoodName: '',
+        postalCode: '',
+        contactPersonName: '',
+        contactPersonRelationship: '',
+        contactPersonContact: '',
+        contactPersonEmail: '',
       );
 
   /// The request body for saving the details. The API's snake_case keys

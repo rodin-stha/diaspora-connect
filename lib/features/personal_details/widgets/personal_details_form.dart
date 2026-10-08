@@ -204,7 +204,12 @@ class _PersonalDetailsFormState extends ConsumerState<PersonalDetailsForm> {
               ],
             ),
 
-            FormSectionHeader(title: l10n.homeInIsraelSection),
+            // The council type chips below have no label of their own:
+            // this heading is it, so it carries their "required" mark.
+            FormSectionHeader(
+              title: l10n.homeInIsraelSection,
+              isRequired: true,
+            ),
             FormField<AuthorityType>(
               initialValue: _authorityType,
               validator: requiredChoice(l10n.errorCouncilType),

@@ -469,7 +469,7 @@ class AppLocalizationsNe extends AppLocalizations {
   String get workPermitSection => 'कार्य अनुमति';
 
   @override
-  String get caregivingDetailsSection => 'हेरचाह कामको विवरण';
+  String get otherDetailsSection => 'अन्य विवरण';
 
   @override
   String get careArrangementLabel => 'घरमै बस्ने वा बाहिर बस्ने';

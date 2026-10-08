@@ -142,7 +142,7 @@
   "errorLoadEmploymentTypes": "व्यवसायका प्रकारहरू लोड गर्न सकिएन।",
   "businessTypeLabel": "व्यवसायको प्रकार",
   "workPermitSection": "कार्य अनुमति",
-  "caregivingDetailsSection": "हेरचाह कामको विवरण",
+  "otherDetailsSection": "अन्य विवरण",
   "careArrangementLabel": "घरमै बस्ने वा बाहिर बस्ने",
   "liveIn": "घरमै बस्ने",
   "liveOut": "बाहिर बस्ने",
