@@ -10,12 +10,17 @@ class Env {
 
   static const isProd = env == 'prod';
 
-  /// Fails fast in debug if the app was started without an env file.
+  /// Fails fast if the app was built without an env file.
+  ///
+  /// A real check, not an `assert`: asserts are stripped from release
+  /// builds, so a release build without the env file would otherwise start
+  /// with an empty base URL and every API call would silently fail.
   static void validate() {
-    assert(
-      apiBaseUrl.isNotEmpty,
-      'API_BASE_URL is missing. Run with '
-      '--dart-define-from-file=env/dev.json',
-    );
+    if (apiBaseUrl.isEmpty) {
+      throw StateError(
+        'API_BASE_URL is missing. Run with '
+        '--dart-define-from-file=env/dev.json',
+      );
+    }
   }
 }

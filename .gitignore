@@ -51,6 +51,7 @@ app.*.map.json
 # the app binary, so never put real secrets here.
 env/*.json
 !env/example.json
+/env.json
 
 # Google Maps key for iOS (see ios/Flutter/Secrets.example.xcconfig)
 ios/Flutter/Secrets.xcconfig
