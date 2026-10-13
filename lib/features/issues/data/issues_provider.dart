@@ -45,6 +45,22 @@ class IssuesNotifier extends AsyncNotifier<List<Issue>> {
     // Any open search may now match the new issue too.
     ref.invalidate(issueSearchProvider);
   }
+
+  /// Sends the user's answer on an issue that needs info, then fetches the
+  /// issue and the lists again: the reply may have changed its status.
+  /// Throws [ApiException] if sending fails.
+  Future<void> reply(
+    String reference, {
+    required String message,
+    String? photoPath,
+  }) async {
+    await ref
+        .read(issuesRepositoryProvider)
+        .replyToIssue(reference, message: message, photoPath: photoPath);
+    ref.invalidate(issueDetailProvider(reference));
+    ref.invalidateSelf();
+    ref.invalidate(issueSearchProvider);
+  }
 }
 
 /// Issues matching a search and/or filter chip, as the server finds them.

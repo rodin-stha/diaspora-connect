@@ -272,6 +272,54 @@ abstract class AppLocalizations {
   /// **'Escalated'**
   String get statusEscalated;
 
+  /// No description provided for @statusNeedsInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs info'**
+  String get statusNeedsInfo;
+
+  /// No description provided for @replyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reply'**
+  String get replyLabel;
+
+  /// No description provided for @viewPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'View photo'**
+  String get viewPhoto;
+
+  /// No description provided for @replyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write the details you were asked for'**
+  String get replyHint;
+
+  /// No description provided for @replyAddPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo'**
+  String get replyAddPhoto;
+
+  /// No description provided for @sendReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reply'**
+  String get sendReply;
+
+  /// No description provided for @replySent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reply has been sent'**
+  String get replySent;
+
+  /// No description provided for @errorReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a reply or add a photo'**
+  String get errorReply;
+
   /// No description provided for @statusNew.
   ///
   /// In en, this message translates to:

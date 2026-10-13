@@ -12,9 +12,11 @@ import '../../utils/formatters.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
 import '../../widgets/load_error.dart';
+import '../../widgets/soft_bouncing_scroll_physics.dart';
 import '../../widgets/status_pill.dart';
 import 'data/issues_provider.dart';
 import 'models/issue.dart';
+import 'widgets/info_reply_form.dart';
 import 'widgets/issue_timeline.dart';
 
 /// "Track issue": one issue's details and progress timeline.
@@ -39,45 +41,61 @@ class IssueDetailScreen extends ConsumerWidget {
           // the issue.
           body: RefreshIndicator(
             onRefresh: () => ref.refresh(issueDetailProvider(reference).future),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.fromLTRB(
-                TSizes.pagePadding,
-                topPadding,
-                TSizes.pagePadding,
-                30,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  BackTitleBar(
-                    title: l10n.trackIssueTitle,
-                    fallbackLocation: '/issues',
-                  ),
-                  const SizedBox(height: TSizes.timelineGap),
-                  issueAsync.when(
-                    data: (issue) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      spacing: TSizes.timelineGap,
-                      children: [
-                        _IssueSummary(issue: issue),
-                        IssueTimeline(issue: issue),
-                      ],
+            // A SingleChildScrollView is only as tall as its content, so on a
+            // short page the empty space below wouldn't react to the pull.
+            // Filling the screen makes the whole page draggable.
+            child: SizedBox.expand(
+              child: SingleChildScrollView(
+                // Bouncing: the page follows the finger on a pull and glides
+                // back on release (Android would otherwise stay put).
+                // AlwaysScrollable as parent keeps that working on a short page.
+                physics: const SoftBouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: EdgeInsets.fromLTRB(
+                  TSizes.pagePadding,
+                  topPadding,
+                  TSizes.pagePadding,
+                  30,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    BackTitleBar(
+                      title: l10n.trackIssueTitle,
+                      fallbackLocation: '/issues',
                     ),
-                    loading: () => const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32),
-                      child: Center(child: CircularProgressIndicator()),
+                    const SizedBox(height: TSizes.timelineGap),
+                    issueAsync.when(
+                      data: (issue) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        spacing: TSizes.timelineGap,
+                        children: [
+                          _IssueSummary(issue: issue),
+                          IssueTimeline(issue: issue),
+                          // Right under the case worker's question, the
+                          // last entry of the timeline.
+                          if (issue.status == IssueStatus.needsInfo)
+                            InfoReplyForm(reference: reference),
+                        ],
+                      ),
+                      loading: () => const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      error: (error, _) => LoadError(
+                        message: l10n.errorLoadIssues,
+                        onRetry: () =>
+                            ref.invalidate(issueDetailProvider(reference)),
+                      ),
+                      // Retry after an error shows the spinner; a pull-to-refresh
+                      // keeps the issue (the pull has its own spinner).
+                      skipLoadingOnRefresh: !issueAsync.hasError,
                     ),
-                    error: (error, _) => LoadError(
-                      message: l10n.errorLoadIssues,
-                      onRetry: () =>
-                          ref.invalidate(issueDetailProvider(reference)),
-                    ),
-                    // Retry after an error shows the spinner; a pull-to-refresh
-                    // keeps the issue (the pull has its own spinner).
-                    skipLoadingOnRefresh: !issueAsync.hasError,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

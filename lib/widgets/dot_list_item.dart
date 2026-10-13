@@ -16,6 +16,13 @@ class DotListItem extends StatelessWidget {
 
   /// Smaller grey lines under the title (description, date…).
   final List<String> details;
+
+  /// A message under the details, semibold so it stands out from them
+  /// (e.g. what a case worker asks for). Null for none.
+  final String? note;
+
+  /// Anything else to show under the text (e.g. a reply with a photo).
+  final Widget? footer;
   final Color dotColor;
   final double dotSize;
 
@@ -34,6 +41,8 @@ class DotListItem extends StatelessWidget {
     super.key,
     required this.title,
     this.details = const [],
+    this.note,
+    this.footer,
     required this.dotColor,
     this.dotSize = TSizes.dotMd,
     this.connectorColor,
@@ -122,6 +131,20 @@ class DotListItem extends StatelessWidget {
                         color: colors.textSecondary,
                       ),
                     ),
+                  ],
+                  if (note case final note?) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      note,
+                      style: TTextStyles.bodySmall.copyWith(
+                        color: colors.textSecondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                  if (footer case final footer?) ...[
+                    const SizedBox(height: TSizes.sm),
+                    footer,
                   ],
                 ],
               ),

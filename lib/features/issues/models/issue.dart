@@ -11,6 +11,9 @@ enum IssueStatus {
   /// A case worker has taken it but not started yet.
   assigned,
   inProgress,
+
+  /// The case worker is waiting for more details from the user.
+  needsInfo,
   escalated,
   resolved,
 
@@ -23,12 +26,53 @@ class StatusChange {
   final IssueStatus status;
   final DateTime date;
 
-  const StatusChange(this.status, this.date);
+  /// A message sent with the change, e.g. what the case worker asks for
+  /// on "Needs info". Null when there is none.
+  final String? body;
 
-  factory StatusChange.fromJson(Map<String, dynamic> json) => StatusChange(
-    Issue.statusFromJson(json['to_status']),
-    DateTime.parse(json['changed_at'] as String).toLocal(),
-  );
+  /// What the user replied to [body]. Null until they have.
+  final IssueAnswer? answer;
+
+  const StatusChange(this.status, this.date, {this.body, this.answer});
+
+  factory StatusChange.fromJson(Map<String, dynamic> json) {
+    final answer = json['answer'];
+
+    return StatusChange(
+      Issue.statusFromJson(json['to_status']),
+      DateTime.parse(json['changed_at'] as String).toLocal(),
+      body: json['body'] as String?,
+      answer: answer is Map<String, dynamic>
+          ? IssueAnswer.fromJson(answer)
+          : null,
+    );
+  }
+}
+
+/// The user's reply to a case worker's question: text, a photo, or both.
+class IssueAnswer {
+  final String? body;
+
+  /// Where to download the attached photo; null if there's none (or the
+  /// attachment isn't an image). The link is signed and stops working
+  /// after a while; fetching the issue again gives a fresh one.
+  final String? photoUrl;
+  final DateTime date;
+
+  const IssueAnswer({this.body, this.photoUrl, required this.date});
+
+  factory IssueAnswer.fromJson(Map<String, dynamic> json) {
+    final attachment = json['attachment'];
+    final isImage =
+        attachment is Map<String, dynamic> &&
+        (attachment['mime_type'] as String? ?? '').startsWith('image/');
+
+    return IssueAnswer(
+      body: json['body'] as String?,
+      photoUrl: isImage ? attachment['url'] as String? : null,
+      date: DateTime.parse(json['answered_at'] as String).toLocal(),
+    );
+  }
 }
 
 class Issue {
@@ -102,6 +146,7 @@ class Issue {
       switch ((json as Map<String, dynamic>?)?['value']) {
         'assigned' => IssueStatus.assigned,
         'in_progress' => IssueStatus.inProgress,
+        'needs_info' => IssueStatus.needsInfo,
         'escalated' => IssueStatus.escalated,
         'resolved' || 'closed' => IssueStatus.resolved,
         'rejected' || 'failed' => IssueStatus.rejected,

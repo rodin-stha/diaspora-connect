@@ -111,6 +111,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusEscalated => 'Escalated';
 
   @override
+  String get statusNeedsInfo => 'Needs info';
+
+  @override
+  String get replyLabel => 'Your reply';
+
+  @override
+  String get viewPhoto => 'View photo';
+
+  @override
+  String get replyHint => 'Write the details you were asked for';
+
+  @override
+  String get replyAddPhoto => 'Add a photo';
+
+  @override
+  String get sendReply => 'Send reply';
+
+  @override
+  String get replySent => 'Your reply has been sent';
+
+  @override
+  String get errorReply => 'Write a reply or add a photo';
+
+  @override
   String get statusNew => 'New';
 
   @override

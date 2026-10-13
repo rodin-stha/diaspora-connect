@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../../../theme/colors.dart';
-import '../../../theme/sizes.dart';
-import '../../../widgets/skeleton.dart';
+import '../theme/colors.dart';
+import '../theme/sizes.dart';
+import 'skeleton.dart';
 
-/// An announcement's image from the network, filling its box: a pulsing
-/// placeholder while it loads, an icon if it can't.
-class AnnouncementImage extends StatelessWidget {
+/// An image from the network, filling its box: a pulsing placeholder
+/// while it loads, an icon if it can't.
+class NetworkPhoto extends StatelessWidget {
   final String url;
 
-  /// [BoxFit.cover] crops to fill (carousel); [BoxFit.contain] shows it
-  /// whole (full-screen view).
+  /// [BoxFit.cover] crops to fill (carousel, thumbnail); [BoxFit.contain]
+  /// shows it whole (full-screen view).
   final BoxFit fit;
 
-  const AnnouncementImage({
+  const NetworkPhoto({
     super.key,
     required this.url,
     this.fit = BoxFit.cover,

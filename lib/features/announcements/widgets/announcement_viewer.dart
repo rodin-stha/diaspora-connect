@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import '../../../theme/colors.dart';
 import '../../../theme/sizes.dart';
 import '../../../theme/text_styles.dart';
+import '../../../widgets/network_photo.dart';
 import '../models/announcement.dart';
-import 'announcement_image.dart';
 
 /// Opens [announcement] full screen, over the bottom nav.
 void showAnnouncement(BuildContext context, Announcement announcement) =>
@@ -51,7 +51,7 @@ class AnnouncementViewer extends StatelessWidget {
               Expanded(
                 child: InteractiveViewer(
                   maxScale: _maxZoom,
-                  child: AnnouncementImage(
+                  child: NetworkPhoto(
                     url: announcement.imageUrl,
                     fit: BoxFit.contain,
                   ),

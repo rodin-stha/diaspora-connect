@@ -110,6 +110,30 @@ class AppLocalizationsNe extends AppLocalizations {
   String get statusEscalated => 'माथि पठाइएको';
 
   @override
+  String get statusNeedsInfo => 'थप जानकारी चाहिन्छ';
+
+  @override
+  String get replyLabel => 'तपाईंको जवाफ';
+
+  @override
+  String get viewPhoto => 'फोटो हेर्नुहोस्';
+
+  @override
+  String get replyHint => 'मागिएको विवरण लेख्नुहोस्';
+
+  @override
+  String get replyAddPhoto => 'फोटो थप्नुहोस्';
+
+  @override
+  String get sendReply => 'जवाफ पठाउनुहोस्';
+
+  @override
+  String get replySent => 'तपाईंको जवाफ पठाइयो';
+
+  @override
+  String get errorReply => 'जवाफ लेख्नुहोस् वा फोटो थप्नुहोस्';
+
+  @override
   String get statusNew => 'नयाँ';
 
   @override

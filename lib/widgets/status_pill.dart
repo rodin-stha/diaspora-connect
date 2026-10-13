@@ -12,6 +12,7 @@ String issueStatusLabel(AppLocalizations l10n, IssueStatus status) =>
       IssueStatus.submitted => l10n.statusNew,
       IssueStatus.assigned => l10n.statusAssigned,
       IssueStatus.inProgress => l10n.statusInProgress,
+      IssueStatus.needsInfo => l10n.statusNeedsInfo,
       IssueStatus.escalated => l10n.statusEscalated,
       IssueStatus.resolved => l10n.statusResolved,
       IssueStatus.rejected => l10n.statusRejected,
@@ -37,6 +38,11 @@ class StatusPill extends StatelessWidget {
         colors.onInfoContainer,
       ),
       IssueStatus.inProgress => (
+        colors.warningContainer,
+        colors.onWarningContainer,
+      ),
+      // Same colours as In progress: open, and waiting on the user.
+      IssueStatus.needsInfo => (
         colors.warningContainer,
         colors.onWarningContainer,
       ),

@@ -16,6 +16,7 @@ import '../../widgets/issue_card.dart';
 import '../../widgets/load_error.dart';
 import '../../widgets/search_field.dart';
 import '../../widgets/selectable_chip.dart';
+import '../../widgets/soft_bouncing_scroll_physics.dart';
 import 'data/issues_provider.dart';
 import 'models/issue_filter.dart';
 
@@ -87,100 +88,111 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
               if (!query.isEmpty)
                 ref.refresh(issueSearchProvider(query).future),
             ]),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              padding: EdgeInsets.fromLTRB(
-                TSizes.pagePadding,
-                topPadding,
-                TSizes.pagePadding,
-                TSizes.xl,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    l10n.issuesTitle,
-                    style: TTextStyles.titleLarge.copyWith(
-                      color: colors.textPrimary,
+            // A SingleChildScrollView is only as tall as its content, so on a
+            // short list the empty space below wouldn't react to the pull.
+            // Filling the screen makes the whole page draggable.
+            child: SizedBox.expand(
+              child: SingleChildScrollView(
+                // Bouncing: the page follows the finger on a pull and glides
+                // back on release (Android would otherwise stay put).
+                // AlwaysScrollable as parent keeps that working on a short list.
+                physics: const SoftBouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: EdgeInsets.fromLTRB(
+                  TSizes.pagePadding,
+                  topPadding,
+                  TSizes.pagePadding,
+                  TSizes.xl,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      l10n.issuesTitle,
+                      style: TTextStyles.titleLarge.copyWith(
+                        color: colors.textPrimary,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: TSizes.listGap),
-                  SearchField(
-                    hintText: l10n.searchIssuesHint,
-                    onChanged: _onSearchChanged,
-                  ),
-                  const SizedBox(height: TSizes.listGap),
-                  Wrap(
-                    spacing: 3,
-                    runSpacing: TSizes.sm,
-                    children: [
-                      for (final filter in IssueFilter.values)
-                        SelectableChip(
-                          label: _filterLabel(
-                            l10n,
-                            filter,
-                            allIssues?.length ?? 0,
-                          ),
-                          isSelected: filter == _filter,
-                          onTap: () => setState(() => _filter = filter),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: TSizes.listGap),
-                  issuesAsync.when(
-                    data: (issues) {
-                      if (allIssues != null && allIssues.isEmpty) {
-                        return EmptyState(
-                          iconAsset: 'assets/icons/inbox.svg',
-                          message: l10n.noIssuesYet,
-                          actionLabel: l10n.reportNewIssue,
-                          onAction: () => context.push('/report-issue'),
-                        );
-                      }
-                      // The issues exist, a search or filter hides them all:
-                      // no icon or "report" link, just say so.
-                      if (issues.isEmpty) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 32),
-                          child: Text(
-                            l10n.noIssuesFound,
-                            textAlign: TextAlign.center,
-                            style: TTextStyles.body.copyWith(
-                              color: colors.textSecondary,
+                    const SizedBox(height: TSizes.listGap),
+                    SearchField(
+                      hintText: l10n.searchIssuesHint,
+                      onChanged: _onSearchChanged,
+                    ),
+                    const SizedBox(height: TSizes.listGap),
+                    Wrap(
+                      spacing: 3,
+                      runSpacing: TSizes.sm,
+                      children: [
+                        for (final filter in IssueFilter.values)
+                          SelectableChip(
+                            label: _filterLabel(
+                              l10n,
+                              filter,
+                              allIssues?.length ?? 0,
                             ),
+                            isSelected: filter == _filter,
+                            onTap: () => setState(() => _filter = filter),
                           ),
-                        );
-                      }
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        spacing: TSizes.listGap,
-                        children: [
-                          for (final issue in issues)
-                            IssueCard(
-                              issue: issue,
-                              showCategory: true,
-                              onTap: () =>
-                                  context.push('/issues/${issue.reference}'),
+                      ],
+                    ),
+                    const SizedBox(height: TSizes.listGap),
+                    issuesAsync.when(
+                      data: (issues) {
+                        if (allIssues != null && allIssues.isEmpty) {
+                          return EmptyState(
+                            iconAsset: 'assets/icons/inbox.svg',
+                            message: l10n.noIssuesYet,
+                            actionLabel: l10n.reportNewIssue,
+                            onAction: () => context.push('/report-issue'),
+                          );
+                        }
+                        // The issues exist, a search or filter hides them all:
+                        // no icon or "report" link, just say so.
+                        if (issues.isEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 32),
+                            child: Text(
+                              l10n.noIssuesFound,
+                              textAlign: TextAlign.center,
+                              style: TTextStyles.body.copyWith(
+                                color: colors.textSecondary,
+                              ),
                             ),
-                        ],
-                      );
-                    },
-                    loading: () => const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32),
-                      child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          spacing: TSizes.listGap,
+                          children: [
+                            for (final issue in issues)
+                              IssueCard(
+                                issue: issue,
+                                showCategory: true,
+                                onTap: () =>
+                                    context.push('/issues/${issue.reference}'),
+                              ),
+                          ],
+                        );
+                      },
+                      loading: () => const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      error: (error, _) => LoadError(
+                        message: l10n.errorLoadIssues,
+                        onRetry: () => query.isEmpty
+                            ? ref.invalidate(issuesProvider)
+                            : ref.invalidate(issueSearchProvider(query)),
+                      ),
+                      // Retry after an error shows the spinner; a pull-to-refresh
+                      // keeps the list (the pull has its own spinner).
+                      skipLoadingOnRefresh: !issuesAsync.hasError,
                     ),
-                    error: (error, _) => LoadError(
-                      message: l10n.errorLoadIssues,
-                      onRetry: () => query.isEmpty
-                          ? ref.invalidate(issuesProvider)
-                          : ref.invalidate(issueSearchProvider(query)),
-                    ),
-                    // Retry after an error shows the spinner; a pull-to-refresh
-                    // keeps the list (the pull has its own spinner).
-                    skipLoadingOnRefresh: !issuesAsync.hasError,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

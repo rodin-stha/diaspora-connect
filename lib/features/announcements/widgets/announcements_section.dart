@@ -6,11 +6,11 @@ import '../../../theme/colors.dart';
 import '../../../theme/sizes.dart';
 import '../../../theme/text_styles.dart';
 import '../../../widgets/load_error.dart';
+import '../../../widgets/network_photo.dart';
 import '../../../widgets/page_dots.dart';
 import '../../../widgets/skeleton.dart';
 import '../data/announcements_provider.dart';
 import '../models/announcement.dart';
-import 'announcement_image.dart';
 import 'announcement_viewer.dart';
 
 /// Wide, like a banner. Posters are cropped to fit; tapping one shows it
@@ -120,7 +120,7 @@ class _CarouselState extends State<_Carousel> {
                   onTap: () => showAnnouncement(context, announcement),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(TSizes.cardRadius),
-                    child: AnnouncementImage(url: announcement.imageUrl),
+                    child: NetworkPhoto(url: announcement.imageUrl),
                   ),
                 ),
               );
