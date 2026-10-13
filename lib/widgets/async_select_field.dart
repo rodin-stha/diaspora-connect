@@ -51,7 +51,8 @@ class AsyncSelectField<T> extends StatelessWidget {
         value: list.where((option) => idOf(option) == selectedId).firstOrNull,
         options: list,
         optionLabel: nameOf,
-        hintText: l10n.selectHint,
+        // An empty list can't open, so say why instead of inviting a tap.
+        hintText: list.isEmpty ? l10n.noOptionsFound : l10n.selectHint,
         validator: (option) => option == null ? requiredMessage : null,
         onChanged: onChanged,
       ),

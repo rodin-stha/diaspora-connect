@@ -268,6 +268,9 @@ class AppLocalizationsNe extends AppLocalizations {
   String get selectHint => 'छान्नुहोस्';
 
   @override
+  String get noOptionsFound => 'कुनै विकल्प भेटिएन';
+
+  @override
   String get mobileIsraelLabel => 'मोबाइल नम्बर (इजरायल)';
 
   @override

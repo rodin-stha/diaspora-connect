@@ -79,6 +79,7 @@
   "genderMale": "पुरुष",
   "genderOther": "अन्य",
   "selectHint": "छान्नुहोस्",
+  "noOptionsFound": "कुनै विकल्प भेटिएन",
   "mobileIsraelLabel": "मोबाइल नम्बर (इजरायल)",
   "mobileIsraelHint": "+972 5X-XXX-XXXX",
   "homeInIsraelSection": "इजरायलमा तपाईंको घर",

@@ -268,6 +268,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectHint => 'Select';
 
   @override
+  String get noOptionsFound => 'No options found';
+
+  @override
   String get mobileIsraelLabel => 'Mobile number (Israel)';
 
   @override

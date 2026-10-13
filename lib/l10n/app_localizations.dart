@@ -572,6 +572,12 @@ abstract class AppLocalizations {
   /// **'Select'**
   String get selectHint;
 
+  /// No description provided for @noOptionsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No options found'**
+  String get noOptionsFound;
+
   /// No description provided for @mobileIsraelLabel.
   ///
   /// In en, this message translates to:
