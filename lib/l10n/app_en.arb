@@ -201,6 +201,7 @@
   "hostFamilyHint": "Name of household or facility",
   "errorBusinessType": "Select the type of business you work in",
   "errorCareArrangement": "Select whether you live in or out",
+  "errorWorkPermit": "Upload your work permit",
   "alertIssueStatusChanged": "“{title}” is now {status}",
   "@alertIssueStatusChanged": {
     "placeholders": {

@@ -1052,6 +1052,12 @@ abstract class AppLocalizations {
   /// **'Select whether you live in or out'**
   String get errorCareArrangement;
 
+  /// No description provided for @errorWorkPermit.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload your work permit'**
+  String get errorWorkPermit;
+
   /// No description provided for @alertIssueStatusChanged.
   ///
   /// In en, this message translates to:

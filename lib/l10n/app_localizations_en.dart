@@ -517,6 +517,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorCareArrangement => 'Select whether you live in or out';
 
   @override
+  String get errorWorkPermit => 'Upload your work permit';
+
+  @override
   String alertIssueStatusChanged(String title, String status) {
     return '“$title” is now $status';
   }

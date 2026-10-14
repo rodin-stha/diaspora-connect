@@ -57,7 +57,7 @@ class _VoiceRecorderSheet extends StatefulWidget {
 class _VoiceRecorderSheetState extends State<_VoiceRecorderSheet> {
   /// Long enough to explain what happened, short enough to upload on a
   /// slow connection. Stops by itself at this length.
-  static const _maxLength = Duration(minutes: 3);
+  static const _maxLength = Duration(minutes: 1);
 
   Timer? _timer;
   Duration _elapsed = Duration.zero;

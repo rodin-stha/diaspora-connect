@@ -159,6 +159,7 @@
   "hostFamilyHint": "परिवार वा संस्थाको नाम",
   "errorBusinessType": "तपाईं काम गर्ने व्यवसायको प्रकार छान्नुहोस्",
   "errorCareArrangement": "घरमै बस्ने वा बाहिर बस्ने छान्नुहोस्",
+  "errorWorkPermit": "आफ्नो कार्य अनुमतिपत्र अपलोड गर्नुहोस्",
   "alertIssueStatusChanged": "“{title}” अब {status} छ",
   "alertIssueAssigned": "“{title}” {caseWorker} लाई सुम्पिइयो",
   "alertIssuesUpdated": "{count, plural, other{तपाईंका {count} वटा समस्याहरू अपडेट भए}}",

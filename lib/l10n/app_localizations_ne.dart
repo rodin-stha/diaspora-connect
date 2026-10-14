@@ -520,6 +520,9 @@ class AppLocalizationsNe extends AppLocalizations {
   String get errorCareArrangement => 'घरमै बस्ने वा बाहिर बस्ने छान्नुहोस्';
 
   @override
+  String get errorWorkPermit => 'आफ्नो कार्य अनुमतिपत्र अपलोड गर्नुहोस्';
+
+  @override
   String alertIssueStatusChanged(String title, String status) {
     return '“$title” अब $status छ';
   }

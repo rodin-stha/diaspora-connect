@@ -8,6 +8,7 @@ import '../../../widgets/image_source_sheet.dart';
 import '../../../widgets/image_upload_tile.dart';
 import '../../../widgets/document_row.dart';
 import '../../../widgets/form_section_header.dart';
+import '../../../widgets/labeled_field.dart';
 import '../../../widgets/labeled_text_field.dart';
 import '../../../widgets/loading_button.dart';
 import '../../../widgets/select_field.dart';
@@ -83,12 +84,6 @@ class _WorkDetailsFormState extends ConsumerState<WorkDetailsForm> {
         false;
   }
 
-  Future<void> _pickPermit() async {
-    final image = await pickImage(context);
-    if (image == null) return;
-    setState(() => _permitFile = image.path);
-  }
-
   Future<void> _submit() async {
     setState(() => _submitted = true);
     if (!_formKey.currentState!.validate()) return;
@@ -117,7 +112,6 @@ class _WorkDetailsFormState extends ConsumerState<WorkDetailsForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final hasPermit = _permitFile != null || _initial.workPermitLetter != null;
 
     return Form(
       key: _formKey,
@@ -141,18 +135,7 @@ class _WorkDetailsFormState extends ConsumerState<WorkDetailsForm> {
           ),
 
           FormSectionHeader(title: l10n.workPermitSection, showDivider: false),
-          if (widget.useUploadTiles)
-            ImageUploadTile(
-              label: l10n.uploadWorkPermit,
-              imagePath: _permitFile,
-              onTap: _pickPermit,
-            )
-          else
-            DocumentRow(
-              name: l10n.documentWorkPermitLetter,
-              actionLabel: hasPermit ? l10n.replaceAction : l10n.uploadAction,
-              onAction: _pickPermit,
-            ),
+          _permitField(l10n),
 
           if (_allowsLiveIn) ...[
             FormSectionHeader(
@@ -189,6 +172,51 @@ class _WorkDetailsFormState extends ConsumerState<WorkDetailsForm> {
           ),
         ],
       ),
+    );
+  }
+
+  /// The required permit photo: an upload tile in onboarding, a row with
+  /// Upload/Replace in Profile. Valid once a file is uploaded or picked.
+  ///
+  /// A FormField (like the legal details documents) so the same validate()
+  /// call checks it and shows its error the same way.
+  Widget _permitField(AppLocalizations l10n) {
+    final current = _permitFile ?? _initial.workPermitLetter;
+
+    return FormField<String>(
+      initialValue: current,
+      validator: (value) =>
+          (value == null || value.isEmpty) ? l10n.errorWorkPermit : null,
+      builder: (field) {
+        Future<void> pick() async {
+          final image = await pickImage(context);
+          if (image == null) return;
+          setState(() => _permitFile = image.path);
+          field.didChange(image.path);
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (widget.useUploadTiles)
+              ImageUploadTile(
+                label: l10n.uploadWorkPermit,
+                imagePath: _permitFile,
+                hasError: field.hasError,
+                onTap: pick,
+              )
+            else
+              DocumentRow(
+                name: l10n.documentWorkPermitLetter,
+                actionLabel: current == null
+                    ? l10n.uploadAction
+                    : l10n.replaceAction,
+                onAction: pick,
+              ),
+            if (field.hasError) FieldErrorText(field.errorText!),
+          ],
+        );
+      },
     );
   }
 }
