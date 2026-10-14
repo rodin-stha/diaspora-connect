@@ -38,6 +38,10 @@ class SavedDocument {
     required this.url,
   });
 
+  /// Whether the file is a photo (shown in the app's image viewer) rather
+  /// than e.g. a PDF.
+  bool get isImage => mimeType.startsWith('image/');
+
   factory SavedDocument.fromJson(Map<String, dynamic> json) => SavedDocument(
     id: json['id'] as int,
     type: DocumentType.fromJson(

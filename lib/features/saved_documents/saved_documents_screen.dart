@@ -13,8 +13,10 @@ import '../../widgets/dashed_button.dart';
 import '../../widgets/document_row.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/image_source_sheet.dart';
+import '../../widgets/image_viewer.dart';
 import '../../widgets/load_error.dart';
 import '../../widgets/skeleton.dart';
+import '../../widgets/soft_bouncing_scroll_physics.dart';
 import 'data/saved_documents_provider.dart';
 import 'models/saved_document.dart';
 import 'widgets/upload_document_dialog.dart';
@@ -40,9 +42,11 @@ class SavedDocumentsScreen extends ConsumerWidget {
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
 
-    // Opens the file over the app (Safari View Controller / Chrome Custom
-    // Tabs), which shows images and PDFs alike; closing it returns here.
+    // Images open full screen, like photos on an issue. Anything else
+    // (PDFs) opens over the app (Safari View Controller / Chrome Custom
+    // Tabs); closing it returns here.
     Future<void> view(SavedDocument document) async {
+      if (document.isImage) return showImageViewer(context, document.url);
       final opened = await launchUrl(
         Uri.parse(document.url),
         mode: LaunchMode.inAppBrowserView,
@@ -71,66 +75,75 @@ class SavedDocumentsScreen extends ConsumerWidget {
           // Pull down to fetch again, e.g. after a file link has expired.
           body: RefreshIndicator(
             onRefresh: () => ref.refresh(savedDocumentsProvider.future),
-            child: SingleChildScrollView(
-              // Lets the pull work even when the list is too short to scroll.
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.fromLTRB(
-                TSizes.pagePadding,
-                topPadding,
-                TSizes.pagePadding,
-                30,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                spacing: TSizes.md,
-                children: [
-                  BackTitleBar(
-                    title: l10n.savedDocuments,
-                    fallbackLocation: '/profile',
-                  ),
-                  documentsAsync.when(
-                    data: (documents) => documents.isEmpty
-                        ? EmptyState(
-                            iconAsset: 'assets/icons/document.svg',
-                            message: l10n.noSavedDocuments,
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            spacing: TSizes.md,
-                            children: [
-                              for (final document in documents)
-                                DocumentRow(
-                                  name: _documentName(l10n, document),
-                                  actionLabel: l10n.viewAction,
-                                  onAction: () => view(document),
-                                ),
-                            ],
-                          ),
-                    // Placeholder rows in the shape of the real list, so
-                    // nothing jumps when it arrives.
-                    loading: () => Skeleton(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        spacing: TSizes.md,
-                        children: [
-                          for (var i = 0; i < _skeletonCount; i++)
-                            const DocumentRowSkeleton(),
-                        ],
+            // A SingleChildScrollView is only as tall as its content, so on a
+            // short list the empty space below wouldn't react to the pull.
+            // Filling the screen makes the whole page draggable.
+            child: SizedBox.expand(
+              child: SingleChildScrollView(
+                // Bouncing: the page follows the finger on a pull and glides
+                // back on release (Android would otherwise stay put).
+                // AlwaysScrollable as parent keeps that working on a short list.
+                physics: const SoftBouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                padding: EdgeInsets.fromLTRB(
+                  TSizes.pagePadding,
+                  topPadding,
+                  TSizes.pagePadding,
+                  30,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: TSizes.md,
+                  children: [
+                    BackTitleBar(
+                      title: l10n.savedDocuments,
+                      fallbackLocation: '/profile',
+                    ),
+                    documentsAsync.when(
+                      data: (documents) => documents.isEmpty
+                          ? EmptyState(
+                              iconAsset: 'assets/icons/document.svg',
+                              message: l10n.noSavedDocuments,
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              spacing: TSizes.md,
+                              children: [
+                                for (final document in documents)
+                                  DocumentRow(
+                                    name: _documentName(l10n, document),
+                                    actionLabel: l10n.viewAction,
+                                    onAction: () => view(document),
+                                  ),
+                              ],
+                            ),
+                      // Placeholder rows in the shape of the real list, so
+                      // nothing jumps when it arrives.
+                      loading: () => Skeleton(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          spacing: TSizes.md,
+                          children: [
+                            for (var i = 0; i < _skeletonCount; i++)
+                              const DocumentRowSkeleton(),
+                          ],
+                        ),
                       ),
+                      error: (error, _) => LoadError(
+                        message: l10n.errorLoadDocuments,
+                        onRetry: () => ref.invalidate(savedDocumentsProvider),
+                      ),
+                      // Retry after an error shows the spinner; a pull-to-refresh
+                      // keeps the list (the pull has its own spinner).
+                      skipLoadingOnRefresh: !documentsAsync.hasError,
                     ),
-                    error: (error, _) => LoadError(
-                      message: l10n.errorLoadDocuments,
-                      onRetry: () => ref.invalidate(savedDocumentsProvider),
+                    DashedButton(
+                      label: l10n.uploadNewDocument,
+                      onPressed: upload,
                     ),
-                    // Retry after an error shows the spinner; a pull-to-refresh
-                    // keeps the list (the pull has its own spinner).
-                    skipLoadingOnRefresh: !documentsAsync.hasError,
-                  ),
-                  DashedButton(
-                    label: l10n.uploadNewDocument,
-                    onPressed: upload,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
