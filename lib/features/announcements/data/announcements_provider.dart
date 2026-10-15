@@ -15,44 +15,45 @@ const _refreshBeforeExpiry = Duration(minutes: 2);
 /// already (e.g. the phone's clock is off).
 const _minRefreshInterval = Duration(minutes: 1);
 
-/// The latest few announcements, for the carousel on Home.
+/// The latest few announcements with an image, for the carousel on Home.
+/// Text-only ones are left out (a slide needs a picture); they're on the
+/// Notice tab.
 ///
 /// autoDispose: only fetched while Home is open.
 final announcementsProvider = FutureProvider.autoDispose<List<Announcement>>((
   ref,
 ) async {
-  final announcements = await ref
+  final page = await ref
       .read(announcementsRepositoryProvider)
-      .fetchAnnouncements(limit: _homeLimit);
-  _refetchBeforeLinksExpire(ref, announcements);
+      .fetchAnnouncementsPage(page: 1, perPage: _homeLimit);
+  final announcements = page.items
+      .where((announcement) => announcement.image != null)
+      .toList();
+
+  // The image links expire, and a cached list would show broken images
+  // after that. Refetch shortly before, for fresh links. While refetching,
+  // Riverpod keeps the current list, so the carousel doesn't flicker.
+  final delay = linkRefreshDelay(announcements);
+  if (delay != null && ref.mounted) {
+    final timer = Timer(delay, ref.invalidateSelf);
+    ref.onDispose(timer.cancel);
+  }
   return announcements;
 });
 
-/// All announcements (the first page), for the Notice tab.
-final allAnnouncementsProvider = FutureProvider.autoDispose<List<Announcement>>(
-  (ref) async {
-    final announcements = await ref
-        .read(announcementsRepositoryProvider)
-        .fetchAnnouncements();
-    _refetchBeforeLinksExpire(ref, announcements);
-    return announcements;
-  },
-);
+/// How long until [announcements] should be fetched again for fresh image
+/// links, or null if none has an image.
+Duration? linkRefreshDelay(List<Announcement> announcements) {
+  final expiries = [
+    for (final announcement in announcements)
+      if (announcement.image case final image?) image.expiresAt,
+  ];
+  if (expiries.isEmpty) return null;
 
-/// The image links expire, and a cached list would show broken images after
-/// that. Refetch shortly before, for fresh links. While refetching, Riverpod
-/// keeps the current list, so nothing flickers.
-void _refetchBeforeLinksExpire(Ref ref, List<Announcement> announcements) {
-  if (announcements.isEmpty || !ref.mounted) return;
-
-  final firstExpiry = announcements
-      .map((announcement) => announcement.imageExpiresAt)
-      .reduce((a, b) => a.isBefore(b) ? a : b);
+  final firstExpiry = expiries.reduce((a, b) => a.isBefore(b) ? a : b);
   final untilRefresh =
       firstExpiry.difference(DateTime.now()) - _refreshBeforeExpiry;
-  final timer = Timer(
-    untilRefresh < _minRefreshInterval ? _minRefreshInterval : untilRefresh,
-    ref.invalidateSelf,
-  );
-  ref.onDispose(timer.cancel);
+  return untilRefresh < _minRefreshInterval
+      ? _minRefreshInterval
+      : untilRefresh;
 }

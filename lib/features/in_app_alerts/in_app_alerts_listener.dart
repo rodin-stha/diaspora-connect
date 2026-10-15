@@ -146,7 +146,7 @@ class _InAppAlertsListenerState extends ConsumerState<InAppAlertsListener> {
     if (ref.watch(authProvider.select((auth) => auth.isOnboarded))) {
       ref.listen(issuesProvider, (_, next) {
         // Settled results only: not the loading state in between.
-        if (next case AsyncData(:final value)) _onIssues(value);
+        if (next case AsyncData(:final value)) _onIssues(value.items);
       });
     }
 

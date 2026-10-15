@@ -1,3 +1,4 @@
+import 'package:diaspora_connect/app/api/paged.dart';
 import 'package:diaspora_connect/features/issues/data/issues_repository.dart';
 import 'package:diaspora_connect/features/issues/models/issue.dart';
 import 'package:diaspora_connect/features/issues/widgets/info_reply_form.dart';
@@ -16,8 +17,12 @@ class _FakeIssuesRepository extends IssuesRepository {
 
   // The notifier fetches the list when it's first used.
   @override
-  Future<List<Issue>> fetchIssues({String? search, String? type}) async =>
-      const [];
+  Future<Paged<Issue>> fetchIssues({
+    required int page,
+    required int perPage,
+    String? search,
+    String? type,
+  }) async => const Paged(items: [], hasMore: false);
 
   @override
   Future<void> replyToIssue(

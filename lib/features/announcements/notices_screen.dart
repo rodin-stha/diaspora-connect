@@ -12,9 +12,10 @@ import '../../theme/text_styles.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/load_error.dart';
+import '../../widgets/load_more_scroll_view.dart';
 import '../../widgets/network_photo.dart';
 import '../../widgets/skeleton.dart';
-import 'data/announcements_provider.dart';
+import 'data/notices_provider.dart';
 import 'models/announcement.dart';
 
 /// Wide, like the posters' usual shape. Tapping one shows it whole.
@@ -23,7 +24,8 @@ const _imageAspectRatio = 16 / 9;
 // Placeholder cards while loading: enough to fill most of the screen.
 const _skeletonCount = 3;
 
-/// The Notice tab: every Embassy and DoFE announcement, newest first.
+/// The Notice tab: every Embassy and DoFE announcement, newest first, a
+/// page at a time as the user scrolls.
 class NoticesScreen extends ConsumerWidget {
   const NoticesScreen({super.key});
 
@@ -31,7 +33,9 @@ class NoticesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final announcementsAsync = ref.watch(allAnnouncementsProvider);
+    final listAsync = ref.watch(noticesProvider);
+    final list = listAsync.value;
+    void loadMore() => ref.read(noticesProvider.notifier).loadMore();
 
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
@@ -41,8 +45,10 @@ class NoticesScreen extends ConsumerWidget {
       child: AppBackground(
         child: Scaffold(
           body: RefreshIndicator(
-            onRefresh: () => ref.refresh(allAnnouncementsProvider.future),
-            child: SingleChildScrollView(
+            onRefresh: () => ref.refresh(noticesProvider.future),
+            child: LoadMoreScrollView(
+              canLoadMore: list != null && list.hasMore && !list.loadMoreFailed,
+              onLoadMore: loadMore,
               // Lets the pull work even when the list is too short to scroll.
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.fromLTRB(
@@ -61,24 +67,33 @@ class NoticesScreen extends ConsumerWidget {
                       color: colors.textPrimary,
                     ),
                   ),
-                  switch (announcementsAsync) {
-                    // Checked first: while refetching for fresh image links,
-                    // keep showing the current ones.
-                    AsyncValue(:final value?) when value.isNotEmpty => Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      spacing: TSizes.listGap,
-                      children: [
-                        for (final announcement in value)
-                          _NoticeCard(announcement: announcement),
-                      ],
-                    ),
-                    AsyncValue(value: []) => EmptyState(
+                  switch (listAsync) {
+                    // Checked first: while refreshing, keep showing the
+                    // current list.
+                    AsyncValue(:final value?) when value.items.isNotEmpty =>
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        spacing: TSizes.listGap,
+                        children: [
+                          for (final announcement in value.items)
+                            _NoticeCard(announcement: announcement),
+                          if (value.isLoadingMore || value.loadMoreFailed)
+                            LoadMoreFooter(
+                              isLoading: value.isLoadingMore,
+                              failed: value.loadMoreFailed,
+                              errorMessage: l10n.errorLoadAnnouncements,
+                              onRetry: loadMore,
+                              skeleton: const _NoticeCardSkeleton(),
+                            ),
+                        ],
+                      ),
+                    AsyncValue(hasValue: true) => EmptyState(
                       iconAsset: 'assets/icons/inbox.svg',
                       message: l10n.noNoticesYet,
                     ),
                     AsyncValue(hasError: true) => LoadError(
                       message: l10n.errorLoadAnnouncements,
-                      onRetry: () => ref.invalidate(allAnnouncementsProvider),
+                      onRetry: () => ref.invalidate(noticesProvider),
                     ),
                     _ => Skeleton(
                       child: Column(
@@ -86,13 +101,7 @@ class NoticesScreen extends ConsumerWidget {
                         spacing: TSizes.listGap,
                         children: [
                           for (var i = 0; i < _skeletonCount; i++)
-                            const AspectRatio(
-                              aspectRatio: _imageAspectRatio,
-                              child: SkeletonBox(
-                                height: double.infinity,
-                                radius: TSizes.cardRadius,
-                              ),
-                            ),
+                            const _NoticeCardSkeleton(),
                         ],
                       ),
                     ),
@@ -107,8 +116,8 @@ class NoticesScreen extends ConsumerWidget {
   }
 }
 
-/// One announcement: its image, then its title and the start of its
-/// description. Tapping opens the whole notice.
+/// One announcement: its image (if it has one), then its title and the
+/// start of its description. Tapping opens the whole notice.
 class _NoticeCard extends StatelessWidget {
   final Announcement announcement;
 
@@ -132,10 +141,11 @@ class _NoticeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            AspectRatio(
-              aspectRatio: _imageAspectRatio,
-              child: NetworkPhoto(url: announcement.imageUrl),
-            ),
+            if (announcement.image case final image?)
+              AspectRatio(
+                aspectRatio: _imageAspectRatio,
+                child: NetworkPhoto(url: image.url),
+              ),
             if (title != null || description != null)
               Padding(
                 padding: const EdgeInsets.all(TSizes.md),
@@ -164,6 +174,49 @@ class _NoticeCard extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Placeholder for a [_NoticeCard] while it loads: the image, a title line
+/// and two description lines. Put it inside a [Skeleton] so it pulses.
+class _NoticeCardSkeleton extends StatelessWidget {
+  const _NoticeCardSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(TSizes.cardRadius),
+        border: Border.all(color: colors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const AspectRatio(
+            aspectRatio: _imageAspectRatio,
+            child: SkeletonBox(
+              height: double.infinity,
+              radius: TSizes.cardRadius,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(TSizes.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: TSizes.sm,
+              children: const [
+                SkeletonBox(width: 160, height: 14),
+                SkeletonBox(height: 10),
+                SkeletonBox(width: 220, height: 10),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

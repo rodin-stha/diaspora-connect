@@ -49,13 +49,13 @@ class AnnouncementViewer extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: InteractiveViewer(
-                  maxScale: _maxZoom,
-                  child: NetworkPhoto(
-                    url: announcement.imageUrl,
-                    fit: BoxFit.contain,
+                child: switch (announcement.image) {
+                  final image? => InteractiveViewer(
+                    maxScale: _maxZoom,
+                    child: NetworkPhoto(url: image.url, fit: BoxFit.contain),
                   ),
-                ),
+                  null => const SizedBox.shrink(),
+                },
               ),
               if (title != null || description != null)
                 // At most half the screen; a long description scrolls.

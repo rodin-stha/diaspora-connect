@@ -1,14 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/api/api_exception.dart';
+import '../../../app/api/paged.dart';
+import '../../../app/api/paged_notifier.dart';
 import '../models/issue.dart';
 import '../models/issue_filter.dart';
 import '../models/new_issue.dart';
 import 'issues_repository.dart';
 
-/// All of the current user's issues, newest first. The single source of
-/// truth for Home, the Issues screen and Track issue.
-final issuesProvider = AsyncNotifierProvider<IssuesNotifier, List<Issue>>(
+/// How many issues to fetch at a time.
+const _issuesPerPage = 20;
+
+/// The current user's issues, newest first, loaded a page at a time as the
+/// Issues screen scrolls. Also what in-app alerts watch for changes.
+final issuesProvider = AsyncNotifierProvider<IssuesNotifier, PagedList<Issue>>(
   IssuesNotifier.new,
 );
 
@@ -18,19 +23,26 @@ final issueCategoriesProvider = FutureProvider<List<IssueCategory>>(
   (ref) => ref.read(issuesRepositoryProvider).fetchCategories(),
 );
 
-class IssuesNotifier extends AsyncNotifier<List<Issue>> {
+class IssuesNotifier extends PagedNotifier<Issue> {
   @override
-  Future<List<Issue>> build() =>
-      ref.read(issuesRepositoryProvider).fetchIssues();
+  int get perPage => _issuesPerPage;
 
-  /// Fetches the list again in the background, e.g. to check for changes.
-  /// No loading state, and a failure (offline…) keeps the current list:
-  /// the user didn't ask for this, so it shouldn't replace the list with
-  /// a spinner or an error.
+  @override
+  Future<Paged<Issue>> fetchPage({required int page, required int perPage}) =>
+      ref
+          .read(issuesRepositoryProvider)
+          .fetchIssues(page: page, perPage: perPage);
+
+  @override
+  Object idOf(Issue item) => item.reference;
+
+  /// Fetches the loaded issues again in the background, e.g. to check for
+  /// changes. No loading state, and a failure (offline…) keeps the current
+  /// list: the user didn't ask for this, so it shouldn't replace the list
+  /// with a spinner or an error.
   Future<void> refreshQuietly() async {
     try {
-      final issues = await ref.read(issuesRepositoryProvider).fetchIssues();
-      state = AsyncData(issues);
+      await reloadLoaded();
     } on ApiException {
       // Try again on the next check.
     }
@@ -63,19 +75,39 @@ class IssuesNotifier extends AsyncNotifier<List<Issue>> {
   }
 }
 
-/// Issues matching a search and/or filter chip, as the server finds them.
+/// Issues matching a search and/or filter chip, as the server finds them,
+/// a page at a time.
 ///
 /// A family: one cached result per [IssueQuery] (like a React Query key).
 /// autoDispose: results for queries no longer on screen are dropped.
-final issueSearchProvider = FutureProvider.autoDispose
-    .family<List<Issue>, IssueQuery>(
-      (ref, query) => ref
+final issueSearchProvider = AsyncNotifierProvider.autoDispose
+    .family<IssueSearchNotifier, PagedList<Issue>, IssueQuery>(
+      IssueSearchNotifier.new,
+    );
+
+class IssueSearchNotifier extends PagedNotifier<Issue> {
+  /// Riverpod passes each family member its query through the constructor.
+  final IssueQuery query;
+
+  IssueSearchNotifier(this.query);
+
+  @override
+  int get perPage => _issuesPerPage;
+
+  @override
+  Future<Paged<Issue>> fetchPage({required int page, required int perPage}) =>
+      ref
           .read(issuesRepositoryProvider)
           .fetchIssues(
+            page: page,
+            perPage: perPage,
             search: query.search.isEmpty ? null : query.search,
             type: query.filter.apiValue,
-          ),
-    );
+          );
+
+  @override
+  Object idOf(Issue item) => item.reference;
+}
 
 /// One issue with its status history, for Track issue. Fetched on its own
 /// because the list doesn't include the history, and so it works for any

@@ -13,14 +13,15 @@ import '../../widgets/back_title_bar.dart';
 import '../../widgets/image_viewer.dart';
 import '../../widgets/load_error.dart';
 import '../../widgets/skeleton.dart';
-import 'data/announcements_provider.dart';
+import 'data/notices_provider.dart';
 import 'models/announcement.dart';
 
 /// Shape of the placeholder while the image loads; the real one keeps its
 /// own shape.
 const _placeholderAspectRatio = 16 / 9;
 
-/// One notice in full: its image, title and whole description.
+/// One notice in full: its image (if it has one), title and whole
+/// description.
 class NoticeDetailScreen extends ConsumerWidget {
   final int id;
 
@@ -32,7 +33,7 @@ class NoticeDetailScreen extends ConsumerWidget {
     final colors = context.colors;
     // There's no endpoint for a single announcement, so find it in the
     // Notice list (already loaded when coming from the Notice tab).
-    final announcementsAsync = ref.watch(allAnnouncementsProvider);
+    final feedAsync = ref.watch(noticesProvider);
 
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
@@ -56,8 +57,8 @@ class NoticeDetailScreen extends ConsumerWidget {
                   title: l10n.noticeDetailTitle,
                   fallbackLocation: '/notices',
                 ),
-                switch (announcementsAsync) {
-                  AsyncValue(:final value?) => switch (value
+                switch (feedAsync) {
+                  AsyncValue(:final value?) => switch (value.items
                       .where((announcement) => announcement.id == id)
                       .firstOrNull) {
                     final announcement? => _NoticeContent(
@@ -74,7 +75,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                   },
                   AsyncValue(hasError: true) => LoadError(
                     message: l10n.errorLoadAnnouncements,
-                    onRetry: () => ref.invalidate(allAnnouncementsProvider),
+                    onRetry: () => ref.invalidate(noticesProvider),
                   ),
                   _ => const Skeleton(
                     child: AspectRatio(
@@ -111,18 +112,19 @@ class _NoticeContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: TSizes.lg,
       children: [
-        // Tap to zoom: posters often have small print.
-        Semantics(
-          button: true,
-          label: l10n.zoomImage,
-          child: GestureDetector(
-            onTap: () => showImageViewer(context, announcement.imageUrl),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(TSizes.cardRadius),
-              child: _WholeImage(url: announcement.imageUrl),
+        if (announcement.image case final image?)
+          // Tap to zoom: posters often have small print.
+          Semantics(
+            button: true,
+            label: l10n.zoomImage,
+            child: GestureDetector(
+              onTap: () => showImageViewer(context, image.url),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(TSizes.cardRadius),
+                child: _WholeImage(url: image.url),
+              ),
             ),
           ),
-        ),
         if (title != null)
           Text(
             title,

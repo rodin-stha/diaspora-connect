@@ -14,8 +14,10 @@ import 'package:diaspora_connect/widgets/page_dots.dart';
 Announcement _announcement(int id, {String? title}) => Announcement(
   id: id,
   title: title,
-  imageUrl: 'https://example.com/$id.jpg',
-  imageExpiresAt: DateTime.now().add(const Duration(hours: 1)),
+  image: AnnouncementImage(
+    url: 'https://example.com/$id.jpg',
+    expiresAt: DateTime.now().add(const Duration(hours: 1)),
+  ),
 );
 
 void main() {
@@ -38,12 +40,26 @@ void main() {
       expect(announcement.title, isNull);
       // Blank counts as none, so the viewer doesn't show an empty caption.
       expect(announcement.description, isNull);
-      expect(announcement.imageUrl, contains('signature=x'));
+      expect(announcement.image!.url, contains('signature=x'));
       expect(
-        announcement.imageExpiresAt,
+        announcement.image!.expiresAt,
         DateTime.utc(2026, 10, 8, 6, 36, 15),
       );
     });
+  });
+
+  test('reads a text-only announcement (no image)', () {
+    final announcement = Announcement.fromJson({
+      'id': 11,
+      'title': 'Beware of fake job offers',
+      'description': 'Do not pay anyone for a job offer or visa change.',
+      'image': null,
+      'created_at': '2026-09-25T10:00:00+00:00',
+      'updated_at': '2026-09-25T10:00:00+00:00',
+    });
+
+    expect(announcement.title, 'Beware of fake job offers');
+    expect(announcement.image, isNull);
   });
 
   group('AnnouncementsSection', () {

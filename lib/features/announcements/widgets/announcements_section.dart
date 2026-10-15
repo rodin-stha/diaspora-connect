@@ -124,7 +124,10 @@ class _CarouselState extends State<_Carousel> {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        NetworkPhoto(url: announcement.imageUrl),
+                        // Always there: Home only gets announcements with
+                        // an image (see announcementsProvider).
+                        if (announcement.image case final image?)
+                          NetworkPhoto(url: image.url),
                         if (announcement.title != null ||
                             announcement.description != null)
                           // Pinned left and right, so it spans the full

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app/api/api_response.dart';
 import '../../../app/api/dio_provider.dart';
+import '../../../app/api/paged.dart';
 import '../models/activity.dart';
 
 final activityRepositoryProvider = Provider<ActivityRepository>(
@@ -14,16 +14,18 @@ class ActivityRepository {
 
   ActivityRepository(this._dio);
 
-  Future<List<Activity>> fetchActivity() async {
+  /// One page of the activity log, newest first.
+  Future<Paged<Activity>> fetchActivity({
+    required int page,
+    required int perPage,
+  }) async {
     final res = await apiCall(
-      () => _dio.get<Map<String, dynamic>>('/activity-logs'),
+      () => _dio.get<Map<String, dynamic>>(
+        '/activity-logs',
+        queryParameters: {'page': page, 'per_page': perPage},
+      ),
     );
 
-    return ApiResponse.fromJson(
-      res.data!,
-      (data) => (data as List)
-          .map((item) => Activity.fromJson(item as Map<String, dynamic>))
-          .toList(),
-    ).data;
+    return Paged.fromJson(res.data!, Activity.fromJson, perPage: perPage);
   }
 }

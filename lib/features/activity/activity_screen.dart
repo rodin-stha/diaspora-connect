@@ -12,6 +12,7 @@ import '../../utils/formatters.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/dot_list_item.dart';
 import '../../widgets/link_button.dart';
+import '../../widgets/load_more_scroll_view.dart';
 import '../../widgets/skeleton.dart';
 import 'data/activity_provider.dart';
 import 'models/activity.dart';
@@ -28,9 +29,11 @@ class ActivityScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
     final activitiesAsync = ref.watch(activityProvider);
+    final list = activitiesAsync.value;
     // Empty while loading, so "Mark all read" stays disabled until then.
-    final activities = activitiesAsync.value ?? const <Activity>[];
+    final activities = list?.items ?? const <Activity>[];
     final hasUnread = activities.any((activity) => !activity.isRead);
+    void loadMore() => ref.read(activityProvider.notifier).loadMore();
 
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
@@ -43,7 +46,9 @@ class ActivityScreen extends ConsumerWidget {
           // Future, so the spinner stays until it completes.
           body: RefreshIndicator(
             onRefresh: () => ref.refresh(activityProvider.future),
-            child: SingleChildScrollView(
+            child: LoadMoreScrollView(
+              canLoadMore: list != null && list.hasMore && !list.loadMoreFailed,
+              onLoadMore: loadMore,
               // Lets the pull work even when the list is too short to scroll.
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.fromLTRB(
@@ -86,14 +91,22 @@ class ActivityScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: TSizes.lg),
                   activitiesAsync.when(
-                    data: (activities) => activities.isEmpty
+                    data: (list) => list.items.isEmpty
                         ? _CenteredMessage(l10n.noActivity)
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             spacing: TSizes.lg,
                             children: [
-                              for (final activity in activities)
+                              for (final activity in list.items)
                                 _ActivityItem(activity: activity),
+                              if (list.isLoadingMore || list.loadMoreFailed)
+                                LoadMoreFooter(
+                                  isLoading: list.isLoadingMore,
+                                  failed: list.loadMoreFailed,
+                                  errorMessage: l10n.errorLoadActivity,
+                                  onRetry: loadMore,
+                                  skeleton: const DotListItemSkeleton(),
+                                ),
                             ],
                           ),
                     // Placeholder items in the shape of the real feed, so

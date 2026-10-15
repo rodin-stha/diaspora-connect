@@ -14,11 +14,16 @@ import '../../widgets/app_background.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/issue_card.dart';
 import '../../widgets/load_error.dart';
+import '../../widgets/load_more_scroll_view.dart';
 import '../../widgets/search_field.dart';
 import '../../widgets/selectable_chip.dart';
+import '../../widgets/skeleton.dart';
 import '../../widgets/soft_bouncing_scroll_physics.dart';
 import 'data/issues_provider.dart';
 import 'models/issue_filter.dart';
+
+// Placeholder cards while the first page loads.
+const _skeletonCount = 3;
 
 class IssuesScreen extends ConsumerStatefulWidget {
   const IssuesScreen({super.key});
@@ -69,6 +74,10 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
     final issuesAsync = query.isEmpty
         ? allIssuesAsync
         : ref.watch(issueSearchProvider(query));
+    final shown = issuesAsync.value;
+    void loadMore() => query.isEmpty
+        ? ref.read(issuesProvider.notifier).loadMore()
+        : ref.read(issueSearchProvider(query).notifier).loadMore();
 
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
@@ -92,7 +101,10 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
             // short list the empty space below wouldn't react to the pull.
             // Filling the screen makes the whole page draggable.
             child: SizedBox.expand(
-              child: SingleChildScrollView(
+              child: LoadMoreScrollView(
+                canLoadMore:
+                    shown != null && shown.hasMore && !shown.loadMoreFailed,
+                onLoadMore: loadMore,
                 // Bouncing: the page follows the finger on a pull and glides
                 // back on release (Android would otherwise stay put).
                 // AlwaysScrollable as parent keeps that working on a short list.
@@ -131,7 +143,8 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                             label: _filterLabel(
                               l10n,
                               filter,
-                              allIssues?.length ?? 0,
+                              // All of them, not just the pages loaded so far.
+                              allIssues?.total ?? allIssues?.items.length ?? 0,
                             ),
                             isSelected: filter == _filter,
                             onTap: () => setState(() => _filter = filter),
@@ -141,7 +154,7 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                     const SizedBox(height: TSizes.listGap),
                     issuesAsync.when(
                       data: (issues) {
-                        if (allIssues != null && allIssues.isEmpty) {
+                        if (allIssues != null && allIssues.items.isEmpty) {
                           return EmptyState(
                             iconAsset: 'assets/icons/inbox.svg',
                             message: l10n.noIssuesYet,
@@ -151,7 +164,7 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                         }
                         // The issues exist, a search or filter hides them all:
                         // no icon or "report" link, just say so.
-                        if (issues.isEmpty) {
+                        if (issues.items.isEmpty) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 32),
                             child: Text(
@@ -167,19 +180,35 @@ class _IssuesScreenState extends ConsumerState<IssuesScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           spacing: TSizes.listGap,
                           children: [
-                            for (final issue in issues)
+                            for (final issue in issues.items)
                               IssueCard(
                                 issue: issue,
                                 showCategory: true,
                                 onTap: () =>
                                     context.push('/issues/${issue.reference}'),
                               ),
+                            if (issues.isLoadingMore || issues.loadMoreFailed)
+                              LoadMoreFooter(
+                                isLoading: issues.isLoadingMore,
+                                failed: issues.loadMoreFailed,
+                                errorMessage: l10n.errorLoadIssues,
+                                onRetry: loadMore,
+                                skeleton: const IssueCardSkeleton(),
+                              ),
                           ],
                         );
                       },
-                      loading: () => const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32),
-                        child: Center(child: CircularProgressIndicator()),
+                      // Placeholder cards in the shape of the real ones, so
+                      // nothing jumps when the issues arrive.
+                      loading: () => Skeleton(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          spacing: TSizes.listGap,
+                          children: [
+                            for (var i = 0; i < _skeletonCount; i++)
+                              const IssueCardSkeleton(),
+                          ],
+                        ),
                       ),
                       error: (error, _) => LoadError(
                         message: l10n.errorLoadIssues,
