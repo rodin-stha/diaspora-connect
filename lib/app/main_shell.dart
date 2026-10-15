@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../l10n/app_localizations.dart';
 import '../widgets/bottom_nav_bar.dart';
+import 'tab_switch_container.dart';
 
 /// Width of the strip along the left edge where a swipe goes back (iOS).
 const _edgeWidth = 20.0;
@@ -31,6 +32,10 @@ class _MainShellState extends State<MainShell> {
   /// added to the history.
   bool _goingBack = false;
 
+  /// Whether the latest tab change was "back", for the tab container to
+  /// pick its animation.
+  bool _lastChangeWasBack = false;
+
   double _swipeDistance = 0;
 
   int get _currentIndex => widget.navigationShell.currentIndex;
@@ -43,6 +48,7 @@ class _MainShellState extends State<MainShell> {
     final previous = oldWidget.navigationShell.currentIndex;
     if (previous == _currentIndex) return;
 
+    _lastChangeWasBack = _goingBack;
     if (_goingBack) {
       _goingBack = false;
     } else {
@@ -99,7 +105,10 @@ class _MainShellState extends State<MainShell> {
       child: Scaffold(
         body: Stack(
           children: [
-            navigationShell,
+            TabBackScope(
+              lastChangeWasBack: _lastChangeWasBack,
+              child: navigationShell,
+            ),
             // iOS has no system back gesture for tabs, so watch the left edge
             // ourselves. Not on Android: the system already turns that swipe
             // into "back" (handled above).

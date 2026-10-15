@@ -24,6 +24,7 @@ import '../features/report_issue/report_issue_screen.dart';
 import '../features/saved_documents/saved_documents_screen.dart';
 import '../features/work_details/work_details_screen.dart';
 import 'main_shell.dart';
+import 'tab_switch_container.dart';
 
 /// Wraps a screen in a MaterialPage, which gives iOS its slide transition and
 /// swipe-from-left-edge to go back (Android gets its normal transition).
@@ -119,9 +120,16 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      StatefulShellRoute.indexedStack(
+      // Like StatefulShellRoute.indexedStack, but with a container that can
+      // animate going back between tabs.
+      StatefulShellRoute(
         builder: (context, state, navigationShell) =>
             MainShell(navigationShell: navigationShell),
+        navigatorContainerBuilder: (context, navigationShell, children) =>
+            TabSwitchContainer(
+              currentIndex: navigationShell.currentIndex,
+              children: children,
+            ),
         branches: [
           StatefulShellBranch(
             routes: [

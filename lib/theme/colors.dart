@@ -47,6 +47,9 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color scrim;
   final Color onScrim;
 
+  // Shadow along the edge of a page sliding over another
+  final Color shadow;
+
   const AppColors({
     required this.primary,
     required this.onPrimary,
@@ -74,6 +77,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.onInverseSurface,
     required this.scrim,
     required this.onScrim,
+    required this.shadow,
   });
 
   /// Values from the Figma design.
@@ -106,6 +110,7 @@ class AppColors extends ThemeExtension<AppColors> {
     onInverseSurface: Color(0xFFFFFFFF),
     scrim: Color(0xAB3D3D3D), // 67% dark grey
     onScrim: Color(0xFFFFFFFF),
+    shadow: Color(0x33000000), // 20% black
   );
 
   // To add dark mode: define `static const dark = AppColors(...)` with the
@@ -139,6 +144,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? onInverseSurface,
     Color? scrim,
     Color? onScrim,
+    Color? shadow,
   }) {
     return AppColors(
       primary: primary ?? this.primary,
@@ -167,6 +173,7 @@ class AppColors extends ThemeExtension<AppColors> {
       onInverseSurface: onInverseSurface ?? this.onInverseSurface,
       scrim: scrim ?? this.scrim,
       onScrim: onScrim ?? this.onScrim,
+      shadow: shadow ?? this.shadow,
     );
   }
 
@@ -225,6 +232,7 @@ class AppColors extends ThemeExtension<AppColors> {
       )!,
       scrim: Color.lerp(scrim, other.scrim, t)!,
       onScrim: Color.lerp(onScrim, other.onScrim, t)!,
+      shadow: Color.lerp(shadow, other.shadow, t)!,
     );
   }
 }
