@@ -43,10 +43,11 @@ flutter:
 
 # App icon. Source files live in assets/app_icon/ (not bundled into the app).
 # After changing them, run: dart run flutter_launcher_icons
-# icon.png is the designer's file (not square). icon_square.png is it padded
-# with its own background colour, since icons must be square; recreate it
-# after replacing icon.png:
-#   sips --padToHeightWidth <w> <w> --padColor F5F9FA icon.png --out icon_square.png
+# icon.png is the designer's file (not square, lots of empty margin).
+# icon_square.png is a square crop of it so the logo fills ~70% of the icon
+# (like other iOS icons); recreate it after replacing icon.png:
+#   sips -c 760 760 --cropOffset 18 151 icon.png --out icon_square.png
+#   sips -z 1024 1024 icon_square.png
 flutter_launcher_icons:
   image_path: assets/app_icon/icon_square.png
   ios: true
