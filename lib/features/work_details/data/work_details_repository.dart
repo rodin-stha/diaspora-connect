@@ -26,6 +26,21 @@ class WorkDetailsRepository {
     await apiCall(() => _dio.post<void>('/work-details', data: form));
   }
 
+  /// The saved details, or empty ones if there are none yet (assumed to come
+  /// as `data: null`).
+  Future<WorkDetails> fetchWorkDetails() async {
+    final res = await apiCall(
+      () => _dio.get<Map<String, dynamic>>('/work-details'),
+    );
+
+    return ApiResponse.fromJson(
+      res.data!,
+      (data) => data == null
+          ? const WorkDetails()
+          : WorkDetails.fromJson(data as Map<String, dynamic>),
+    ).data;
+  }
+
   Future<List<EmploymentType>> fetchEmploymentTypes() async {
     final res = await apiCall(
       () => _dio.get<Map<String, dynamic>>('/employment-types'),

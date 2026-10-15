@@ -11,6 +11,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/sizes.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/back_title_bar.dart';
+import '../../widgets/link_button.dart';
 import 'data/work_details_provider.dart';
 import 'models/work_details.dart';
 import 'widgets/work_details_form.dart';
@@ -22,7 +23,7 @@ class WorkDetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final details = ref.watch(workDetailsProvider);
+    final detailsAsync = ref.watch(workDetailsProvider);
 
     // Design uses 54px top padding, which sits just below the status bar.
     final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
@@ -62,10 +63,32 @@ class WorkDetailsScreen extends ConsumerWidget {
                   title: l10n.workDetails,
                   fallbackLocation: '/profile',
                 ),
-                WorkDetailsForm(
-                  initialValue: details,
-                  submitLabel: l10n.saveChanges,
-                  onSubmit: save,
+                // The form reads initialValue only once, so it's built only
+                // after the details have loaded.
+                detailsAsync.when(
+                  data: (details) => WorkDetailsForm(
+                    initialValue: details,
+                    submitLabel: l10n.saveChanges,
+                    onSubmit: save,
+                  ),
+                  loading: () => const Padding(
+                    padding: EdgeInsets.only(top: TSizes.xl),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  error: (error, _) => Column(
+                    spacing: TSizes.sm,
+                    children: [
+                      Text(l10n.errorGeneric),
+                      LinkButton(
+                        label: l10n.retry,
+                        // Drops the failed result, so build() fetches again.
+                        onPressed: () => ref.invalidate(workDetailsProvider),
+                      ),
+                    ],
+                  ),
+                  // Show the spinner on Retry instead of keeping the old
+                  // error on screen until the new result arrives.
+                  skipLoadingOnRefresh: false,
                 ),
               ],
             ),

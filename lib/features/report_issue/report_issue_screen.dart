@@ -47,7 +47,7 @@ class _ReportIssueScreenState extends ConsumerState<ReportIssueScreen> {
 
   // Pre-filled with the employer from Work details; the user can change it.
   late final _concerned = TextEditingController(
-    text: ref.read(workDetailsProvider).hostFamily,
+    text: ref.read(workDetailsProvider).value?.hostFamily,
   );
   final _subject = TextEditingController();
   final _description = TextEditingController();
@@ -63,6 +63,21 @@ class _ReportIssueScreenState extends ConsumerState<ReportIssueScreen> {
   String? _photo;
   PinnedLocation? _location;
   VoiceNote? _voiceNote;
+
+  @override
+  void initState() {
+    super.initState();
+    // Work details may not have loaded yet (e.g. the Profile page was never
+    // opened). Fill in the employer when they arrive, unless the user has
+    // typed something by then. If loading fails, the field just stays empty.
+    if (!ref.read(workDetailsProvider).hasValue) {
+      ref.read(workDetailsProvider.future).then((details) {
+        if (mounted && _concerned.text.isEmpty) {
+          _concerned.text = details.hostFamily;
+        }
+      }, onError: (_) {});
+    }
+  }
 
   @override
   void dispose() {

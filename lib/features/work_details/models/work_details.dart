@@ -8,6 +8,10 @@ enum CareArrangement {
     CareArrangement.liveIn => 'live_in',
     CareArrangement.liveOut => 'live_out',
   };
+
+  /// The arrangement for an API value; null for null or an unknown value.
+  static CareArrangement? fromApi(String? value) =>
+      values.where((arrangement) => arrangement.apiValue == value).firstOrNull;
 }
 
 /// Work details and permit (Profile → Work details & permit, and onboarding
@@ -43,4 +47,17 @@ class WorkDetails {
     'employer_name': hostFamily.isEmpty ? null : hostFamily,
     'live_in_situation': careArrangement?.apiValue,
   };
+
+  /// From GET /work-details. The type and the permit come as objects; only
+  /// the type's id and the permit's file name are kept.
+  factory WorkDetails.fromJson(Map<String, dynamic> json) => WorkDetails(
+    employmentTypeId:
+        (json['employment_type'] as Map<String, dynamic>?)?['id'] as int?,
+    workPermitLetter:
+        (json['work_permit'] as Map<String, dynamic>?)?['file_name'] as String?,
+    careArrangement: CareArrangement.fromApi(
+      json['live_in_situation'] as String?,
+    ),
+    hostFamily: json['employer_name'] as String? ?? '',
+  );
 }
