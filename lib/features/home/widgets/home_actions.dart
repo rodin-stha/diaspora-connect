@@ -22,11 +22,6 @@ class HomeActions extends ConsumerWidget {
     // someone taps. In an emergency, no spinner.
     ref.watch(platformSettingsProvider);
 
-    // TODO: Notice has no screen yet.
-    void comingSoon() => ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(l10n.comingSoon)));
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: TSizes.md,
@@ -45,7 +40,8 @@ class HomeActions extends ConsumerWidget {
               iconAsset: 'assets/icons/alarm.svg',
               color: colors.accent,
               onColor: colors.onAccent,
-              onTap: comingSoon,
+              // A tab, so `go` (switch to it), not `push`.
+              onTap: () => context.go('/notices'),
             ),
           ],
         ),

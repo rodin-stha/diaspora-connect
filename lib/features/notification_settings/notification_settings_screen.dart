@@ -76,6 +76,5 @@ class NotificationSettingsScreen extends ConsumerWidget {
         NotificationSetting.issueStatusChanges => l10n.notifyIssueStatus,
         NotificationSetting.documentExpiryReminders =>
           l10n.notifyDocumentExpiry,
-        NotificationSetting.embassyAnnouncements => l10n.notifyAnnouncements,
       };
 }

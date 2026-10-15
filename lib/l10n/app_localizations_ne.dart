@@ -82,9 +82,6 @@ class AppLocalizationsNe extends AppLocalizations {
   String get helpline => 'हेल्पलाइन';
 
   @override
-  String get comingSoon => 'छिट्टै आउँदैछ';
-
-  @override
   String get callAction => 'कल गर्नुहोस्';
 
   @override
@@ -580,9 +577,6 @@ class AppLocalizationsNe extends AppLocalizations {
   String get notifyDocumentExpiry => 'कागजातको म्याद सकिने सम्झना';
 
   @override
-  String get notifyAnnouncements => 'दूतावास र वैदेशिक रोजगार विभागका सूचना';
-
-  @override
   String get mobileNumberLabel => 'मोबाइल नम्बर';
 
   @override
@@ -649,6 +643,9 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get navIssues => 'मेरा समस्याहरू';
+
+  @override
+  String get navNotice => 'सूचना';
 
   @override
   String get navActivity => 'गतिविधि';
@@ -808,6 +805,21 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get announcements => 'सूचनाहरू';
+
+  @override
+  String get noticesTitle => 'सूचनाहरू';
+
+  @override
+  String get noNoticesYet => 'अहिलेसम्म कुनै सूचना छैन।';
+
+  @override
+  String get noticeDetailTitle => 'सूचना';
+
+  @override
+  String get noticeNotFound => 'यो सूचना अब उपलब्ध छैन।';
+
+  @override
+  String get zoomImage => 'तस्बिर ठूलो पारेर हेर्नुहोस्';
 
   @override
   String get errorLoadAnnouncements => 'सूचनाहरू लोड गर्न सकिएन।';

@@ -36,7 +36,6 @@
     "description": "Title of the sheet that opens from the SOS button, above the number to call"
   },
   "helpline": "Helpline",
-  "comingSoon": "Coming soon",
   "callAction": "Call",
   "numberNotAvailable": "This number isn't available yet.",
   "errorLoadNumber": "Couldn't load the number.",
@@ -250,7 +249,6 @@
   "notifyInApp": "In-app alerts",
   "notifyIssueStatus": "Issue status changes",
   "notifyDocumentExpiry": "Document expiry reminders",
-  "notifyAnnouncements": "Embassy & DoFE announcements",
   "mobileNumberLabel": "Mobile number",
   "mobileNumberHint": "5X-XXX-XXXX",
   "sendOtp": "Send OTP",
@@ -274,6 +272,7 @@
   "logOutConfirmBody": "Are you sure you want to log out? You'll need your mobile number and a new code to sign in again.",
   "navHome": "Home",
   "navIssues": "My issues",
+  "navNotice": "Notice",
   "navActivity": "Activity",
   "navProfile": "Profile",
   "onboardingStep": "Step {step} of {total}",
@@ -324,6 +323,17 @@
   "noInternetConnection": "No internet connection",
   "backOnline": "Back online",
   "announcements": "Announcements",
+  "noticesTitle": "Notices",
+  "noNoticesYet": "No notices yet.",
+  "noticeDetailTitle": "Notice",
+  "@noticeDetailTitle": {
+    "description": "Title bar of the page showing one notice"
+  },
+  "noticeNotFound": "This notice is no longer available.",
+  "zoomImage": "Zoom image",
+  "@zoomImage": {
+    "description": "Screen reader label for tapping an image to view it full screen"
+  },
   "errorLoadAnnouncements": "Couldn't load announcements.",
   "announcementLabel": "Announcement {index} of {count}",
   "@announcementLabel": {

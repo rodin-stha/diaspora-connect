@@ -9,22 +9,22 @@ final announcementsRepositoryProvider = Provider<AnnouncementsRepository>(
   (ref) => AnnouncementsRepository(ref.read(dioProvider)),
 );
 
-/// Home shows only the latest few.
-const _limit = 5;
-
 class AnnouncementsRepository {
   final Dio _dio;
 
   AnnouncementsRepository(this._dio);
 
-  /// The latest [_limit] announcements, newest first (the API's order).
-  Future<List<Announcement>> fetchAnnouncements() async {
+  /// The latest announcements, newest first (the API's order): [limit] of
+  /// them, or the server's first page if null.
+  ///
+  /// TODO: load more on scroll (Notice tab) using `meta.last_page`.
+  Future<List<Announcement>> fetchAnnouncements({int? limit}) async {
     final res = await apiCall(
       () => _dio.get<Map<String, dynamic>>(
         '/announcements',
-        // Asks the server for just these, so it doesn't send the default
-        // 20 to throw away.
-        queryParameters: {'per_page': _limit},
+        // Asks the server for just these, so it doesn't send a full page
+        // to throw away.
+        queryParameters: {'per_page': ?limit},
       ),
     );
 
@@ -38,6 +38,6 @@ class AnnouncementsRepository {
     ).data;
 
     // In case the server ignores `per_page`.
-    return announcements.take(_limit).toList();
+    return limit == null ? announcements : announcements.take(limit).toList();
   }
 }

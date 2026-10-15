@@ -24,6 +24,10 @@ class MainShell extends StatelessWidget {
         iconAsset: 'assets/icons/nav_issues.svg',
       ),
       BottomNavItem(
+        label: l10n.navNotice,
+        iconAsset: 'assets/icons/nav_notice.svg',
+      ),
+      BottomNavItem(
         label: l10n.navActivity,
         iconAsset: 'assets/icons/nav_activity.svg',
       ),

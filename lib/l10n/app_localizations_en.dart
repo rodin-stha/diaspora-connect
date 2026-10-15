@@ -82,9 +82,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpline => 'Helpline';
 
   @override
-  String get comingSoon => 'Coming soon';
-
-  @override
   String get callAction => 'Call';
 
   @override
@@ -578,9 +575,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifyDocumentExpiry => 'Document expiry reminders';
 
   @override
-  String get notifyAnnouncements => 'Embassy & DoFE announcements';
-
-  @override
   String get mobileNumberLabel => 'Mobile number';
 
   @override
@@ -648,6 +642,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navIssues => 'My issues';
+
+  @override
+  String get navNotice => 'Notice';
 
   @override
   String get navActivity => 'Activity';
@@ -804,6 +801,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get announcements => 'Announcements';
+
+  @override
+  String get noticesTitle => 'Notices';
+
+  @override
+  String get noNoticesYet => 'No notices yet.';
+
+  @override
+  String get noticeDetailTitle => 'Notice';
+
+  @override
+  String get noticeNotFound => 'This notice is no longer available.';
+
+  @override
+  String get zoomImage => 'Zoom image';
 
   @override
   String get errorLoadAnnouncements => 'Couldn\'t load announcements.';

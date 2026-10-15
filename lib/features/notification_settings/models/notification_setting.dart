@@ -13,8 +13,7 @@ enum NotificationSetting {
   smsAlerts(NotificationGroup.channel, defaultOn: true),
   inAppAlerts(NotificationGroup.channel, defaultOn: true),
   issueStatusChanges(NotificationGroup.topic, defaultOn: true),
-  documentExpiryReminders(NotificationGroup.topic, defaultOn: true),
-  embassyAnnouncements(NotificationGroup.topic, defaultOn: true);
+  documentExpiryReminders(NotificationGroup.topic, defaultOn: true);
 
   final NotificationGroup group;
   final bool defaultOn;

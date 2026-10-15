@@ -5,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/sizes.dart';
 import '../../widgets/app_background.dart';
 import '../announcements/widgets/announcements_section.dart';
-import '../notification_settings/data/notification_settings_provider.dart';
-import '../notification_settings/models/notification_setting.dart';
 import '../profile/data/user_provider.dart';
 import 'widgets/home_actions.dart';
 import 'widgets/home_header.dart';
@@ -17,12 +15,6 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
-    // `select`: rebuild only when this one switch changes, not the others.
-    final showAnnouncements = ref.watch(
-      notificationSettingsProvider.select(
-        (settings) => settings[NotificationSetting.embassyAnnouncements]!,
-      ),
-    );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // White status bar icons on the blue header
@@ -44,11 +36,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Off: not built, so not fetched either.
-                      if (showAnnouncements) const AnnouncementsSection(),
-                      const HomeActions(),
-                    ],
+                    children: const [AnnouncementsSection(), HomeActions()],
                   ),
                 ),
               ],

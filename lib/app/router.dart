@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/activity/activity_screen.dart';
+import '../features/announcements/notice_detail_screen.dart';
+import '../features/announcements/notices_screen.dart';
 import '../features/auth/data/auth_provider.dart';
 import '../features/auth/login_screen.dart';
 import '../features/auth/verify_code_screen.dart';
@@ -145,6 +147,28 @@ final routerProvider = Provider<GoRouter>((ref) {
                       state,
                       IssueDetailScreen(
                         reference: state.pathParameters['reference']!,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/notices',
+                pageBuilder: (context, state) =>
+                    _page(state, const NoticesScreen()),
+                routes: [
+                  GoRoute(
+                    path: ':id', // → /notices/6
+                    // Full screen, no bottom nav (like Track issue)
+                    parentNavigatorKey: rootNavigatorKey,
+                    pageBuilder: (context, state) => _page(
+                      state,
+                      NoticeDetailScreen(
+                        id: int.parse(state.pathParameters['id']!),
                       ),
                     ),
                   ),

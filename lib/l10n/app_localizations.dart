@@ -236,12 +236,6 @@ abstract class AppLocalizations {
   /// **'Helpline'**
   String get helpline;
 
-  /// No description provided for @comingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Coming soon'**
-  String get comingSoon;
-
   /// No description provided for @callAction.
   ///
   /// In en, this message translates to:
@@ -1148,12 +1142,6 @@ abstract class AppLocalizations {
   /// **'Document expiry reminders'**
   String get notifyDocumentExpiry;
 
-  /// No description provided for @notifyAnnouncements.
-  ///
-  /// In en, this message translates to:
-  /// **'Embassy & DoFE announcements'**
-  String get notifyAnnouncements;
-
   /// No description provided for @mobileNumberLabel.
   ///
   /// In en, this message translates to:
@@ -1273,6 +1261,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My issues'**
   String get navIssues;
+
+  /// No description provided for @navNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get navNotice;
 
   /// No description provided for @navActivity.
   ///
@@ -1567,6 +1561,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Announcements'**
   String get announcements;
+
+  /// No description provided for @noticesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices'**
+  String get noticesTitle;
+
+  /// No description provided for @noNoticesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No notices yet.'**
+  String get noNoticesYet;
+
+  /// Title bar of the page showing one notice
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get noticeDetailTitle;
+
+  /// No description provided for @noticeNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This notice is no longer available.'**
+  String get noticeNotFound;
+
+  /// Screen reader label for tapping an image to view it full screen
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom image'**
+  String get zoomImage;
 
   /// No description provided for @errorLoadAnnouncements.
   ///
