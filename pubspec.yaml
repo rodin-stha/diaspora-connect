@@ -43,13 +43,18 @@ flutter:
 
 # App icon. Source files live in assets/app_icon/ (not bundled into the app).
 # After changing them, run: dart run flutter_launcher_icons
+# icon.png is the designer's file (not square). icon_square.png is it padded
+# with its own background colour, since icons must be square; recreate it
+# after replacing icon.png:
+#   sips --padToHeightWidth <w> <w> --padColor F5F9FA icon.png --out icon_square.png
 flutter_launcher_icons:
-  image_path: assets/app_icon/icon.png
+  image_path: assets/app_icon/icon_square.png
   ios: true
   remove_alpha_ios: true # App Store rejects icons with transparency
   android: true
   min_sdk_android: 21
-  # Android 8+ masks icons into circles/squircles, so the logo sits smaller
-  # on a plain background layer to survive the crop.
-  adaptive_icon_background: "#F6F7F9"
+  # Android 8+ masks icons into circles/squircles, so the logo (from
+  # logo.png, transparent) sits in the middle ~60% on a plain background
+  # layer, matching icon.png's, to survive the crop.
+  adaptive_icon_background: "#F5F9FA"
   adaptive_icon_foreground: assets/app_icon/icon_foreground.png
