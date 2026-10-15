@@ -43,6 +43,10 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color inverseSurface;
   final Color onInverseSurface;
 
+  // Scrim: dark see-through strip over a photo, so text on it stays readable
+  final Color scrim;
+  final Color onScrim;
+
   const AppColors({
     required this.primary,
     required this.onPrimary,
@@ -68,6 +72,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.onSuccessContainer,
     required this.inverseSurface,
     required this.onInverseSurface,
+    required this.scrim,
+    required this.onScrim,
   });
 
   /// Values from the Figma design.
@@ -98,6 +104,8 @@ class AppColors extends ThemeExtension<AppColors> {
     onSuccessContainer: Color(0xFF1F7A4D),
     inverseSurface: Color(0xFF1C1B1A),
     onInverseSurface: Color(0xFFFFFFFF),
+    scrim: Color(0xAB3D3D3D), // 67% dark grey
+    onScrim: Color(0xFFFFFFFF),
   );
 
   // To add dark mode: define `static const dark = AppColors(...)` with the
@@ -129,6 +137,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? onSuccessContainer,
     Color? inverseSurface,
     Color? onInverseSurface,
+    Color? scrim,
+    Color? onScrim,
   }) {
     return AppColors(
       primary: primary ?? this.primary,
@@ -155,6 +165,8 @@ class AppColors extends ThemeExtension<AppColors> {
       onSuccessContainer: onSuccessContainer ?? this.onSuccessContainer,
       inverseSurface: inverseSurface ?? this.inverseSurface,
       onInverseSurface: onInverseSurface ?? this.onInverseSurface,
+      scrim: scrim ?? this.scrim,
+      onScrim: onScrim ?? this.onScrim,
     );
   }
 
@@ -211,6 +223,8 @@ class AppColors extends ThemeExtension<AppColors> {
         other.onInverseSurface,
         t,
       )!,
+      scrim: Color.lerp(scrim, other.scrim, t)!,
+      onScrim: Color.lerp(onScrim, other.onScrim, t)!,
     );
   }
 }

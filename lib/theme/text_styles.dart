@@ -95,6 +95,12 @@ class TTextStyles {
   static TextStyle get button =>
       _manrope(fontSize: 15, fontWeight: FontWeight.w700, height: 1.3);
 
+  /// Label on a Home action tile ("Notice").
+  static TextStyle get tileLabel => _manrope(fontSize: 18, height: 1.4);
+
+  /// A Home action tile that is all text ("SOS").
+  static TextStyle get tileDisplay => _manrope(fontSize: 44, height: 1.2);
+
   static TextStyle get caption => _manrope(
     fontSize: 11,
     fontWeight: FontWeight.w700,

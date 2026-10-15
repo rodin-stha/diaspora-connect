@@ -26,9 +26,21 @@
     }
   },
   "reportIssueTitle": "Report an issue",
-  "reportIssueSubtitle": "Wages, permit, housing, safety and more",
-  "myIssues": "My issues",
-  "viewAll": "View all",
+  "notice": "Notice",
+  "sos": "SOS",
+  "@sos": {
+    "description": "Emergency button on Home. Usually kept as the letters SOS."
+  },
+  "sosSheetTitle": "Emergency number",
+  "@sosSheetTitle": {
+    "description": "Title of the sheet that opens from the SOS button, above the number to call"
+  },
+  "helpline": "Helpline",
+  "comingSoon": "Coming soon",
+  "callAction": "Call",
+  "numberNotAvailable": "This number isn't available yet.",
+  "errorLoadNumber": "Couldn't load the number.",
+  "errorStartCall": "Couldn't start the call. Dial the number from your phone app.",
   "dueInDays": "{days, plural, =0{Due today} =1{Due in 1 day} other{Due in {days} days}}",
   "@dueInDays": {
     "placeholders": {
@@ -261,7 +273,7 @@
   "logOutConfirmTitle": "Log out?",
   "logOutConfirmBody": "Are you sure you want to log out? You'll need your mobile number and a new code to sign in again.",
   "navHome": "Home",
-  "navIssues": "Issues",
+  "navIssues": "My issues",
   "navActivity": "Activity",
   "navProfile": "Profile",
   "onboardingStep": "Step {step} of {total}",

@@ -212,23 +212,59 @@ abstract class AppLocalizations {
   /// **'Report an issue'**
   String get reportIssueTitle;
 
-  /// No description provided for @reportIssueSubtitle.
+  /// No description provided for @notice.
   ///
   /// In en, this message translates to:
-  /// **'Wages, permit, housing, safety and more'**
-  String get reportIssueSubtitle;
+  /// **'Notice'**
+  String get notice;
 
-  /// No description provided for @myIssues.
+  /// Emergency button on Home. Usually kept as the letters SOS.
   ///
   /// In en, this message translates to:
-  /// **'My issues'**
-  String get myIssues;
+  /// **'SOS'**
+  String get sos;
 
-  /// No description provided for @viewAll.
+  /// Title of the sheet that opens from the SOS button, above the number to call
   ///
   /// In en, this message translates to:
-  /// **'View all'**
-  String get viewAll;
+  /// **'Emergency number'**
+  String get sosSheetTitle;
+
+  /// No description provided for @helpline.
+  ///
+  /// In en, this message translates to:
+  /// **'Helpline'**
+  String get helpline;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoon;
+
+  /// No description provided for @callAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get callAction;
+
+  /// No description provided for @numberNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This number isn\'t available yet.'**
+  String get numberNotAvailable;
+
+  /// No description provided for @errorLoadNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the number.'**
+  String get errorLoadNumber;
+
+  /// No description provided for @errorStartCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start the call. Dial the number from your phone app.'**
+  String get errorStartCall;
 
   /// No description provided for @dueInDays.
   ///
@@ -1235,7 +1271,7 @@ abstract class AppLocalizations {
   /// No description provided for @navIssues.
   ///
   /// In en, this message translates to:
-  /// **'Issues'**
+  /// **'My issues'**
   String get navIssues;
 
   /// No description provided for @navActivity.

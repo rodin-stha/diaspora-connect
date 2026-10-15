@@ -29,7 +29,11 @@ class TSizes {
   static const double cardRadius = 14.0;
   static const double actionCardRadius = 18.0;
   static const double headerRadius = 28.0;
+  static const double bannerRadius = 12.0;
   static const double pillRadius = 999.0;
+
+  // Home action tiles (Report an issue, Notice, SOS, Helpline)
+  static const double actionTileMinHeight = 111.0;
 
   // Avatars
   static const double avatarLg = 56.0;

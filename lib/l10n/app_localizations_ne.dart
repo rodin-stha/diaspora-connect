@@ -70,13 +70,32 @@ class AppLocalizationsNe extends AppLocalizations {
   String get reportIssueTitle => 'समस्या रिपोर्ट गर्नुहोस्';
 
   @override
-  String get reportIssueSubtitle => 'तलब, अनुमतिपत्र, आवास, सुरक्षा र अन्य';
+  String get notice => 'सूचना';
 
   @override
-  String get myIssues => 'मेरा समस्याहरू';
+  String get sos => 'SOS';
 
   @override
-  String get viewAll => 'सबै हेर्नुहोस्';
+  String get sosSheetTitle => 'आपत्कालीन नम्बर';
+
+  @override
+  String get helpline => 'हेल्पलाइन';
+
+  @override
+  String get comingSoon => 'छिट्टै आउँदैछ';
+
+  @override
+  String get callAction => 'कल गर्नुहोस्';
+
+  @override
+  String get numberNotAvailable => 'यो नम्बर अहिले उपलब्ध छैन।';
+
+  @override
+  String get errorLoadNumber => 'नम्बर लोड गर्न सकिएन।';
+
+  @override
+  String get errorStartCall =>
+      'कल सुरु गर्न सकिएन। फोन एपबाट नम्बर डायल गर्नुहोस्।';
 
   @override
   String dueInDays(int days) {
@@ -629,7 +648,7 @@ class AppLocalizationsNe extends AppLocalizations {
   String get navHome => 'गृहपृष्ठ';
 
   @override
-  String get navIssues => 'समस्याहरू';
+  String get navIssues => 'मेरा समस्याहरू';
 
   @override
   String get navActivity => 'गतिविधि';

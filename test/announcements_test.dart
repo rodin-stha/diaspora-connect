@@ -93,6 +93,14 @@ void main() {
       expect(find.byType(PageDots), findsNothing);
     });
 
+    testWidgets('shows the title on the banner', (tester) async {
+      await pumpSection(
+        tester,
+        () async => [_announcement(1, title: 'Embassy closed Friday')],
+      );
+      expect(find.text('Embassy closed Friday'), findsOneWidget);
+    });
+
     testWidgets('tapping one opens it full screen with its title', (
       tester,
     ) async {
@@ -104,7 +112,14 @@ void main() {
       await tester.tap(find.byType(PageView));
       await tester.pumpAndSettle();
       expect(find.byType(AnnouncementViewer), findsOneWidget);
-      expect(find.text('Embassy closed Friday'), findsOneWidget);
+      // The banner behind the viewer shows it too, so look in the viewer.
+      expect(
+        find.descendant(
+          of: find.byType(AnnouncementViewer),
+          matching: find.text('Embassy closed Friday'),
+        ),
+        findsOneWidget,
+      );
 
       await tester.tap(find.byIcon(Icons.close));
       await tester.pumpAndSettle();

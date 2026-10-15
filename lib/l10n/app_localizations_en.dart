@@ -70,13 +70,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportIssueTitle => 'Report an issue';
 
   @override
-  String get reportIssueSubtitle => 'Wages, permit, housing, safety and more';
+  String get notice => 'Notice';
 
   @override
-  String get myIssues => 'My issues';
+  String get sos => 'SOS';
 
   @override
-  String get viewAll => 'View all';
+  String get sosSheetTitle => 'Emergency number';
+
+  @override
+  String get helpline => 'Helpline';
+
+  @override
+  String get comingSoon => 'Coming soon';
+
+  @override
+  String get callAction => 'Call';
+
+  @override
+  String get numberNotAvailable => 'This number isn\'t available yet.';
+
+  @override
+  String get errorLoadNumber => 'Couldn\'t load the number.';
+
+  @override
+  String get errorStartCall =>
+      'Couldn\'t start the call. Dial the number from your phone app.';
 
   @override
   String dueInDays(int days) {
@@ -628,7 +647,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navHome => 'Home';
 
   @override
-  String get navIssues => 'Issues';
+  String get navIssues => 'My issues';
 
   @override
   String get navActivity => 'Activity';

@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../../../l10n/app_localizations.dart';
@@ -22,8 +20,8 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    // Design uses 54px top padding, which sits just below the status bar.
-    final topPadding = math.max(54.0, MediaQuery.paddingOf(context).top + 8);
+    // The design has 22px above the greeting, measured below the status bar.
+    final topPadding = MediaQuery.paddingOf(context).top + TSizes.pagePadding;
 
     return Container(
       width: double.infinity,
@@ -43,25 +41,21 @@ class HomeHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: TSizes.sm,
             children: [
               // Expanded takes the leftover width, pushing the toggle to the
-              // right edge. The ellipsis guards against a long translated name.
+              // right edge. A long name wraps instead of running under it.
               Expanded(
                 child: Text(
-                  l10n.appName,
-                  style: TTextStyles.logo.copyWith(color: colors.onPrimary),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  l10n.greeting(userName),
+                  style: TTextStyles.headline.copyWith(
+                    color: colors.onPrimary,
+                  ),
                 ),
               ),
-              const SizedBox(width: TSizes.sm),
               const LanguageToggle(),
             ],
-          ),
-          const SizedBox(height: TSizes.lg),
-          Text(
-            l10n.greeting(userName),
-            style: TTextStyles.headline.copyWith(color: colors.onPrimary),
           ),
           const SizedBox(height: TSizes.xs),
           Text(

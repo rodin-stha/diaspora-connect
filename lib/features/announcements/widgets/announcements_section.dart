@@ -13,12 +13,13 @@ import '../data/announcements_provider.dart';
 import '../models/announcement.dart';
 import 'announcement_viewer.dart';
 
-/// Wide, like a banner. Posters are cropped to fit; tapping one shows it
-/// whole.
-const _aspectRatio = 16 / 9;
+/// Nearly square, as in the design (342 × 298). Posters are cropped to fit;
+/// tapping one shows it whole.
+const _aspectRatio = 342 / 298;
 
-/// "Announcements" on Home: a swipeable carousel of the latest Embassy and
-/// DoFE announcement images. Shows nothing if there are none.
+/// "Announcements" at the top of Home: a swipeable carousel of the latest
+/// Embassy and DoFE announcements, each with its title and description
+/// over the image. Shows nothing if there are none.
 ///
 /// Includes the space below it, so Home has no gap when it's hidden.
 class AnnouncementsSection extends ConsumerWidget {
@@ -48,7 +49,7 @@ class AnnouncementsSection extends ConsumerWidget {
             aspectRatio: _aspectRatio,
             child: SkeletonBox(
               height: double.infinity,
-              radius: TSizes.cardRadius,
+              radius: TSizes.bannerRadius,
             ),
           ),
         );
@@ -119,8 +120,23 @@ class _CarouselState extends State<_Carousel> {
                 child: GestureDetector(
                   onTap: () => showAnnouncement(context, announcement),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(TSizes.cardRadius),
-                    child: NetworkPhoto(url: announcement.imageUrl),
+                    borderRadius: BorderRadius.circular(TSizes.bannerRadius),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        NetworkPhoto(url: announcement.imageUrl),
+                        if (announcement.title != null ||
+                            announcement.description != null)
+                          // Pinned left and right, so it spans the full
+                          // width; its height follows the text.
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: _Caption(announcement: announcement),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -130,6 +146,49 @@ class _CarouselState extends State<_Carousel> {
         if (announcements.length > 1)
           PageDots(count: announcements.length, current: page),
       ],
+    );
+  }
+}
+
+/// Title and description on a dark strip along the bottom of the image.
+/// Cut short here; the full text is in the viewer.
+class _Caption extends StatelessWidget {
+  final Announcement announcement;
+
+  const _Caption({required this.announcement});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final title = announcement.title;
+    final description = announcement.description;
+
+    return ColoredBox(
+      color: colors.scrim,
+      child: Padding(
+        padding: const EdgeInsets.all(TSizes.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          spacing: TSizes.xs,
+          children: [
+            if (title != null)
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TTextStyles.body.copyWith(color: colors.onScrim),
+              ),
+            if (description != null)
+              Text(
+                description,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TTextStyles.bodySmall.copyWith(color: colors.onScrim),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
