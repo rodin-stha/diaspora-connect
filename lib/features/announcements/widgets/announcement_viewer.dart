@@ -6,6 +6,7 @@ import '../../../theme/sizes.dart';
 import '../../../theme/text_styles.dart';
 import '../../../widgets/network_photo.dart';
 import '../models/announcement.dart';
+import 'announcement_photo.dart';
 
 /// Opens [announcement] full screen, over the bottom nav.
 void showAnnouncement(BuildContext context, Announcement announcement) =>
@@ -54,7 +55,12 @@ class AnnouncementViewer extends StatelessWidget {
                     maxScale: _maxZoom,
                     child: NetworkPhoto(url: image.url, fit: BoxFit.contain),
                   ),
-                  null => const SizedBox.shrink(),
+                  // No image of its own (opened from the carousel, which
+                  // shows these with the fallback): show that here too.
+                  null => const AnnouncementPhoto(
+                    image: null,
+                    fit: BoxFit.contain,
+                  ),
                 },
               ),
               if (title != null || description != null)

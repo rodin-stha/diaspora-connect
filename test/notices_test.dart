@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,7 @@ import 'package:diaspora_connect/features/announcements/data/announcements_repos
 import 'package:diaspora_connect/features/announcements/models/announcement.dart';
 import 'package:diaspora_connect/features/announcements/notice_detail_screen.dart';
 import 'package:diaspora_connect/features/announcements/notices_screen.dart';
+import 'package:diaspora_connect/features/platform_settings/data/fallback_image_provider.dart';
 import 'package:diaspora_connect/l10n/app_localizations.dart';
 import 'package:diaspora_connect/theme/app_theme.dart';
 import 'package:diaspora_connect/widgets/skeleton.dart';
@@ -25,10 +27,12 @@ Announcement _notice(
   String? title,
   String? description,
   bool hasImage = true,
+  DateTime? createdAt,
 }) => Announcement(
   id: id,
   title: title ?? 'Notice $id',
   description: description,
+  createdAt: createdAt,
   image: hasImage
       ? AnnouncementImage(
           url: 'https://example.com/$id.jpg',
@@ -68,6 +72,7 @@ void main() {
     WidgetTester tester, {
     required String initialLocation,
     required _FakeRepository repository,
+    File? fallbackImage,
   }) async {
     final router = GoRouter(
       initialLocation: initialLocation,
@@ -90,6 +95,8 @@ void main() {
       ProviderScope(
         overrides: [
           announcementsRepositoryProvider.overrideWithValue(repository),
+          // The real one downloads from the API into the phone's storage.
+          fallbackImageProvider.overrideWith((ref) async => fallbackImage),
         ],
         child: MaterialApp.router(
           theme: TAppTheme.light,
@@ -162,6 +169,46 @@ void main() {
 
     expect(repository.requestedPages, [1, 2, 3]);
     expect(find.text('Notice 12', skipOffstage: false), findsOneWidget);
+  });
+
+  testWidgets('each notice shows its date', (tester) async {
+    await pumpApp(
+      tester,
+      initialLocation: '/notices',
+      repository: _FakeRepository([
+        _notice(1, createdAt: DateTime(2026, 9, 25, 10)),
+      ]),
+    );
+    expect(find.text('25 Sep 2026'), findsOneWidget);
+  });
+
+  testWidgets('a notice without an image shows the fallback image', (
+    tester,
+  ) async {
+    final fallback = File('${Directory.systemTemp.path}/fallback_test.jpg');
+    await pumpApp(
+      tester,
+      initialLocation: '/notices',
+      repository: _FakeRepository([_notice(1, hasImage: false)]),
+      fallbackImage: fallback,
+    );
+
+    // Wrapped in a ResizeImage: it's decoded at the size it's shown.
+    final shown = tester.widget<Image>(find.byType(Image)).image;
+    final file = (shown as ResizeImage).imageProvider as FileImage;
+    expect(file.file.path, fallback.path);
+  });
+
+  testWidgets('without a fallback, a text-only notice has no picture', (
+    tester,
+  ) async {
+    await pumpApp(
+      tester,
+      initialLocation: '/notices',
+      repository: _FakeRepository([_notice(1, hasImage: false)]),
+    );
+    expect(find.byType(Image), findsNothing);
+    expect(find.text('Notice 1'), findsOneWidget);
   });
 
   testWidgets('tapping a notice opens it with its whole description', (

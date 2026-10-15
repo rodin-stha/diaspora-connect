@@ -15,9 +15,7 @@ const _refreshBeforeExpiry = Duration(minutes: 2);
 /// already (e.g. the phone's clock is off).
 const _minRefreshInterval = Duration(minutes: 1);
 
-/// The latest few announcements with an image, for the carousel on Home.
-/// Text-only ones are left out (a slide needs a picture); they're on the
-/// Notice tab.
+/// The latest few announcements, for the carousel on Home.
 ///
 /// autoDispose: only fetched while Home is open.
 final announcementsProvider = FutureProvider.autoDispose<List<Announcement>>((
@@ -26,9 +24,7 @@ final announcementsProvider = FutureProvider.autoDispose<List<Announcement>>((
   final page = await ref
       .read(announcementsRepositoryProvider)
       .fetchAnnouncementsPage(page: 1, perPage: _homeLimit);
-  final announcements = page.items
-      .where((announcement) => announcement.image != null)
-      .toList();
+  final announcements = page.items;
 
   // The image links expire, and a cached list would show broken images
   // after that. Refetch shortly before, for fresh links. While refetching,

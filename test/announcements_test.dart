@@ -7,6 +7,7 @@ import 'package:diaspora_connect/features/announcements/data/announcements_provi
 import 'package:diaspora_connect/features/announcements/models/announcement.dart';
 import 'package:diaspora_connect/features/announcements/widgets/announcement_viewer.dart';
 import 'package:diaspora_connect/features/announcements/widgets/announcements_section.dart';
+import 'package:diaspora_connect/features/platform_settings/data/fallback_image_provider.dart';
 import 'package:diaspora_connect/l10n/app_localizations.dart';
 import 'package:diaspora_connect/theme/app_theme.dart';
 import 'package:diaspora_connect/widgets/page_dots.dart';
@@ -60,6 +61,10 @@ void main() {
 
     expect(announcement.title, 'Beware of fake job offers');
     expect(announcement.image, isNull);
+    expect(
+      announcement.createdAt!.toUtc(),
+      DateTime.utc(2026, 9, 25, 10),
+    );
   });
 
   group('AnnouncementsSection', () {
@@ -69,7 +74,10 @@ void main() {
     ) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [announcementsProvider.overrideWith((ref) => fetch())],
+          overrides: [
+            announcementsProvider.overrideWith((ref) => fetch()),
+            fallbackImageProvider.overrideWith((ref) async => null),
+          ],
           child: MaterialApp(
             theme: TAppTheme.light,
             localizationsDelegates: AppLocalizations.localizationsDelegates,

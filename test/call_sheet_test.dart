@@ -22,6 +22,26 @@ void main() {
       expect(settings.helplineNumber, isNull);
     });
 
+    test('reads the fallback image', () {
+      final settings = PlatformSettings.fromJson({
+        'sos_number': '9800001111',
+        'helpline_number': '9525990012',
+        'fallback_image': {
+          'id': 87,
+          'file_name': 'about-img-1.testingwala.jpg',
+          'mime_type': 'image/jpeg',
+          'size': 1464841,
+          'url': 'https://diaspora.kumo-labs.com/storage/87/a.jpg?signature=x',
+          'expires_at': '2026-10-15T05:43:11+00:00',
+        },
+      });
+
+      final image = settings.fallbackImage!;
+      expect(image.id, 87);
+      expect(image.fileName, 'about-img-1.testingwala.jpg');
+      expect(image.url, contains('signature=x'));
+    });
+
     test('trims numbers and treats blank as none', () {
       final settings = PlatformSettings.fromJson({
         'sos_number': ' 100 ',

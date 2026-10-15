@@ -8,11 +8,15 @@ class Announcement {
   /// Null for a text-only announcement.
   final AnnouncementImage? image;
 
+  /// When it was posted, in the phone's time zone.
+  final DateTime? createdAt;
+
   const Announcement({
     required this.id,
     this.title,
     this.description,
     this.image,
+    this.createdAt,
   });
 
   factory Announcement.fromJson(Map<String, dynamic> json) {
@@ -22,6 +26,10 @@ class Announcement {
       title: _nonEmpty(json['title'] as String?),
       description: _nonEmpty(json['description'] as String?),
       image: image == null ? null : AnnouncementImage.fromJson(image),
+      // The API sends UTC; toLocal() shows the day it is for the user.
+      createdAt: DateTime.tryParse(
+        json['created_at'] as String? ?? '',
+      )?.toLocal(),
     );
   }
 

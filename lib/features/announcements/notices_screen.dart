@@ -9,14 +9,15 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
 import '../../theme/text_styles.dart';
+import '../../utils/formatters.dart';
 import '../../widgets/app_background.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/load_error.dart';
 import '../../widgets/load_more_scroll_view.dart';
-import '../../widgets/network_photo.dart';
 import '../../widgets/skeleton.dart';
 import 'data/notices_provider.dart';
 import 'models/announcement.dart';
+import 'widgets/announcement_photo.dart';
 
 /// Wide, like the posters' usual shape. Tapping one shows it whole.
 const _imageAspectRatio = 16 / 9;
@@ -116,18 +117,19 @@ class NoticesScreen extends ConsumerWidget {
   }
 }
 
-/// One announcement: its image (if it has one), then its title and the
-/// start of its description. Tapping opens the whole notice.
-class _NoticeCard extends StatelessWidget {
+/// One announcement: its image (or the fallback image), then its title and
+/// the start of its description. Tapping opens the whole notice.
+class _NoticeCard extends ConsumerWidget {
   final Announcement announcement;
 
   const _NoticeCard({required this.announcement});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
     final title = announcement.title;
     final description = announcement.description;
+    final createdAt = announcement.createdAt;
 
     return Material(
       color: colors.surface,
@@ -141,18 +143,26 @@ class _NoticeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (announcement.image case final image?)
+            // Without its own image, the fallback image (if there is one).
+            if (announcement.image != null || hasFallbackImage(ref))
               AspectRatio(
                 aspectRatio: _imageAspectRatio,
-                child: NetworkPhoto(url: image.url),
+                child: AnnouncementPhoto(image: announcement.image),
               ),
-            if (title != null || description != null)
+            if (createdAt != null || title != null || description != null)
               Padding(
                 padding: const EdgeInsets.all(TSizes.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: TSizes.xs,
                   children: [
+                    if (createdAt != null)
+                      Text(
+                        TFormatters.date(context, createdAt),
+                        style: TTextStyles.caption.copyWith(
+                          color: colors.textSecondary,
+                        ),
+                      ),
                     if (title != null)
                       Text(
                         title,

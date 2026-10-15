@@ -15,6 +15,7 @@ import '../../widgets/load_error.dart';
 import '../../widgets/skeleton.dart';
 import 'data/notices_provider.dart';
 import 'models/announcement.dart';
+import 'widgets/announcement_photo.dart';
 
 /// Shape of the placeholder while the image loads; the real one keeps its
 /// own shape.
@@ -96,13 +97,13 @@ class NoticeDetailScreen extends ConsumerWidget {
   }
 }
 
-class _NoticeContent extends StatelessWidget {
+class _NoticeContent extends ConsumerWidget {
   final Announcement announcement;
 
   const _NoticeContent({required this.announcement});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
     final title = announcement.title;
@@ -112,6 +113,16 @@ class _NoticeContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: TSizes.lg,
       children: [
+        if (announcement.image == null && hasFallbackImage(ref))
+          // No image of its own: the fallback, cropped like in the list.
+          // Not zoomable: it's decoration, not content.
+          ClipRRect(
+            borderRadius: BorderRadius.circular(TSizes.cardRadius),
+            child: const AspectRatio(
+              aspectRatio: _placeholderAspectRatio,
+              child: AnnouncementPhoto(image: null),
+            ),
+          ),
         if (announcement.image case final image?)
           // Tap to zoom: posters often have small print.
           Semantics(
@@ -153,8 +164,6 @@ class _WholeImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-
     return LayoutBuilder(
       builder: (context, constraints) => Image.network(
         url,
@@ -172,18 +181,10 @@ class _WholeImage extends StatelessWidget {
                   child: SkeletonBox(height: double.infinity, radius: 0),
                 ),
               ),
-        errorBuilder: (context, error, stackTrace) => AspectRatio(
+        // Broken link: the fallback image instead.
+        errorBuilder: (context, error, stackTrace) => const AspectRatio(
           aspectRatio: _placeholderAspectRatio,
-          child: ColoredBox(
-            color: colors.border,
-            child: Center(
-              child: Icon(
-                Icons.broken_image_outlined,
-                size: TSizes.iconLg,
-                color: colors.iconInactive,
-              ),
-            ),
-          ),
+          child: AnnouncementPhoto(image: null),
         ),
       ),
     );

@@ -13,10 +13,15 @@ class NetworkPhoto extends StatelessWidget {
   /// shows it whole (full-screen view).
   final BoxFit fit;
 
+  /// Shown instead if the image can't load. Defaults to a broken-image
+  /// icon.
+  final Widget? fallback;
+
   const NetworkPhoto({
     super.key,
     required this.url,
     this.fit = BoxFit.cover,
+    this.fallback,
   });
 
   @override
@@ -39,16 +44,18 @@ class NetworkPhoto extends StatelessWidget {
             : const Skeleton(
                 child: SkeletonBox(height: double.infinity, radius: 0),
               ),
-        errorBuilder: (context, error, stackTrace) => ColoredBox(
-          color: colors.border,
-          child: Center(
-            child: Icon(
-              Icons.broken_image_outlined,
-              size: TSizes.iconLg,
-              color: colors.iconInactive,
+        errorBuilder: (context, error, stackTrace) =>
+            fallback ??
+            ColoredBox(
+              color: colors.border,
+              child: Center(
+                child: Icon(
+                  Icons.broken_image_outlined,
+                  size: TSizes.iconLg,
+                  color: colors.iconInactive,
+                ),
+              ),
             ),
-          ),
-        ),
       ),
     );
   }

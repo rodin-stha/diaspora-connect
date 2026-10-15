@@ -6,11 +6,11 @@ import '../../../theme/colors.dart';
 import '../../../theme/sizes.dart';
 import '../../../theme/text_styles.dart';
 import '../../../widgets/load_error.dart';
-import '../../../widgets/network_photo.dart';
 import '../../../widgets/page_dots.dart';
 import '../../../widgets/skeleton.dart';
 import '../data/announcements_provider.dart';
 import '../models/announcement.dart';
+import 'announcement_photo.dart';
 import 'announcement_viewer.dart';
 
 /// Nearly square, as in the design (342 × 298). Posters are cropped to fit;
@@ -28,7 +28,17 @@ class AnnouncementsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final announcementsAsync = ref.watch(announcementsProvider);
+    // A slide needs a picture: text-only announcements are shown only once
+    // there's a fallback image for them. Otherwise they're on the Notice tab.
+    final hasFallback = hasFallbackImage(ref);
+    final announcementsAsync = ref
+        .watch(announcementsProvider)
+        .whenData(
+          (announcements) => [
+            for (final announcement in announcements)
+              if (announcement.image != null || hasFallback) announcement,
+          ],
+        );
 
     final Widget content;
     switch (announcementsAsync) {
@@ -124,10 +134,7 @@ class _CarouselState extends State<_Carousel> {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        // Always there: Home only gets announcements with
-                        // an image (see announcementsProvider).
-                        if (announcement.image case final image?)
-                          NetworkPhoto(url: image.url),
+                        AnnouncementPhoto(image: announcement.image),
                         if (announcement.title != null ||
                             announcement.description != null)
                           // Pinned left and right, so it spans the full
