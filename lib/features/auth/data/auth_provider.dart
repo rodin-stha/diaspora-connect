@@ -95,4 +95,20 @@ class AuthNotifier extends Notifier<AuthState> {
     await ref.read(tokenStorageProvider).delete();
     state = const AuthState();
   }
+
+  /// The server rejected our token (401): it expired or was revoked.
+  /// Signs out on this device only; there's no session left on the server
+  /// to end, so unlike [signOut] there's no logout request.
+  Future<void> endExpiredSession() async {
+    // Screens often load several things at once, so a few 401s can arrive
+    // together. Only the first one signs out.
+    if (!state.isSignedIn) return;
+    // Read before signing out: signing out throws this container away
+    // (see SessionProviderScope), and `ref` can't be used after that.
+    final tokenStorage = ref.read(tokenStorageProvider);
+    // Signed out first, synchronously, so the 401s right behind this one
+    // see it and return above.
+    state = const AuthState();
+    await tokenStorage.delete();
+  }
 }

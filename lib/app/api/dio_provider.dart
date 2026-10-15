@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +35,24 @@ final dioProvider = Provider<Dio>((ref) {
           options.headers['Authorization'] = 'Bearer $token';
         }
         handler.next(options);
+      },
+      // An expired or revoked token gets 401 on every request, so without
+      // this the user would see errors everywhere until they found Sign
+      // out. Signing out here makes the router send them to Login.
+      onError: (error, handler) {
+        final request = error.requestOptions;
+        if (error.response?.statusCode == 401 &&
+            // Only requests that sent a token: a 401 on Login means
+            // something else (e.g. a wrong code), not an expired session.
+            request.headers.containsKey('Authorization') &&
+            // signOut already handles its own logout request failing.
+            request.path != '/logout' &&
+            // A late reply to a request from before the last sign-out.
+            ref.mounted) {
+          unawaited(ref.read(authProvider.notifier).endExpiredSession());
+        }
+        // Still passed on, so the screen that asked gets its error as usual.
+        handler.next(error);
       },
     ),
     if (kDebugMode)
