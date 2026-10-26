@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/api/api_response.dart';
 import '../../../app/api/dio_provider.dart';
+import '../../push_notifications/push_token.dart';
 import '../models/register.dart';
 import '../models/verify_otp_response.dart';
 
@@ -27,11 +28,21 @@ class AuthRepository {
     ).data;
   }
 
+  /// Also tells the server where to send this device's push notifications.
+  /// Signing in still works without a token: then it's just left out.
   Future<VerifyOtpResponse> verifyCode(String phone, String code) async {
+    final fcmToken = await pushToken();
     final res = await apiCall(
       () => _dio.post<Map<String, dynamic>>(
         '/register/verify-otp',
-        data: {'phone': normalizePhone(phone), 'otp': code},
+        data: {
+          'phone': normalizePhone(phone),
+          'otp': code,
+          if (fcmToken != null) ...{
+            'fcm_token': fcmToken,
+            'platform': pushPlatform,
+          },
+        },
       ),
     );
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "728008484931",
+    "project_id": "diaspora-connect-29809",
+    "storage_bucket": "diaspora-connect-29809.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728008484931:android:32cd89aa2597a649488cf6",
+        "android_client_info": {
+          "package_name": "com.kumolabs.diaspora_connect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOJnCMA6AVggCO5Vpjfy_N-Y1VIF1qrsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

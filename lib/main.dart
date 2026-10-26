@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,6 +13,8 @@ import 'app/session_provider_scope.dart';
 import 'features/auth/data/token_storage.dart';
 import 'features/connectivity/connectivity_listener.dart';
 import 'features/in_app_alerts/in_app_alerts_listener.dart';
+import 'features/push_notifications/push_notifications_listener.dart';
+import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
 import 'widgets/keyboard_done_bar.dart';
@@ -19,6 +22,7 @@ import 'widgets/keyboard_done_bar.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Env.validate();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final prefs = await SharedPreferences.getInstance();
   final savedToken = await TokenStorage(const FlutterSecureStorage()).read();
   // Debug builds only: copy it into Postman/curl to call the API by hand.
@@ -46,7 +50,9 @@ class MyApp extends ConsumerWidget {
       // Wraps every screen, so alerts, the offline message and the keyboard's
       // Done bar show wherever the user is.
       builder: (context, child) => InAppAlertsListener(
-        child: ConnectivityListener(child: KeyboardDoneBar(child: child!)),
+        child: PushNotificationsListener(
+          child: ConnectivityListener(child: KeyboardDoneBar(child: child!)),
+        ),
       ),
       locale: ref.watch(localeProvider),
       supportedLocales: supportedAppLocales,
