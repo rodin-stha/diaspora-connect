@@ -251,5 +251,8 @@
   "zoomImage": "तस्बिर ठूलो पारेर हेर्नुहोस्",
   "errorLoadAnnouncements": "सूचनाहरू लोड गर्न सकिएन।",
   "announcementLabel": "सूचना {count} मध्ये {index}",
-  "done": "भयो"
+  "done": "भयो",
+  "updateRequiredTitle": "अपडेट आवश्यक छ",
+  "updateRequiredMessage": "Diaspora Connect को यो संस्करण अब चल्दैन। आफ्ना समस्याहरू रिपोर्ट र ट्र्याक गरिरहन एप अपडेट गर्नुहोस्।",
+  "updateNow": "अहिले अपडेट गर्नुहोस्"
 }

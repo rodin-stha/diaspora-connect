@@ -347,5 +347,14 @@
       }
     }
   },
-  "done": "Done"
+  "done": "Done",
+  "updateRequiredTitle": "Update required",
+  "@updateRequiredTitle": {
+    "description": "Heading of the full-screen page shown when this app version is too old to use"
+  },
+  "updateRequiredMessage": "This version of Diaspora Connect is no longer supported. Update the app to keep reporting and tracking your issues.",
+  "updateNow": "Update now",
+  "@updateNow": {
+    "description": "Button that opens the Play Store or App Store page of the app"
+  }
 }

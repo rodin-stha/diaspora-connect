@@ -831,4 +831,14 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get done => 'भयो';
+
+  @override
+  String get updateRequiredTitle => 'अपडेट आवश्यक छ';
+
+  @override
+  String get updateRequiredMessage =>
+      'Diaspora Connect को यो संस्करण अब चल्दैन। आफ्ना समस्याहरू रिपोर्ट र ट्र्याक गरिरहन एप अपडेट गर्नुहोस्।';
+
+  @override
+  String get updateNow => 'अहिले अपडेट गर्नुहोस्';
 }

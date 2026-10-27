@@ -827,4 +827,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get done => 'Done';
+
+  @override
+  String get updateRequiredTitle => 'Update required';
+
+  @override
+  String get updateRequiredMessage =>
+      'This version of Diaspora Connect is no longer supported. Update the app to keep reporting and tracking your issues.';
+
+  @override
+  String get updateNow => 'Update now';
 }

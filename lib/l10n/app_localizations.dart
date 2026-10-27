@@ -1609,6 +1609,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Done'**
   String get done;
+
+  /// Heading of the full-screen page shown when this app version is too old to use
+  ///
+  /// In en, this message translates to:
+  /// **'Update required'**
+  String get updateRequiredTitle;
+
+  /// No description provided for @updateRequiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This version of Diaspora Connect is no longer supported. Update the app to keep reporting and tracking your issues.'**
+  String get updateRequiredMessage;
+
+  /// Button that opens the Play Store or App Store page of the app
+  ///
+  /// In en, this message translates to:
+  /// **'Update now'**
+  String get updateNow;
 }
 
 class _AppLocalizationsDelegate
