@@ -512,11 +512,11 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profileSectionProfile;
 
-  /// No description provided for @profileSectionPreferences.
+  /// No description provided for @profileSectionAbout.
   ///
   /// In en, this message translates to:
-  /// **'Preferences'**
-  String get profileSectionPreferences;
+  /// **'About'**
+  String get profileSectionAbout;
 
   /// No description provided for @personalDetails.
   ///
@@ -541,12 +541,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saved documents'**
   String get savedDocuments;
-
-  /// No description provided for @notificationSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Notification settings'**
-  String get notificationSettings;
 
   /// No description provided for @logOut.
   ///
@@ -1106,42 +1100,6 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 of your issues was updated} other{{count} of your issues were updated}}'**
   String alertIssuesUpdated(int count);
 
-  /// No description provided for @howNotifiedSection.
-  ///
-  /// In en, this message translates to:
-  /// **'How you\'re notified'**
-  String get howNotifiedSection;
-
-  /// No description provided for @whatNotifiedSection.
-  ///
-  /// In en, this message translates to:
-  /// **'What you\'re notified about'**
-  String get whatNotifiedSection;
-
-  /// No description provided for @notifySms.
-  ///
-  /// In en, this message translates to:
-  /// **'SMS alerts'**
-  String get notifySms;
-
-  /// No description provided for @notifyInApp.
-  ///
-  /// In en, this message translates to:
-  /// **'In-app alerts'**
-  String get notifyInApp;
-
-  /// No description provided for @notifyIssueStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Issue status changes'**
-  String get notifyIssueStatus;
-
-  /// No description provided for @notifyDocumentExpiry.
-  ///
-  /// In en, this message translates to:
-  /// **'Document expiry reminders'**
-  String get notifyDocumentExpiry;
-
   /// No description provided for @mobileNumberLabel.
   ///
   /// In en, this message translates to:
@@ -1627,6 +1585,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update now'**
   String get updateNow;
+
+  /// Profile menu row that opens the privacy policy web page
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get privacyPolicy;
 }
 
 class _AppLocalizationsDelegate

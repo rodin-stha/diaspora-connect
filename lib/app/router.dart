@@ -12,7 +12,6 @@ import '../features/home/home_screen.dart';
 import '../features/issues/issue_detail_screen.dart';
 import '../features/issues/issues_screen.dart';
 import '../features/legal_details/legal_details_screen.dart';
-import '../features/notification_settings/notification_settings_screen.dart';
 import '../features/onboarding/onboarding_legal_screen.dart';
 import '../features/onboarding/onboarding_personal_screen.dart';
 import '../features/onboarding/onboarding_work_screen.dart';
@@ -217,12 +216,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                     parentNavigatorKey: rootNavigatorKey,
                     pageBuilder: (context, state) =>
                         _page(state, const WorkDetailsScreen()),
-                  ),
-                  GoRoute(
-                    path: 'notification-settings',
-                    parentNavigatorKey: rootNavigatorKey,
-                    pageBuilder: (context, state) =>
-                        _page(state, const NotificationSettingsScreen()),
                   ),
                   GoRoute(
                     path: 'saved-documents', // → /profile/saved-documents

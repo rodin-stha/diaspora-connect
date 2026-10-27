@@ -239,7 +239,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSectionProfile => 'Profile';
 
   @override
-  String get profileSectionPreferences => 'Preferences';
+  String get profileSectionAbout => 'About';
 
   @override
   String get personalDetails => 'Personal details';
@@ -252,9 +252,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savedDocuments => 'Saved documents';
-
-  @override
-  String get notificationSettings => 'Notification settings';
 
   @override
   String get logOut => 'Log out';
@@ -557,24 +554,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get howNotifiedSection => 'How you\'re notified';
-
-  @override
-  String get whatNotifiedSection => 'What you\'re notified about';
-
-  @override
-  String get notifySms => 'SMS alerts';
-
-  @override
-  String get notifyInApp => 'In-app alerts';
-
-  @override
-  String get notifyIssueStatus => 'Issue status changes';
-
-  @override
-  String get notifyDocumentExpiry => 'Document expiry reminders';
-
-  @override
   String get mobileNumberLabel => 'Mobile number';
 
   @override
@@ -837,4 +816,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateNow => 'Update now';
+
+  @override
+  String get privacyPolicy => 'Privacy policy';
 }

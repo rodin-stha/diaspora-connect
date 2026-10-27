@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../app/links.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
@@ -85,12 +87,16 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: TSizes.groupGap),
                       ListSection(
-                        title: l10n.profileSectionPreferences,
+                        title: l10n.profileSectionAbout,
                         children: [
                           MenuRow(
-                            title: l10n.notificationSettings,
-                            onTap: () =>
-                                context.push('/profile/notification-settings'),
+                            title: l10n.privacyPolicy,
+                            // In-app browser (Safari view / Custom Tab): a
+                            // Done button brings the user straight back.
+                            onTap: () => launchUrl(
+                              AppLinks.privacyPolicy,
+                              mode: LaunchMode.inAppBrowserView,
+                            ),
                           ),
                         ],
                       ),

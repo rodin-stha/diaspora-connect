@@ -117,12 +117,11 @@
   "activityProfileUpdatedDetail": "Work details & permit saved",
   "appLanguage": "App language",
   "profileSectionProfile": "Profile",
-  "profileSectionPreferences": "Preferences",
+  "profileSectionAbout": "About",
   "personalDetails": "Personal details",
   "legalDetails": "Legal details · Citizenship / NID",
   "workDetails": "Work details & permit",
   "savedDocuments": "Saved documents",
-  "notificationSettings": "Notification settings",
   "logOut": "Log out",
   "fullNameLabel": "Full name",
   "dateOfBirthLabel": "Date of birth · optional",
@@ -243,12 +242,6 @@
       }
     }
   },
-  "howNotifiedSection": "How you're notified",
-  "whatNotifiedSection": "What you're notified about",
-  "notifySms": "SMS alerts",
-  "notifyInApp": "In-app alerts",
-  "notifyIssueStatus": "Issue status changes",
-  "notifyDocumentExpiry": "Document expiry reminders",
   "mobileNumberLabel": "Mobile number",
   "mobileNumberHint": "5X-XXX-XXXX",
   "sendOtp": "Send OTP",
@@ -356,5 +349,9 @@
   "updateNow": "Update now",
   "@updateNow": {
     "description": "Button that opens the Play Store or App Store page of the app"
+  },
+  "privacyPolicy": "Privacy policy",
+  "@privacyPolicy": {
+    "description": "Profile menu row that opens the privacy policy web page"
   }
 }

@@ -8,8 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/router.dart';
 import '../../l10n/app_localizations.dart';
 import '../auth/data/auth_provider.dart';
-import '../notification_settings/data/notification_settings_provider.dart';
-import '../notification_settings/models/notification_setting.dart';
 import 'push_token.dart';
 
 /// Push notifications from Firebase Cloud Messaging. Android only for now:
@@ -106,12 +104,6 @@ class _PushNotificationsListenerState
   void _showInApp(RemoteMessage message) {
     final notification = message.notification;
     if (notification == null || !mounted) return;
-    if (!ref.read(
-      notificationSettingsProvider,
-    )[NotificationSetting.inAppAlerts]!) {
-      return;
-    }
-
     final text = [
       notification.title,
       notification.body,

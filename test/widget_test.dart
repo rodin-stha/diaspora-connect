@@ -11,8 +11,6 @@ import 'package:diaspora_connect/theme/sizes.dart';
 import 'package:diaspora_connect/widgets/issue_card.dart';
 import 'package:diaspora_connect/widgets/labeled_field.dart';
 import 'package:diaspora_connect/widgets/selectable_chip.dart';
-import 'package:diaspora_connect/widgets/toggle_row.dart';
-import 'package:diaspora_connect/widgets/toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -710,34 +708,6 @@ void main() {
       await tester.tap(find.text('Save changes'));
       await tester.pumpAndSettle();
       expect(find.text('Your details have been saved'), findsOneWidget);
-    });
-
-    testWidgets('Notification settings: toggles save on the device', (
-      tester,
-    ) async {
-      await openProfileTab(tester);
-      await tester.tap(find.text('Notification settings'));
-      await tester.pumpAndSettle();
-
-      bool isOn(String title) => tester
-          .widget<ToggleSwitch>(
-            find.descendant(
-              of: find.widgetWithText(ToggleRow, title),
-              matching: find.byType(ToggleSwitch),
-            ),
-          )
-          .value;
-
-      expect(isOn('SMS alerts'), isTrue);
-      expect(isOn('Document expiry reminders'), isTrue);
-
-      // Tapping the row label (not just the switch) flips it
-      await tester.tap(find.text('Document expiry reminders'));
-      await tester.pumpAndSettle();
-      expect(isOn('Document expiry reminders'), isFalse);
-
-      final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getBool('notify_documentExpiryReminders'), isFalse);
     });
 
     testWidgets('language pill switches the app to Nepali', (tester) async {

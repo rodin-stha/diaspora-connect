@@ -8,8 +8,6 @@ import '../../l10n/app_localizations.dart';
 import '../auth/data/auth_provider.dart';
 import '../issues/data/issues_provider.dart';
 import '../issues/models/issue.dart';
-import '../notification_settings/data/notification_settings_provider.dart';
-import '../notification_settings/models/notification_setting.dart';
 import '../../widgets/status_pill.dart';
 import 'models/issue_alert.dart';
 
@@ -17,8 +15,7 @@ import 'models/issue_alert.dart';
 const _pollInterval = Duration(minutes: 1);
 
 /// Shows a message when a case worker changes one of the user's issues
-/// (new status, assigned), while the app is open. Controlled by "In-app
-/// alerts" and "Issue status changes" in Notification settings.
+/// (new status, assigned), while the app is open.
 ///
 /// There's no push from the server yet, so it asks: every minute while the
 /// app is in the foreground, and right away when the user returns to it.
@@ -66,12 +63,7 @@ class _InAppAlertsListenerState extends ConsumerState<InAppAlertsListener> {
     super.dispose();
   }
 
-  bool get _alertsOn {
-    final settings = ref.read(notificationSettingsProvider);
-    return ref.read(authProvider).isOnboarded &&
-        settings[NotificationSetting.inAppAlerts]! &&
-        settings[NotificationSetting.issueStatusChanges]!;
-  }
+  bool get _alertsOn => ref.read(authProvider).isOnboarded;
 
   /// Polls only while alerts are on and the app is on screen: no requests
   /// (data, battery) from the background or for nothing.
@@ -133,13 +125,12 @@ class _InAppAlertsListenerState extends ConsumerState<InAppAlertsListener> {
 
   @override
   Widget build(BuildContext context) {
-    // Start or stop polling when the user signs in/out or flips a switch.
+    // Start or stop polling when the user signs in/out.
     ref.listen(authProvider, (_, auth) {
       // Signed out: forget the old account's issues.
       if (!auth.isOnboarded) _known = null;
       _syncTimer();
     });
-    ref.listen(notificationSettingsProvider, (_, _) => _syncTimer());
 
     // Only when signed in: listening makes the provider fetch, and that
     // request would fail on the login screen.

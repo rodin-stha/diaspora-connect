@@ -239,7 +239,7 @@ class AppLocalizationsNe extends AppLocalizations {
   String get profileSectionProfile => 'प्रोफाइल';
 
   @override
-  String get profileSectionPreferences => 'प्राथमिकताहरू';
+  String get profileSectionAbout => 'बारेमा';
 
   @override
   String get personalDetails => 'व्यक्तिगत विवरण';
@@ -252,9 +252,6 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get savedDocuments => 'सुरक्षित कागजातहरू';
-
-  @override
-  String get notificationSettings => 'सूचना सेटिङहरू';
 
   @override
   String get logOut => 'लग आउट';
@@ -559,24 +556,6 @@ class AppLocalizationsNe extends AppLocalizations {
   }
 
   @override
-  String get howNotifiedSection => 'तपाईंलाई कसरी सूचना दिइन्छ';
-
-  @override
-  String get whatNotifiedSection => 'केको बारेमा सूचना दिइन्छ';
-
-  @override
-  String get notifySms => 'SMS सूचना';
-
-  @override
-  String get notifyInApp => 'एपभित्रको सूचना';
-
-  @override
-  String get notifyIssueStatus => 'समस्याको स्थिति परिवर्तन';
-
-  @override
-  String get notifyDocumentExpiry => 'कागजातको म्याद सकिने सम्झना';
-
-  @override
   String get mobileNumberLabel => 'मोबाइल नम्बर';
 
   @override
@@ -841,4 +820,7 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get updateNow => 'अहिले अपडेट गर्नुहोस्';
+
+  @override
+  String get privacyPolicy => 'गोपनीयता नीति';
 }
