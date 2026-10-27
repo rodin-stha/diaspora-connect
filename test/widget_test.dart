@@ -1,6 +1,10 @@
 import 'package:diaspora_connect/app/api/api_exception.dart';
 import 'package:diaspora_connect/app/locale_provider.dart';
 import 'package:diaspora_connect/features/auth/data/auth_repository.dart';
+import 'package:diaspora_connect/features/auth/data/token_storage.dart';
+import 'package:diaspora_connect/features/auth/models/register.dart';
+import 'package:diaspora_connect/features/auth/models/user.dart';
+import 'package:diaspora_connect/features/auth/models/verify_otp_response.dart';
 import 'package:diaspora_connect/features/personal_details/models/personal_details.dart';
 import 'package:diaspora_connect/main.dart';
 import 'package:diaspora_connect/theme/sizes.dart';
@@ -11,6 +15,7 @@ import 'package:diaspora_connect/widgets/toggle_row.dart';
 import 'package:diaspora_connect/widgets/toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,12 +33,14 @@ Future<void> pumpApp(
     'onboarded': ?onboarded,
     ...savedPrefs,
   });
+  FlutterSecureStorage.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
 
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(prefs),
+        savedTokenProvider.overrideWithValue(signedIn ? 'test-token' : null),
         // Never hit the real API from tests.
         authRepositoryProvider.overrideWithValue(
           authRepository ?? _FakeAuthRepository(),
@@ -52,9 +59,33 @@ class _FakeAuthRepository implements AuthRepository {
   _FakeAuthRepository({this.error});
 
   @override
-  Future<void> register(String phone) async {
+  Future<RegisterResponse> register(String phone) async {
     if (error != null) throw error!;
+    return const RegisterResponse(expiresIn: 60);
   }
+
+  /// Only the dev code 111111 is accepted, like a server rejecting a wrong
+  /// code with a 400.
+  @override
+  Future<VerifyOtpResponse> verifyCode(String phone, String code) async {
+    if (code != '111111') {
+      throw const ApiException(ApiErrorType.badRequest, statusCode: 400);
+    }
+    return VerifyOtpResponse(
+      token: 'test-token',
+      isNewUser: false,
+      user: User(
+        id: 1,
+        phone: phone,
+        isActive: true,
+        role: 'worker',
+        permissions: const [],
+      ),
+    );
+  }
+
+  @override
+  Future<void> logout() async {}
 }
 
 void main() {

@@ -35,7 +35,6 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
   String? _error;
   bool _verifying = false;
 
-  // "Resend in 00:42" countdown.
   Timer? _timer;
   Duration _resendIn = Duration(seconds: 60);
 
@@ -145,7 +144,6 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
                       length: _codeLength,
                       semanticsLabel: l10n.otpFieldLabel,
                       hasError: _error != null,
-                      // Clear the error as soon as the user edits the code.
                       onChanged: (_) {
                         if (_error != null) setState(() => _error = null);
                       },
@@ -175,7 +173,6 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
     );
   }
 
-  /// 42 seconds → "00:42".
   static String _format(Duration d) {
     String two(int n) => n.toString().padLeft(2, '0');
     return '${two(d.inMinutes)}:${two(d.inSeconds % 60)}';
