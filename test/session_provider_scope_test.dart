@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:diaspora_connect/app/api/response_cache.dart';
 import 'package:diaspora_connect/app/session_provider_scope.dart';
 import 'package:diaspora_connect/features/auth/data/auth_provider.dart';
 import 'package:diaspora_connect/features/auth/data/auth_repository.dart';
@@ -27,13 +28,24 @@ class _FakeTokenStorage extends Fake implements TokenStorage {
   Future<void> delete() async {}
 }
 
+class _FakeResponseCache extends Fake implements ResponseCache {
+  bool cleared = false;
+
+  @override
+  Future<void> clear() async => cleared = true;
+}
+
 void main() {
+  late _FakeResponseCache cache;
+  setUp(() => cache = _FakeResponseCache());
+
   Future<void> pumpScope(WidgetTester tester, {String? savedToken}) =>
       tester.pumpWidget(
         SessionProviderScope(
           overrides: [
             authRepositoryProvider.overrideWithValue(_FakeAuthRepository()),
             tokenStorageProvider.overrideWithValue(_FakeTokenStorage()),
+            responseCacheProvider.overrideWithValue(cache),
           ],
           savedToken: savedToken,
           child: MaterialApp(
@@ -60,6 +72,8 @@ void main() {
     expect(find.text('empty'), findsOneWidget);
     // The new session starts signed out, not from the deleted token.
     expect(containerOf(tester).read(authProvider).isSignedIn, isFalse);
+    // Nor can the next user see these responses offline.
+    expect(cache.cleared, isTrue);
   });
 
   testWidgets('keeps the data while signed in', (tester) async {

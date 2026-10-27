@@ -8,6 +8,8 @@ import '../../features/auth/data/auth_provider.dart';
 import '../env.dart';
 import '../locale_provider.dart';
 import 'api_exception.dart';
+import 'offline_cache_interceptor.dart';
+import 'response_cache.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
@@ -55,6 +57,7 @@ final dioProvider = Provider<Dio>((ref) {
         handler.next(error);
       },
     ),
+    OfflineCacheInterceptor(ref.read(responseCacheProvider)),
     if (kDebugMode)
       LogInterceptor(requestBody: true, responseBody: true, logPrint: _log),
   ]);

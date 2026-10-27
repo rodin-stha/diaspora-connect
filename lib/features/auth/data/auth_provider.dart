@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/api/api_exception.dart';
-
+import '../../../app/api/response_cache.dart';
 import 'auth_repository.dart';
 import 'token_storage.dart';
 
@@ -93,6 +93,9 @@ class AuthNotifier extends Notifier<AuthState> {
       // be used from this phone again.
     }
     await ref.read(tokenStorageProvider).delete();
+    // Saved responses belong to this user; the next one mustn't see them
+    // offline.
+    await ref.read(responseCacheProvider).clear();
     state = const AuthState();
   }
 
@@ -106,9 +109,11 @@ class AuthNotifier extends Notifier<AuthState> {
     // Read before signing out: signing out throws this container away
     // (see SessionProviderScope), and `ref` can't be used after that.
     final tokenStorage = ref.read(tokenStorageProvider);
+    final cache = ref.read(responseCacheProvider);
     // Signed out first, synchronously, so the 401s right behind this one
     // see it and return above.
     state = const AuthState();
     await tokenStorage.delete();
+    await cache.clear();
   }
 }
