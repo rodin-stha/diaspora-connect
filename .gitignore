@@ -55,3 +55,6 @@ env/*.json
 
 # Google Maps key for iOS (see ios/Flutter/Secrets.example.xcconfig)
 ios/Flutter/Secrets.xcconfig
+
+# Tool the Firebase CLI downloads for `crashlytics:symbols:upload`
+.crashlytics/
