@@ -1,12 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../app/image_cache_provider.dart';
 import '../theme/colors.dart';
 import '../theme/sizes.dart';
 import 'skeleton.dart';
 
 /// An image from the network, filling its box: a pulsing placeholder
 /// while it loads, an icon if it can't.
-class NetworkPhoto extends StatelessWidget {
+///
+/// Saved to the device once loaded, so it still shows offline.
+class NetworkPhoto extends ConsumerWidget {
   final String url;
 
   /// [BoxFit.cover] crops to fill (carousel, thumbnail); [BoxFit.contain]
@@ -25,26 +30,26 @@ class NetworkPhoto extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
 
     return LayoutBuilder(
-      builder: (context, constraints) => Image.network(
-        url,
+      builder: (context, constraints) => CachedNetworkImage(
+        imageUrl: url,
+        cacheKey: imageCacheKey(url),
+        cacheManager: ref.watch(imageCacheProvider),
         fit: fit,
         width: double.infinity,
         height: double.infinity,
         // Decode at the size it's shown, not the original (often 2000px+
         // and over 1 MB): far less memory for the same sharpness.
-        cacheWidth:
+        memCacheWidth:
             (constraints.maxWidth * MediaQuery.devicePixelRatioOf(context))
                 .round(),
-        loadingBuilder: (context, child, progress) => progress == null
-            ? child
-            : const Skeleton(
-                child: SkeletonBox(height: double.infinity, radius: 0),
-              ),
-        errorBuilder: (context, error, stackTrace) =>
+        placeholder: (context, url) => const Skeleton(
+          child: SkeletonBox(height: double.infinity, radius: 0),
+        ),
+        errorWidget: (context, url, error) =>
             fallback ??
             ColoredBox(
               color: colors.border,

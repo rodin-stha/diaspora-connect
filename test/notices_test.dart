@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:diaspora_connect/app/api/paged.dart';
+import 'package:diaspora_connect/app/image_cache_provider.dart';
 import 'package:diaspora_connect/features/announcements/data/announcements_repository.dart';
 import 'package:diaspora_connect/features/announcements/models/announcement.dart';
 import 'package:diaspora_connect/features/announcements/notice_detail_screen.dart';
@@ -16,6 +17,8 @@ import 'package:diaspora_connect/features/platform_settings/data/fallback_image_
 import 'package:diaspora_connect/l10n/app_localizations.dart';
 import 'package:diaspora_connect/theme/app_theme.dart';
 import 'package:diaspora_connect/widgets/skeleton.dart';
+
+import 'fakes/fake_image_cache.dart';
 
 const _longDescription =
     'Every office will be closed this Sunday for the national holiday. '
@@ -94,6 +97,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          imageCacheProvider.overrideWithValue(FakeImageCache()),
           announcementsRepositoryProvider.overrideWithValue(repository),
           // The real one downloads from the API into the phone's storage.
           fallbackImageProvider.overrideWith((ref) async => fallbackImage),

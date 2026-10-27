@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:diaspora_connect/app/image_cache_provider.dart';
 import 'package:diaspora_connect/features/announcements/data/announcements_provider.dart';
 import 'package:diaspora_connect/features/announcements/models/announcement.dart';
 import 'package:diaspora_connect/features/announcements/widgets/announcement_viewer.dart';
@@ -11,6 +12,8 @@ import 'package:diaspora_connect/features/platform_settings/data/fallback_image_
 import 'package:diaspora_connect/l10n/app_localizations.dart';
 import 'package:diaspora_connect/theme/app_theme.dart';
 import 'package:diaspora_connect/widgets/page_dots.dart';
+
+import 'fakes/fake_image_cache.dart';
 
 Announcement _announcement(int id, {String? title}) => Announcement(
   id: id,
@@ -75,6 +78,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            imageCacheProvider.overrideWithValue(FakeImageCache()),
             announcementsProvider.overrideWith((ref) => fetch()),
             fallbackImageProvider.overrideWith((ref) async => null),
           ],

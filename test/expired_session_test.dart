@@ -7,9 +7,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:diaspora_connect/app/api/api_exception.dart';
 import 'package:diaspora_connect/app/api/dio_provider.dart';
+import 'package:diaspora_connect/app/image_cache_provider.dart';
 import 'package:diaspora_connect/app/locale_provider.dart';
 import 'package:diaspora_connect/features/auth/data/auth_provider.dart';
 import 'package:diaspora_connect/features/auth/data/token_storage.dart';
+
+import 'fakes/fake_image_cache.dart';
 
 /// Answers every request with [statusCode], without touching the network.
 class _FakeAdapter implements HttpClientAdapter {
@@ -49,6 +52,7 @@ void main() {
     tokenStorage = _FakeTokenStorage();
     final container = ProviderContainer(
       overrides: [
+        imageCacheProvider.overrideWithValue(FakeImageCache()),
         sharedPreferencesProvider.overrideWithValue(
           await SharedPreferences.getInstance(),
         ),

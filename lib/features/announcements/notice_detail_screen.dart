@@ -1,9 +1,11 @@
 import 'dart:math' as math;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/image_cache_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/sizes.dart';
@@ -154,35 +156,36 @@ class _NoticeContent extends ConsumerWidget {
 }
 
 /// A network image at full width and its own height, so nothing is cropped.
+/// Saved to the device once loaded, so it still shows offline.
 ///
 /// Not [NetworkPhoto]: that one fills a box of a given size, and here the
 /// height comes from the image.
-class _WholeImage extends StatelessWidget {
+class _WholeImage extends ConsumerWidget {
   final String url;
 
   const _WholeImage({required this.url});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return LayoutBuilder(
-      builder: (context, constraints) => Image.network(
-        url,
+      builder: (context, constraints) => CachedNetworkImage(
+        imageUrl: url,
+        cacheKey: imageCacheKey(url),
+        cacheManager: ref.watch(imageCacheProvider),
         width: double.infinity,
         fit: BoxFit.fitWidth,
         // Decode at the size it's shown, not the original (often 2000px+).
-        cacheWidth:
+        memCacheWidth:
             (constraints.maxWidth * MediaQuery.devicePixelRatioOf(context))
                 .round(),
-        loadingBuilder: (context, child, progress) => progress == null
-            ? child
-            : const Skeleton(
-                child: AspectRatio(
-                  aspectRatio: _placeholderAspectRatio,
-                  child: SkeletonBox(height: double.infinity, radius: 0),
-                ),
-              ),
+        placeholder: (context, url) => const Skeleton(
+          child: AspectRatio(
+            aspectRatio: _placeholderAspectRatio,
+            child: SkeletonBox(height: double.infinity, radius: 0),
+          ),
+        ),
         // Broken link: the fallback image instead.
-        errorBuilder: (context, error, stackTrace) => const AspectRatio(
+        errorWidget: (context, url, error) => const AspectRatio(
           aspectRatio: _placeholderAspectRatio,
           child: AnnouncementPhoto(image: null),
         ),
